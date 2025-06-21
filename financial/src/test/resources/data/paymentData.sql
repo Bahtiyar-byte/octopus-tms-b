@@ -1,0 +1,63 @@
+INSERT INTO payments (
+    id,
+    company_id,
+    payment_number,
+    amount,
+    payment_method,
+    payment_date,
+    reference_number,
+    status,
+    processor,
+    processor_reference,
+    notes,
+    created_by,
+    created_at,
+    updated_at
+) VALUES (
+    'a9984c10-8157-3ea7-8c89-4b5cf34efc44',
+    'a9ea0c7d-9a94-3c28-9ab7-1b0f301e92aa',
+    'Nec ullamcorper.',
+    96.08,
+    'CHECK',
+    '2024-07-04 00:00:00',
+    'Et ea rebum.',
+    'No sea takimata.',
+    'Viverra suspendisse.',
+    'Ut wisi enim.',
+    'Erat pellentesque adipiscing commodo elit.',
+    'a9998857-f537-3403-8689-8d54d4b970dc',
+    '2024-09-02 14:30:00',
+    '2024-09-02 14:30:00'
+);
+
+INSERT INTO payments (
+    id,
+    company_id,
+    payment_number,
+    amount,
+    payment_method,
+    payment_date,
+    reference_number,
+    status,
+    processor,
+    processor_reference,
+    notes,
+    created_by,
+    created_at,
+    updated_at
+) VALUES (
+    'b859da2b-a967-3b82-8766-939a658022c8',
+    'b8ea0c7d-9a94-3c28-9ab7-1b0f301e92aa',
+    'Sed ut perspiciatis.',
+    95.08,
+    'CHECK',
+    '2024-07-05 00:00:00',
+    'Eget est lorem.',
+    'Vel illum dolore.',
+    'Nec ullamcorper.',
+    'Nam liber tempor.',
+    'Elementum tempus egestas sed sed risus pretium.',
+    'b8998857-f537-3403-8689-8d54d4b970dc',
+    '2024-09-03 14:30:00',
+    '2024-09-03 14:30:00'
+);

@@ -1,0 +1,20 @@
+{
+  "companyId" : "f4ea0c7d-9a94-3c28-9ab7-1b0f301e92aa",
+  "name" : "Duis autem vel.",
+  "code" : "Et ea rebum.",
+  "address" : "Nec ullamcorper.",
+  "city" : "Xed diam nonumy.",
+  "state" : "Sed ut perspiciatis.",
+  "zip" : "Nam liber tempor.",
+  "latitude" : "73.0008",
+  "longitude" : "50.0008",
+  "managerId" : "f4002b0c-0e5b-30ab-9cb9-dfc430553cca",
+  "phone" : "Quis nostrud exerci.",
+  "email" : "Nulla facilisis.",
+  "operatingHours" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  "capacitySqft" : 69,
+  "dockDoors" : 21,
+  "status" : "Consetetur sadipscing.",
+  "createdAt" : "2024-09-17T14:30:00+01:00",
+  "updatedAt" : "2024-09-17T14:30:00+01:00"
+}

@@ -1,0 +1,12 @@
+{
+  "periodEnd" : "2024-07-19",
+  "milesDriven" : 37,
+  "loadsCompleted" : 19,
+  "onTimePercentage" : "27.08",
+  "safetyScore" : "59.08",
+  "fuelEfficiency" : "34.08",
+  "customerRating" : "8.08",
+  "violations" : 49,
+  "accidents" : 61,
+  "createdAt" : "2024-09-17T14:30:00+01:00"
+}

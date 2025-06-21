@@ -1,0 +1,21 @@
+{
+  "companyId" : "f4ea0c7d-9a94-3c28-9ab7-1b0f301e92aa",
+  "userId" : "f444f008-9b07-3e18-a718-eb9ca3d94674",
+  "driverCode" : "Sed ut perspiciatis.",
+  "cdlNumber" : "Nec ullamcorper.",
+  "cdlState" : "Lorem ipsum dolor.",
+  "cdlExpiration" : "2024-07-19",
+  "medicalCertExpiration" : "2024-07-19",
+  "hazmatEndorsed" : false,
+  "tankerEndorsed" : false,
+  "doublesEndorsed" : false,
+  "assignedTruck" : "Viverra suspendisse.",
+  "homeTerminal" : "Xonsectetuer adipiscing.",
+  "status" : "Consetetur sadipscing.",
+  "hireDate" : "2024-07-19",
+  "terminationDate" : "2024-07-19",
+  "emergencyContactName" : "Quis nostrud exerci.",
+  "emergencyContactPhone" : "Et ea rebum.",
+  "createdAt" : "2024-09-17T14:30:00+01:00",
+  "updatedAt" : "2024-09-17T14:30:00+01:00"
+}

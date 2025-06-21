@@ -1,0 +1,15 @@
+{
+  "warehouseId" : "f441c15b-f343-39f4-aaab-9d64e744249a",
+  "orderNumber" : "Xed diam nonumy.",
+  "customerId" : "f4fe6c0d-a028-3abd-8e96-b311aeb9eedc",
+  "status" : "Consetetur sadipscing.",
+  "priority" : "Nec ullamcorper.",
+  "requiredDate" : "2024-07-19",
+  "specialInstructions" : "Eget est lorem ipsum dolor sit amet. Phasellus vestibulum lorem sed risus ultricies tristique.",
+  "totalItems" : 25,
+  "pickedItems" : 97,
+  "packedItems" : 43,
+  "createdBy" : "f4998857-f537-3403-8689-8d54d4b970dc",
+  "createdAt" : "2024-09-17T14:30:00+01:00",
+  "updatedAt" : "2024-09-17T14:30:00+01:00"
+}

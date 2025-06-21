@@ -1,0 +1,13 @@
+{
+  "chargeType" : "DETENTION",
+  "description" : "Ullamcorper eget nulla facilisi etiam dignissim diam.",
+  "quantity" : "34.08",
+  "rate" : "73.08",
+  "amount" : "81.08",
+  "billableTo" : "Nec ullamcorper.",
+  "status" : "Consetetur sadipscing.",
+  "approvedAt" : "2024-09-17T14:30:00+01:00",
+  "receiptUrl" : "Commodo consequat.",
+  "notes" : "Tortor consequat id porta nibh venenatis cras sed.",
+  "createdAt" : "2024-09-17T14:30:00+01:00"
+}

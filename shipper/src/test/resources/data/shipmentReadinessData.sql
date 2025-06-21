@@ -1,0 +1,63 @@
+INSERT INTO shipment_readinesses (
+    id,
+    warehouse_id,
+    order_number,
+    customer_id,
+    status,
+    priority,
+    required_date,
+    special_instructions,
+    total_items,
+    picked_items,
+    packed_items,
+    created_by,
+    created_at,
+    updated_at
+) VALUES (
+    'a97628dd-7a71-3c86-b8db-d22d4421ee46',
+    'a941c15b-f343-39f4-aaab-9d64e744249a',
+    'Vel illum dolore.',
+    'a9fe6c0d-a028-3abd-8e96-b311aeb9eedc',
+    'No sea takimata.',
+    'Nam liber tempor.',
+    '2024-07-04 00:00:00',
+    'Elementum tempus egestas sed sed risus pretium.',
+    40,
+    12,
+    28,
+    'a9998857-f537-3403-8689-8d54d4b970dc',
+    '2024-09-02 14:30:00',
+    '2024-09-02 14:30:00'
+);
+
+INSERT INTO shipment_readinesses (
+    id,
+    warehouse_id,
+    order_number,
+    customer_id,
+    status,
+    priority,
+    required_date,
+    special_instructions,
+    total_items,
+    picked_items,
+    packed_items,
+    created_by,
+    created_at,
+    updated_at
+) VALUES (
+    'b8e7f2e0-90fe-350e-b8de-b4466fdc81b3',
+    'b841c15b-f343-39f4-aaab-9d64e744249a',
+    'Xonsectetuer adipiscing.',
+    'b8fe6c0d-a028-3abd-8e96-b311aeb9eedc',
+    'Vel illum dolore.',
+    'Consetetur sadipscing.',
+    '2024-07-05 00:00:00',
+    'Sed faucibus turpis in eu mi bibendum neque.',
+    39,
+    11,
+    29,
+    'b8998857-f537-3403-8689-8d54d4b970dc',
+    '2024-09-03 14:30:00',
+    '2024-09-03 14:30:00'
+);
