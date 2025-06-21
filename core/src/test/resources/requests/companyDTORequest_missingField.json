@@ -1,0 +1,22 @@
+{
+  "type" : "BROKER",
+  "mcNumber" : "Xed diam nonumy.",
+  "dotNumber" : "Lorem ipsum dolor.",
+  "ein" : "Lorem ipsum dolor.",
+  "addressLine1" : "At vero eos.",
+  "addressLine2" : "Stet clita kasd.",
+  "city" : "Xed diam nonumy.",
+  "state" : "Sed ut perspiciatis.",
+  "zipCode" : "Quis nostrud exerci.",
+  "country" : "Eget est lorem.",
+  "phone" : "Quis nostrud exerci.",
+  "email" : "Nulla facilisis.",
+  "website" : "No sea takimata.",
+  "logoUrl" : "Zed diam voluptua.",
+  "status" : "Consetetur sadipscing.",
+  "creditLimit" : "71.08",
+  "creditUsed" : "15.08",
+  "paymentTerms" : 84,
+  "createdAt" : "2024-09-17T14:30:00+01:00",
+  "updatedAt" : "2024-09-17T14:30:00+01:00"
+}

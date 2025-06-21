@@ -1,0 +1,12 @@
+{
+  "originCity" : "Duis autem vel.",
+  "originState" : "Xed diam nonumy.",
+  "destinationCity" : "Xed diam nonumy.",
+  "destinationState" : "Xed diam nonumy.",
+  "status" : "DRAFT",
+  "equipmentType" : "DRY_VAN",
+  "dateFrom" : "2024-07-19",
+  "dateTo" : "2024-07-19",
+  "minRate" : "77.08",
+  "maxRate" : "79.08"
+}

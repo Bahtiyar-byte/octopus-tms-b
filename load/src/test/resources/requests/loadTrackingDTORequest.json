@@ -1,0 +1,17 @@
+{
+  "driverId" : "f4b90747-42dc-358e-8991-4e7848f864eb",
+  "latitude" : "73.0008",
+  "longitude" : "50.0008",
+  "locationName" : "Ut wisi enim.",
+  "speed" : 14,
+  "heading" : 33,
+  "odometer" : 26,
+  "engineHours" : 52,
+  "fuelLevel" : 71,
+  "temperature" : "51.08",
+  "status" : "Consetetur sadipscing.",
+  "eventType" : "Nulla facilisis.",
+  "notes" : "Tortor consequat id porta nibh venenatis cras sed.",
+  "createdAt" : "2024-09-17T14:30:00+01:00",
+  "load" : "a93e29a3-5278-371c-bf65-495871231324"
+}

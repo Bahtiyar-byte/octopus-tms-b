@@ -1,0 +1,23 @@
+{
+  "commodityCode" : "Lorem ipsum dolor.",
+  "weight" : "13.08",
+  "weightUnit" : "Vel illum",
+  "pieces" : 88,
+  "palletCount" : 58,
+  "dimensions" : "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.",
+  "hazmat" : false,
+  "hazmatClass" : "Viverra suspendisse.",
+  "unNumber" : "Stet clita",
+  "temperatureControlled" : false,
+  "temperatureMin" : "77.08",
+  "temperatureMax" : "39.08",
+  "temperatureUnit" : "Nec ullamc",
+  "cargoValue" : "56.08",
+  "poNumber" : "Vel illum dolore.",
+  "sealNumber" : "Quis nostrud exerci.",
+  "cargoStatus" : "Lorem ipsum dolor.",
+  "referenceNumber" : "Vel illum dolore.",
+  "createdAt" : "2024-09-17T14:30:00+01:00",
+  "updatedAt" : "2024-09-17T14:30:00+01:00",
+  "load" : "a93e29a3-5278-371c-bf65-495871231324"
+}

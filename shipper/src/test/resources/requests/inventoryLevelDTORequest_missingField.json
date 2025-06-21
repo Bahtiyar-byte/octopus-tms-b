@@ -1,0 +1,13 @@
+{
+  "itemId" : "f4a814aa-020a-3b32-8467-4a5887a35022",
+  "availableQuantity" : 47,
+  "reservedQuantity" : 22,
+  "locationZone" : "Xed diam nonumy.",
+  "locationAisle" : "Nam liber tempor.",
+  "locationRack" : "Ut wisi enim.",
+  "locationBin" : "Eget est lorem.",
+  "lastCountDate" : "2024-07-19",
+  "createdAt" : "2024-09-17T14:30:00+01:00",
+  "updatedAt" : "2024-09-17T14:30:00+01:00",
+  "warehouse" : "a91ae30a-f875-3c2d-a872-0ea3c1f8c2b1"
+}

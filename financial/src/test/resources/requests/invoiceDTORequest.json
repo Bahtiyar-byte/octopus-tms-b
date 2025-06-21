@@ -1,0 +1,18 @@
+{
+  "invoiceNumber" : "Eget est lorem.",
+  "loadId" : "f4aaa05a-17e2-3fae-97c9-ea5a3f213275",
+  "companyId" : "f4ea0c7d-9a94-3c28-9ab7-1b0f301e92aa",
+  "invoiceType" : "Sed ut perspiciatis.",
+  "status" : "DRAFT",
+  "amount" : "81.08",
+  "taxAmount" : "46.08",
+  "totalAmount" : "41.08",
+  "dueDate" : "2024-07-19",
+  "paidDate" : "2024-07-19",
+  "paymentMethod" : "Xed diam nonumy.",
+  "paymentReference" : "At vero eos.",
+  "notes" : "Tortor consequat id porta nibh venenatis cras sed.",
+  "createdBy" : "f4998857-f537-3403-8689-8d54d4b970dc",
+  "createdAt" : "2024-09-17T14:30:00+01:00",
+  "updatedAt" : "2024-09-17T14:30:00+01:00"
+}

@@ -1,0 +1,19 @@
+{
+  "username" : "username15@invalid.bootify.io",
+  "email" : "Nulla facilisis.",
+  "passwordHash" : "Xonsectetuer adipiscing.",
+  "firstName" : "No sea takimata.",
+  "lastName" : "Duis autem vel.",
+  "phone" : "Quis nostrud exerci.",
+  "role" : "ADMIN",
+  "department" : "Lorem ipsum dolor.",
+  "avatarUrl" : "Quis nostrud exerci.",
+  "status" : "Consetetur sadipscing.",
+  "lastLogin" : "2024-09-17T14:30:00+01:00",
+  "failedLoginAttempts" : 49,
+  "lockedUntil" : "2024-09-17T14:30:00+01:00",
+  "resetToken" : "Stet clita kasd.",
+  "resetTokenStarts" : "2024-09-17T14:30:00+01:00",
+  "createdAt" : "2024-09-17T14:30:00+01:00",
+  "updatedAt" : "2024-09-17T14:30:00+01:00"
+}

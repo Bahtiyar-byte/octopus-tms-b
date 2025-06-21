@@ -1,0 +1,19 @@
+{
+  "companyId" : "f4ea0c7d-9a94-3c28-9ab7-1b0f301e92aa",
+  "name" : "Duis autem vel.",
+  "description" : "Ullamcorper eget nulla facilisi etiam dignissim diam.",
+  "category" : "Eget est lorem.",
+  "unitOfMeasure" : "Sed ut perspiciatis.",
+  "weight" : "13.08",
+  "length" : "59.08",
+  "width" : "69.08",
+  "height" : "78.08",
+  "reorderPoint" : 72,
+  "reorderQuantity" : 13,
+  "hazmat" : false,
+  "temperatureControlled" : false,
+  "fragile" : false,
+  "status" : "Consetetur sadipscing.",
+  "createdAt" : "2024-09-17T14:30:00+01:00",
+  "updatedAt" : "2024-09-17T14:30:00+01:00"
+}

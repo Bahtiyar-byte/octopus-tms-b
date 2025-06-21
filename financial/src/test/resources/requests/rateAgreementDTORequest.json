@@ -1,0 +1,22 @@
+{
+  "agreementNumber" : "Xonsectetuer adipiscing.",
+  "laneOriginCity" : "Viverra suspendisse.",
+  "laneOriginState" : "Et ea rebum.",
+  "laneOriginZip" : "No sea takimata.",
+  "laneDestinationCity" : "At vero eos.",
+  "laneDestinationState" : "Commodo consequat.",
+  "laneDestinationZip" : "Nam liber tempor.",
+  "equipmentType" : "DRY_VAN",
+  "baseRate" : "92.08",
+  "ratePerMile" : "45.08",
+  "fuelSurchargePercent" : "94.08",
+  "minRate" : "77.08",
+  "accessorialRates" : "Eget est lorem ipsum dolor sit amet. Phasellus vestibulum lorem sed risus ultricies tristique.",
+  "validFrom" : "2024-07-19",
+  "validUntil" : "2024-07-19",
+  "autoRenew" : false,
+  "status" : "Consetetur sadipscing.",
+  "notes" : "Tortor consequat id porta nibh venenatis cras sed.",
+  "createdAt" : "2024-09-17T14:30:00+01:00",
+  "updatedAt" : "2024-09-17T14:30:00+01:00"
+}

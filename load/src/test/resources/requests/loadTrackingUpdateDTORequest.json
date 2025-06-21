@@ -1,0 +1,13 @@
+{
+  "loadId" : "f4aaa05a-17e2-3fae-97c9-ea5a3f213275",
+  "latitude" : 73.42,
+  "longitude" : 50.42,
+  "locationName" : "Ut wisi enim.",
+  "speed" : 14,
+  "heading" : 33,
+  "eventType" : "Nulla facilisis.",
+  "temperature" : 51.42,
+  "estimatedArrival" : "2025-05-21T14:30:00",
+  "currentStopId" : "f445b01e-efde-3822-b3b5-7d475defb2fd",
+  "nextStopId" : "f4095283-90f4-3265-a0d6-98c531d17843"
+}
