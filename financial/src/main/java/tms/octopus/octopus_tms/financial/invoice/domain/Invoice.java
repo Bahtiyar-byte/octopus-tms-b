@@ -11,6 +11,7 @@ import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 import lombok.Getter;
@@ -83,9 +84,9 @@ public class Invoice {
     private OffsetDateTime updatedAt;
 
     @OneToMany(mappedBy = "invoice")
-    private Set<InvoiceLineItem> invoiceLineItems;
+    private Set<InvoiceLineItem> invoiceLineItems = new HashSet<>();
 
     @OneToMany(mappedBy = "invoice")
-    private Set<Payment> payments;
+    private Set<Payment> payments = new HashSet<>();
 
 }

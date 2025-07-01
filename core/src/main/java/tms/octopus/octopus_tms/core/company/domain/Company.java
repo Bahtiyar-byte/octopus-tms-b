@@ -10,6 +10,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 import lombok.Getter;
@@ -96,6 +97,6 @@ public class Company {
     private OffsetDateTime updatedAt;
 
     @OneToMany(mappedBy = "company")
-    private Set<User> users;
+    private Set<User> users = new HashSet<>();
 
 }

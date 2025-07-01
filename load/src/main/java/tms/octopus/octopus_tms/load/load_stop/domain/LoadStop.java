@@ -15,6 +15,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 import lombok.Getter;
@@ -114,13 +115,13 @@ public class LoadStop {
     private OffsetDateTime updatedAt;
 
     @OneToMany(mappedBy = "pickupStop")
-    private Set<LoadCargo> pickupCargoes;
+    private Set<LoadCargo> pickupCargoes = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "load_id", nullable = false)
     private Load load;
 
     @OneToMany(mappedBy = "deliveryStop")
-    private Set<LoadCargo> deliveryCargoes;
+    private Set<LoadCargo> deliveryCargoes = new HashSet<>();
 
 }

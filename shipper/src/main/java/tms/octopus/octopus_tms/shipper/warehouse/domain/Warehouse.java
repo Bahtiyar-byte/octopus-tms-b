@@ -8,6 +8,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 import lombok.Getter;
@@ -83,6 +84,6 @@ public class Warehouse {
     private OffsetDateTime updatedAt;
 
     @OneToMany(mappedBy = "warehouse")
-    private Set<InventoryLevel> inventoryLevels;
+    private Set<InventoryLevel> inventoryLevels = new HashSet<>();
 
 }

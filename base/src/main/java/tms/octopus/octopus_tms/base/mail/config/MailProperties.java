@@ -1,4 +1,4 @@
-package tms.octopus.octopus_tms.base.config;
+package tms.octopus.octopus_tms.base.mail.config;
 
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
