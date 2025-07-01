@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-import tms.octopus.octopus_tms.base.service.MailService;
+import tms.octopus.octopus_tms.base.mail.service.MailService;
 import tms.octopus.octopus_tms.base.util.WebUtils;
 import tms.octopus.octopus_tms.core.model.PasswordResetCompleteRequest;
 import tms.octopus.octopus_tms.core.model.PasswordResetRequest;

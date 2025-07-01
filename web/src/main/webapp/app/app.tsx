@@ -3,7 +3,7 @@ import { Outlet, useLocation } from 'react-router';
 import { AuthenticationProvider } from 'app/security/authentication-provider';
 import Header from 'app/common/header';
 import ErrorBoundary from 'app/error/error-boundary';
-import './app.scss';
+import './app.css';
 
 
 /**

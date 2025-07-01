@@ -1,7 +1,7 @@
 import React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import useDocumentTitle from 'app/common/use-document-title';
-import './home.scss';
+import './home.css';
 
 
 export default function Home() {

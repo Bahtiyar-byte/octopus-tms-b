@@ -63,14 +63,14 @@ export default function InputRow({ useFormResult, object, field, type = 'text',
         {!required &&
           <div className="inline-block mr-4 last:mr-0 pt-2">
             <input id={field} {...register(field)} value="" type="radio" disabled={disabled}
-                className={'border-gray-300' + getInputClasses()} />
+                className={'border-gray-300 ' + getInputClasses()} />
             <label htmlFor={field} className="ml-2">{t('select.empty.label')}</label>
           </div>
         }
         {Array.from(optionsMap).map(([key, value]) => (
         <div key={key} className="inline-block mr-4 last:mr-0 pt-2">
           <input id={field + '_' + key} {...register(field)} value={key} type="radio" disabled={disabled}
-              className={'border-gray-300' + getInputClasses()} />
+              className={'border-gray-300 ' + getInputClasses()} />
           <label htmlFor={field + '_' + key} className="ml-2">{value}</label>
         </div>
         ))}

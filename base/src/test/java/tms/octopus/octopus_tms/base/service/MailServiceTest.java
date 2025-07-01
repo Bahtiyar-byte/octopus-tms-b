@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
 import tms.octopus.octopus_tms.base.config.BaseIT;
+import tms.octopus.octopus_tms.base.mail.service.MailService;
 
 
 @ActiveProfiles("nosecurity")

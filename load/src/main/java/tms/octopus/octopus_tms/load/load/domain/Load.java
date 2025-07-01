@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 import lombok.Getter;
@@ -159,15 +160,15 @@ public class Load {
     private OffsetDateTime updatedAt;
 
     @OneToMany(mappedBy = "load")
-    private Set<LoadCargo> cargoes;
+    private Set<LoadCargo> cargoes = new HashSet<>();
 
     @OneToMany(mappedBy = "load")
-    private Set<LoadStop> loadStops;
+    private Set<LoadStop> loadStops = new HashSet<>();
 
     @OneToMany(mappedBy = "load")
-    private Set<LoadDocument> documents;
+    private Set<LoadDocument> documents = new HashSet<>();
 
     @OneToMany(mappedBy = "load")
-    private Set<LoadOffer> offers;
+    private Set<LoadOffer> offers = new HashSet<>();
 
 }

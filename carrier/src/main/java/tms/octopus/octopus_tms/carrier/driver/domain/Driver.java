@@ -8,6 +8,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 import lombok.Getter;
@@ -86,6 +87,6 @@ public class Driver {
     private OffsetDateTime updatedAt;
 
     @OneToMany(mappedBy = "driver")
-    private Set<DriverPerformance> driverPerformances;
+    private Set<DriverPerformance> driverPerformances = new HashSet<>();
 
 }
