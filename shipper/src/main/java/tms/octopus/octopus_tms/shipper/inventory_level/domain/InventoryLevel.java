@@ -19,7 +19,7 @@ import tms.octopus.octopus_tms.shipper.warehouse.domain.Warehouse;
 
 
 @Entity
-@Table(name = "InventoryLevels")
+@Table(name = "Inventory_Levels")
 @Getter
 @Setter
 public class InventoryLevel {
@@ -30,8 +30,8 @@ public class InventoryLevel {
     @UuidGenerator
     private UUID id;
 
-    @Column
-    private UUID itemId;
+//    @Column
+//    private UUID itemId;
 
     @Column(nullable = false)
     private Integer quantity;

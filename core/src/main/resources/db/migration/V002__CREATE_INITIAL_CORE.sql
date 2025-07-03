@@ -1,4 +1,4 @@
-CREATE TABLE companies (
+CREATE TABLE IF NOT EXISTS companies (
     id UUID NOT NULL,
     name VARCHAR(255) NOT NULL,
     type VARCHAR(100) NOT NULL,
@@ -20,11 +20,10 @@ CREATE TABLE companies (
     credit_used numeric(10, 2),
     payment_terms INTEGER,
     created_at TIMESTAMP WITHOUT TIME ZONE,
-    updated_at TIMESTAMP WITHOUT TIME ZONE,
-    CONSTRAINT companies_pkey PRIMARY KEY (id)
+    updated_at TIMESTAMP WITHOUT TIME ZONE
 );
 
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
     id UUID NOT NULL,
     username VARCHAR(100) NOT NULL,
     email VARCHAR(255) NOT NULL,
@@ -43,11 +42,10 @@ CREATE TABLE users (
     reset_token_starts TIMESTAMP WITHOUT TIME ZONE,
     created_at TIMESTAMP WITHOUT TIME ZONE,
     updated_at TIMESTAMP WITHOUT TIME ZONE,
-    company_id UUID,
-    CONSTRAINT users_pkey PRIMARY KEY (id)
+    company_id UUID
 );
 
-CREATE TABLE user_preferences (
+CREATE TABLE IF NOT EXISTS user_preferences (
     id UUID NOT NULL,
     theme VARCHAR(50),
     timezone VARCHAR(100),
@@ -58,11 +56,10 @@ CREATE TABLE user_preferences (
     dashboard_layout TEXT,
     created_at TIMESTAMP WITHOUT TIME ZONE,
     updated_at TIMESTAMP WITHOUT TIME ZONE,
-    user_id UUID,
-    CONSTRAINT user_preferences_pkey PRIMARY KEY (id)
+    user_id UUID
 );
 
-CREATE TABLE audit_logs (
+CREATE TABLE IF NOT EXISTS audit_logs (
     id UUID NOT NULL,
     user_id UUID,
     company_id UUID,
@@ -73,11 +70,10 @@ CREATE TABLE audit_logs (
     new_values TEXT,
     ip_address VARCHAR(255),
     user_agent TEXT,
-    created_at TIMESTAMP WITHOUT TIME ZONE,
-    CONSTRAINT audit_logs_pkey PRIMARY KEY (id)
+    created_at TIMESTAMP WITHOUT TIME ZONE
 );
 
-CREATE TABLE workflows (
+CREATE TABLE if not exists workflows (
     id UUID NOT NULL,
     company_id UUID,
     name VARCHAR(255) NOT NULL,
@@ -88,11 +84,10 @@ CREATE TABLE workflows (
     workflow_data TEXT NOT NULL,
     created_by UUID,
     created_at TIMESTAMP WITHOUT TIME ZONE,
-    updated_at TIMESTAMP WITHOUT TIME ZONE,
-    CONSTRAINT workflows_pkey PRIMARY KEY (id)
+    updated_at TIMESTAMP WITHOUT TIME ZONE
 );
 
-CREATE TABLE workflow_executions (
+CREATE TABLE if not exists workflow_executions (
     id UUID NOT NULL,
     workflow_id UUID,
     trigger_type VARCHAR(100),
@@ -101,11 +96,10 @@ CREATE TABLE workflow_executions (
     started_at TIMESTAMP WITHOUT TIME ZONE,
     completed_at TIMESTAMP WITHOUT TIME ZONE,
     error_message TEXT,
-    execution_data TEXT,
-    CONSTRAINT workflow_executions_pkey PRIMARY KEY (id)
+    execution_data TEXT
 );
 
-CREATE TABLE workflow_logs (
+CREATE TABLE if not exists workflow_logs (
     id UUID NOT NULL,
     execution_id UUID,
     node_id VARCHAR(100),
@@ -113,11 +107,10 @@ CREATE TABLE workflow_logs (
     status VARCHAR(50),
     message TEXT,
     data TEXT,
-    created_at TIMESTAMP WITHOUT TIME ZONE,
-    CONSTRAINT workflow_logs_pkey PRIMARY KEY (id)
+    created_at TIMESTAMP WITHOUT TIME ZONE
 );
 
-CREATE TABLE notifications (
+CREATE TABLE if not exists notifications (
     id UUID NOT NULL,
     type VARCHAR(50) NOT NULL,
     title VARCHAR(255),
@@ -126,11 +119,11 @@ CREATE TABLE notifications (
     read BOOLEAN,
     read_at TIMESTAMP WITHOUT TIME ZONE,
     created_at TIMESTAMP WITHOUT TIME ZONE,
-    user_id UUID NOT NULL,
-    CONSTRAINT notifications_pkey PRIMARY KEY (id)
+    user_id UUID NOT NULL
+
 );
 
-CREATE TABLE ai_provider_configs (
+CREATE TABLE if not exists ai_provider_configs (
     id BIGINT NOT NULL,
     user_id UUID NOT NULL,
     provider VARCHAR(50) NOT NULL,
@@ -141,14 +134,5 @@ CREATE TABLE ai_provider_configs (
     connection_status VARCHAR(20),
     last_tested TIMESTAMP WITHOUT TIME ZONE,
     created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    updated_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    CONSTRAINT ai_provider_configs_pkey PRIMARY KEY (id)
+    updated_at TIMESTAMP WITHOUT TIME ZONE NOT NULL
 );
-
-ALTER TABLE users ADD CONSTRAINT fk_users_company_id FOREIGN KEY (company_id) REFERENCES companies (id) ON UPDATE NO ACTION ON DELETE NO ACTION;
-
-ALTER TABLE user_preferences ADD CONSTRAINT fk_user_preferences_user_id FOREIGN KEY (user_id) REFERENCES users (id) ON UPDATE NO ACTION ON DELETE NO ACTION;
-
-ALTER TABLE user_preferences ADD CONSTRAINT unique_user_preferences_user_id UNIQUE (user_id);
-
-ALTER TABLE notifications ADD CONSTRAINT fk_notifications_user_id FOREIGN KEY (user_id) REFERENCES users (id) ON UPDATE NO ACTION ON DELETE NO ACTION;

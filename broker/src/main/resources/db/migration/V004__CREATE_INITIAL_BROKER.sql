@@ -1,4 +1,4 @@
-CREATE TABLE contracts (
+CREATE TABLE IF NOT EXISTS contracts (
     id UUID NOT NULL,
     broker_id UUID,
     carrier_id UUID,
@@ -15,6 +15,5 @@ CREATE TABLE contracts (
     file_path VARCHAR(500),
     created_by UUID,
     created_at TIMESTAMP WITHOUT TIME ZONE,
-    updated_at TIMESTAMP WITHOUT TIME ZONE,
-    CONSTRAINT contracts_pkey PRIMARY KEY (id)
+    updated_at TIMESTAMP WITHOUT TIME ZONE
 );

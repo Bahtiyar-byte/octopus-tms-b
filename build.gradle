@@ -17,7 +17,7 @@ subprojects {
     apply plugin: 'io.spring.dependency-management'
     apply plugin: 'org.springframework.boot'
 
-    tasks.withType(Test) {
+    tasks.withType(Test).configureEach {
         useJUnitPlatform()
     }
 
@@ -212,7 +212,6 @@ project(':base') {
         api('org.springframework.boot:spring-boot-starter-websocket')
         api('org.springframework.kafka:spring-kafka')
         api('com.amazonaws:aws-java-sdk-s3:1.12.787')
-        api('io.prometheus:simpleclient_bom')
         api('org.springframework.boot:spring-boot-starter-aop')
     }
 }

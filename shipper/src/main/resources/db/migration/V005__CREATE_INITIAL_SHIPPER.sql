@@ -1,4 +1,4 @@
-CREATE TABLE warehouses (
+CREATE TABLE IF NOT EXISTS warehouses (
     id UUID NOT NULL,
     company_id UUID,
     name VARCHAR(255) NOT NULL,
@@ -17,11 +17,10 @@ CREATE TABLE warehouses (
     dock_doors INTEGER,
     status VARCHAR(50),
     created_at TIMESTAMP WITHOUT TIME ZONE,
-    updated_at TIMESTAMP WITHOUT TIME ZONE,
-    CONSTRAINT warehouses_pkey PRIMARY KEY (id)
+    updated_at TIMESTAMP WITHOUT TIME ZONE
 );
 
-CREATE TABLE inventory_items (
+CREATE TABLE IF NOT EXISTS inventory_items (
     id UUID NOT NULL,
     company_id UUID,
     sku VARCHAR(100) NOT NULL,
@@ -40,11 +39,10 @@ CREATE TABLE inventory_items (
     fragile BOOLEAN,
     status VARCHAR(50),
     created_at TIMESTAMP WITHOUT TIME ZONE,
-    updated_at TIMESTAMP WITHOUT TIME ZONE,
-    CONSTRAINT inventory_items_pkey PRIMARY KEY (id)
+    updated_at TIMESTAMP WITHOUT TIME ZONE
 );
 
-CREATE TABLE inventory_levels (
+CREATE TABLE IF NOT EXISTS inventory_levels (
     id UUID NOT NULL,
     item_id UUID,
     quantity INTEGER NOT NULL,
@@ -57,12 +55,10 @@ CREATE TABLE inventory_levels (
     last_count_date date,
     created_at TIMESTAMP WITHOUT TIME ZONE,
     updated_at TIMESTAMP WITHOUT TIME ZONE,
-    item_id UUID,
-    warehouse_id UUID NOT NULL,
-    CONSTRAINT inventory_levels_pkey PRIMARY KEY (id)
+    warehouse_id UUID NOT NULL
 );
 
-CREATE TABLE inventory_movements (
+CREATE TABLE IF NOT EXISTS inventory_movements (
     id UUID NOT NULL,
     item_id UUID,
     movement_type VARCHAR(50) NOT NULL,
@@ -75,11 +71,10 @@ CREATE TABLE inventory_movements (
     created_by UUID,
     created_at TIMESTAMP WITHOUT TIME ZONE,
     inventory_item_id UUID NOT NULL,
-    warehouse_id UUID NOT NULL,
-    CONSTRAINT inventory_movements_pkey PRIMARY KEY (id)
+    warehouse_id UUID NOT NULL
 );
 
-CREATE TABLE shipment_readinesses (
+CREATE TABLE IF NOT EXISTS shipment_readinesses (
     id UUID NOT NULL,
     warehouse_id UUID,
     order_number VARCHAR(100),
@@ -93,14 +88,5 @@ CREATE TABLE shipment_readinesses (
     packed_items INTEGER,
     created_by UUID,
     created_at TIMESTAMP WITHOUT TIME ZONE,
-    updated_at TIMESTAMP WITHOUT TIME ZONE,
-    CONSTRAINT shipment_readinesses_pkey PRIMARY KEY (id)
+    updated_at TIMESTAMP WITHOUT TIME ZONE
 );
-
-ALTER TABLE inventory_levels ADD CONSTRAINT fk_inventory_levels_item_id FOREIGN KEY (item_id) REFERENCES inventory_items (id) ON UPDATE NO ACTION ON DELETE NO ACTION;
-
-ALTER TABLE inventory_levels ADD CONSTRAINT fk_inventory_levels_warehouse_id FOREIGN KEY (warehouse_id) REFERENCES warehouses (id) ON UPDATE NO ACTION ON DELETE NO ACTION;
-
-ALTER TABLE inventory_movements ADD CONSTRAINT fk_inventory_movements_inventory_item_id FOREIGN KEY (inventory_item_id) REFERENCES inventory_items (id) ON UPDATE NO ACTION ON DELETE NO ACTION;
-
-ALTER TABLE inventory_movements ADD CONSTRAINT fk_inventory_movements_warehouse_id FOREIGN KEY (warehouse_id) REFERENCES warehouses (id) ON UPDATE NO ACTION ON DELETE NO ACTION;

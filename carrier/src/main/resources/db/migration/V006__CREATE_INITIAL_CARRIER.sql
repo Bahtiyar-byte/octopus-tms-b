@@ -1,4 +1,4 @@
-CREATE TABLE drivers (
+CREATE TABLE IF NOT EXISTS drivers (
     id UUID NOT NULL,
     company_id UUID,
     user_id UUID,
@@ -18,11 +18,9 @@ CREATE TABLE drivers (
     emergency_contact_name VARCHAR(255),
     emergency_contact_phone VARCHAR(50),
     created_at TIMESTAMP WITHOUT TIME ZONE,
-    updated_at TIMESTAMP WITHOUT TIME ZONE,
-    CONSTRAINT drivers_pkey PRIMARY KEY (id)
-);
+    updated_at TIMESTAMP WITHOUT TIME ZONE);
 
-CREATE TABLE driver_performances (
+CREATE TABLE IF NOT EXISTS driver_performances (
     id UUID NOT NULL,
     period_start date NOT NULL,
     period_end date NOT NULL,
@@ -35,11 +33,9 @@ CREATE TABLE driver_performances (
     violations INTEGER,
     accidents INTEGER,
     created_at TIMESTAMP WITHOUT TIME ZONE,
-    driver_id UUID,
-    CONSTRAINT driver_performances_pkey PRIMARY KEY (id)
-);
+    driver_id UUID);
 
-CREATE TABLE equipments (
+CREATE TABLE IF NOT EXISTS equipments (
     id UUID NOT NULL,
     carrier_id UUID NOT NULL,
     equipment_number VARCHAR(50) NOT NULL,
@@ -62,8 +58,5 @@ CREATE TABLE equipments (
     eld_id VARCHAR(100),
     notes TEXT,
     created_at TIMESTAMP WITHOUT TIME ZONE,
-    updated_at TIMESTAMP WITHOUT TIME ZONE,
-    CONSTRAINT equipments_pkey PRIMARY KEY (id)
-);
+    updated_at TIMESTAMP WITHOUT TIME ZONE);
 
-ALTER TABLE driver_performances ADD CONSTRAINT fk_driver_performances_driver_id FOREIGN KEY (driver_id) REFERENCES drivers (id) ON UPDATE NO ACTION ON DELETE NO ACTION;

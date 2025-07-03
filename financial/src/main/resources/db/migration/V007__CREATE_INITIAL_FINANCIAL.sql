@@ -1,4 +1,4 @@
-CREATE TABLE invoices (
+CREATE TABLE IF NOT EXISTS invoices (
     id UUID NOT NULL,
     invoice_number VARCHAR(50) NOT NULL,
     load_id UUID,
@@ -15,11 +15,10 @@ CREATE TABLE invoices (
     notes TEXT,
     created_by UUID,
     created_at TIMESTAMP WITHOUT TIME ZONE,
-    updated_at TIMESTAMP WITHOUT TIME ZONE,
-    CONSTRAINT invoices_pkey PRIMARY KEY (id)
+    updated_at TIMESTAMP WITHOUT TIME ZONE
 );
 
-CREATE TABLE payments (
+CREATE TABLE IF NOT EXISTS payments (
     id UUID NOT NULL,
     company_id UUID NOT NULL,
     payment_number VARCHAR(50),
@@ -34,11 +33,10 @@ CREATE TABLE payments (
     created_by UUID,
     created_at TIMESTAMP WITHOUT TIME ZONE,
     updated_at TIMESTAMP WITHOUT TIME ZONE,
-    invoice_id UUID,
-    CONSTRAINT payments_pkey PRIMARY KEY (id)
+    invoice_id UUID
 );
 
-CREATE TABLE invoice_line_items (
+CREATE TABLE IF NOT EXISTS invoice_line_items (
     id UUID NOT NULL,
     description VARCHAR(500),
     quantity numeric(10, 2),
@@ -47,11 +45,10 @@ CREATE TABLE invoice_line_items (
     tax_rate numeric(5, 2),
     tax_amount numeric(10, 2),
     created_at TIMESTAMP WITHOUT TIME ZONE,
-    invoice_id UUID NOT NULL,
-    CONSTRAINT invoice_line_items_pkey PRIMARY KEY (id)
+    invoice_id UUID NOT NULL
 );
 
-CREATE TABLE accessorial_charges (
+CREATE TABLE IF NOT EXISTS accessorial_charges (
     id UUID NOT NULL,
     charge_type VARCHAR(100) NOT NULL,
     description TEXT,
@@ -63,11 +60,10 @@ CREATE TABLE accessorial_charges (
     approved_at TIMESTAMP WITHOUT TIME ZONE,
     receipt_url VARCHAR(500),
     notes TEXT,
-    created_at TIMESTAMP WITHOUT TIME ZONE,
-    CONSTRAINT accessorial_charges_pkey PRIMARY KEY (id)
+    created_at TIMESTAMP WITHOUT TIME ZONE
 );
 
-CREATE TABLE rate_agreements (
+CREATE TABLE IF NOT EXISTS rate_agreements (
     id UUID NOT NULL,
     agreement_number VARCHAR(50) NOT NULL,
     lane_origin_city VARCHAR(100),
@@ -88,10 +84,5 @@ CREATE TABLE rate_agreements (
     status VARCHAR(50),
     notes TEXT,
     created_at TIMESTAMP WITHOUT TIME ZONE,
-    updated_at TIMESTAMP WITHOUT TIME ZONE,
-    CONSTRAINT rate_agreements_pkey PRIMARY KEY (id)
+    updated_at TIMESTAMP WITHOUT TIME ZONE
 );
-
-ALTER TABLE payments ADD CONSTRAINT fk_payments_invoice_id FOREIGN KEY (invoice_id) REFERENCES invoices (id) ON UPDATE NO ACTION ON DELETE NO ACTION;
-
-ALTER TABLE invoice_line_items ADD CONSTRAINT fk_invoice_line_items_invoice_id FOREIGN KEY (invoice_id) REFERENCES invoices (id) ON UPDATE NO ACTION ON DELETE NO ACTION;

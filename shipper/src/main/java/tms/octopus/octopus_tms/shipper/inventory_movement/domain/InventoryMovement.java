@@ -18,7 +18,7 @@ import tms.octopus.octopus_tms.shipper.warehouse.domain.Warehouse;
 
 
 @Entity
-@Table(name = "InventoryMovements")
+@Table(name = "Inventory_Movements")
 @Getter
 @Setter
 public class InventoryMovement {

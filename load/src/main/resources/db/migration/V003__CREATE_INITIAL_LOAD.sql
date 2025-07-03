@@ -1,4 +1,4 @@
-CREATE TABLE loads (
+CREATE TABLE IF NOT EXISTS loads (
     id UUID NOT NULL,
     load_number VARCHAR(50) NOT NULL,
     broker_id UUID,
@@ -38,11 +38,10 @@ CREATE TABLE loads (
     assigned_dispatcher UUID,
     assigned_driver_id UUID,
     created_at TIMESTAMP WITHOUT TIME ZONE,
-    updated_at TIMESTAMP WITHOUT TIME ZONE,
-    CONSTRAINT loads_pkey PRIMARY KEY (id)
+    updated_at TIMESTAMP WITHOUT TIME ZONE
 );
 
-CREATE TABLE load_stops (
+CREATE TABLE IF NOT EXISTS load_stops (
     id UUID NOT NULL,
     stop_number INTEGER NOT NULL,
     stop_type VARCHAR(100) NOT NULL,
@@ -69,11 +68,10 @@ CREATE TABLE load_stops (
     special_instructions TEXT,
     created_at TIMESTAMP WITHOUT TIME ZONE,
     updated_at TIMESTAMP WITHOUT TIME ZONE,
-    load_id UUID NOT NULL,
-    CONSTRAINT load_stops_pkey PRIMARY KEY (id)
+    load_id UUID NOT NULL
 );
 
-CREATE TABLE load_cargoes (
+CREATE TABLE IF NOT EXISTS load_cargoes (
     id UUID NOT NULL,
     commodity VARCHAR(255) NOT NULL,
     commodity_code VARCHAR(50),
@@ -98,22 +96,20 @@ CREATE TABLE load_cargoes (
     updated_at TIMESTAMP WITHOUT TIME ZONE,
     load_id UUID NOT NULL,
     pickup_stop_id UUID,
-    delivery_stop_id UUID,
-    CONSTRAINT load_cargoes_pkey PRIMARY KEY (id)
+    delivery_stop_id UUID
 );
 
-CREATE TABLE load_status_histories (
+CREATE TABLE IF NOT EXISTS load_status_histories (
     id UUID NOT NULL,
     load_id UUID,
     old_status VARCHAR(255),
     new_status VARCHAR(255) NOT NULL,
     change_reason VARCHAR(255),
     notes TEXT,
-    created_at TIMESTAMP WITHOUT TIME ZONE,
-    CONSTRAINT load_status_histories_pkey PRIMARY KEY (id)
+    created_at TIMESTAMP WITHOUT TIME ZONE
 );
 
-CREATE TABLE load_trackings (
+CREATE TABLE IF NOT EXISTS load_trackings (
     id UUID NOT NULL,
     driver_id UUID,
     latitude numeric(10, 6),
@@ -129,11 +125,10 @@ CREATE TABLE load_trackings (
     event_type VARCHAR(100),
     notes TEXT,
     created_at TIMESTAMP WITHOUT TIME ZONE,
-    load_id UUID NOT NULL,
-    CONSTRAINT load_trackings_pkey PRIMARY KEY (id)
+    load_id UUID NOT NULL
 );
 
-CREATE TABLE load_documents (
+CREATE TABLE IF NOT EXISTS load_documents (
     id UUID NOT NULL,
     stop_id UUID,
     load_cargo_id UUID,
@@ -144,11 +139,10 @@ CREATE TABLE load_documents (
     mime_type VARCHAR(100),
     uploaded_by UUID,
     uploaded_at TIMESTAMP WITHOUT TIME ZONE,
-    load_id UUID NOT NULL,
-    CONSTRAINT load_documents_pkey PRIMARY KEY (id)
+    load_id UUID NOT NULL
 );
 
-CREATE TABLE load_offers (
+CREATE TABLE IF NOT EXISTS load_offers (
     id UUID NOT NULL,
     carrier_id UUID,
     offered_rate numeric(10, 2),
@@ -160,11 +154,10 @@ CREATE TABLE load_offers (
     created_by UUID,
     created_at TIMESTAMP WITHOUT TIME ZONE,
     updated_at TIMESTAMP WITHOUT TIME ZONE,
-    load_id UUID NOT NULL,
-    CONSTRAINT load_offers_pkey PRIMARY KEY (id)
+    load_id UUID NOT NULL
 );
 
-CREATE TABLE load_status_events (
+CREATE TABLE IF NOT EXISTS load_status_events (
     id UUID NOT NULL,
     event_type VARCHAR(100) NOT NULL,
     event_timestamp TIMESTAMP WITHOUT TIME ZONE NOT NULL,
@@ -176,11 +169,10 @@ CREATE TABLE load_status_events (
     notes TEXT,
     metadata TEXT,
     created_by UUID,
-    load_id UUID NOT NULL,
-    CONSTRAINT load_status_events_pkey PRIMARY KEY (id)
+    load_id UUID NOT NULL
 );
 
-CREATE TABLE load_assignments (
+CREATE TABLE IF NOT EXISTS load_assignments (
     id UUID NOT NULL,
     load_id UUID NOT NULL,
     assignment_type VARCHAR(50) NOT NULL,
@@ -192,22 +184,5 @@ CREATE TABLE load_assignments (
     unassignment_reason VARCHAR(255),
     notes TEXT,
     assigned_by UUID,
-    unassigned_by UUID,
-    CONSTRAINT load_assignments_pkey PRIMARY KEY (id)
+    unassigned_by UUID
 );
-
-ALTER TABLE load_stops ADD CONSTRAINT fk_load_stops_load_id FOREIGN KEY (load_id) REFERENCES loads (id) ON UPDATE NO ACTION ON DELETE NO ACTION;
-
-ALTER TABLE load_cargoes ADD CONSTRAINT fk_load_cargoes_load_id FOREIGN KEY (load_id) REFERENCES loads (id) ON UPDATE NO ACTION ON DELETE NO ACTION;
-
-ALTER TABLE load_cargoes ADD CONSTRAINT fk_load_cargoes_pickup_stop_id FOREIGN KEY (pickup_stop_id) REFERENCES load_stops (id) ON UPDATE NO ACTION ON DELETE NO ACTION;
-
-ALTER TABLE load_cargoes ADD CONSTRAINT fk_load_cargoes_delivery_stop_id FOREIGN KEY (delivery_stop_id) REFERENCES load_stops (id) ON UPDATE NO ACTION ON DELETE NO ACTION;
-
-ALTER TABLE load_trackings ADD CONSTRAINT fk_load_trackings_load_id FOREIGN KEY (load_id) REFERENCES loads (id) ON UPDATE NO ACTION ON DELETE NO ACTION;
-
-ALTER TABLE load_documents ADD CONSTRAINT fk_load_documents_load_id FOREIGN KEY (load_id) REFERENCES loads (id) ON UPDATE NO ACTION ON DELETE NO ACTION;
-
-ALTER TABLE load_offers ADD CONSTRAINT fk_load_offers_load_id FOREIGN KEY (load_id) REFERENCES loads (id) ON UPDATE NO ACTION ON DELETE NO ACTION;
-
-ALTER TABLE load_status_events ADD CONSTRAINT fk_load_status_events_load_id FOREIGN KEY (load_id) REFERENCES loads (id) ON UPDATE NO ACTION ON DELETE NO ACTION;
