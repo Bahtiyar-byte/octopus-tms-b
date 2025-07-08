@@ -1,14 +1,14 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, useNavigate } from 'react-router';
-import { handleServerError, setYupDefaults } from 'app/common/utils';
+import { Link, useNavigate } from 'react-router-dom';
+import { handleServerError, setYupDefaults } from '../utils/common';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { AuthenticationRequest } from 'app/security/authentication-model';
+import { AuthenticationRequest } from './authentication-model';
 import axios from 'axios';
-import useAuthentication from 'app/security/use-authentication';
-import InputRow from 'app/common/input-row/input-row';
-import useDocumentTitle from 'app/common/use-document-title';
+import useAuthentication from '../security/use-authentication';
+import InputRow from '../components/forms/InputRow';
+import useDocumentTitle from '../hooks/useDocumentTitle';
 import * as yup from 'yup';
 
 

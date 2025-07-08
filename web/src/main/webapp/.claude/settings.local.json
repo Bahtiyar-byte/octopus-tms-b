@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install)",
+      "Bash(npm install:*)",
+      "Bash(npm run dev:*)",
+      "Bash(find:*)",
+      "Bash(mkdir:*)",
+      "Bash(touch:*)",
+      "Bash(cp:*)",
+      "Bash(cat:*)",
+      "Bash(diff:*)",
+      "Bash(grep:*)",
+      "Bash(rm:*)",
+      "Bash(rg:*)",
+      "Bash(/Users/haydarovbahtiyar/.nvm/versions/node/v24.0.2/lib/node_modules/@anthropic-ai/claude-code/vendor/ripgrep/arm64-darwin/rg -l \"\\.map\\([^)]*\\)\\s*\\{\" --type tsx src/)",
+      "Bash(/Users/haydarovbahtiyar/.nvm/versions/node/v24.0.2/lib/node_modules/@anthropic-ai/claude-code/vendor/ripgrep/arm64-darwin/rg \"\\.map\\([^)]*\\)\\s*\\{\" -g \"*.tsx\" src/)",
+      "Bash(/Users/haydarovbahtiyar/.nvm/versions/node/v24.0.2/lib/node_modules/@anthropic-ai/claude-code/vendor/ripgrep/arm64-darwin/rg \"@ts-ignore|@ts-nocheck\" -A 2 -B 2 src/pages/AllLoads.tsx)",
+      "Bash(npm run lint)",
+      "Bash(npm run build:*)",
+      "Bash(mv:*)",
+      "Bash(ls:*)",
+      "Bash(git checkout:*)"
+    ],
+    "deny": []
+  },
+  "enableAllProjectMcpServers": false
+}

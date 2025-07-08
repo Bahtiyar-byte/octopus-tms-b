@@ -1,13 +1,13 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router';
-import { handleServerError, setYupDefaults } from 'app/common/utils';
+import { useNavigate } from 'react-router-dom';
+import { handleServerError, setYupDefaults } from '../utils/common';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { PasswordResetRequest } from 'app/security/passwordReset-model';
+import { PasswordResetRequest } from './passwordReset-model';
 import axios from 'axios';
-import InputRow from 'app/common/input-row/input-row';
-import useDocumentTitle from 'app/common/use-document-title';
+import InputRow from '../components/forms/InputRow';
+import useDocumentTitle from '../hooks/useDocumentTitle';
 import * as yup from 'yup';
 
 

@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { AuthenticationContext } from 'app/security/authentication-provider';
+import { AuthenticationContext } from './authentication-provider';
 
 
 /**

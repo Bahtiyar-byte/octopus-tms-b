@@ -1,0 +1,58 @@
+{
+  "mcpServers": {
+    "postgresql": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-postgresql",
+        "postgresql://octopus:password@localhost:5432/octopus_tms"
+      ],
+      "env": {
+        "POSTGRES_SCHEMAS": "public",
+        "POSTGRES_TABLES": "ai_provider_configs,loads,companies,users,drivers,invoices,payments,warehouses,inventory_items,contracts,workflows,shipments",
+        "READ_ONLY": "true"
+      }
+    },
+    "puppeteer": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-puppeteer"
+      ],
+      "env": {
+        "PUPPETEER_HEADLESS": "false",
+        "PUPPETEER_TIMEOUT": "30000"
+      }
+    },
+    "playwright": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-playwright"
+      ],
+      "env": {
+        "PLAYWRIGHT_HEADLESS": "false",
+        "PLAYWRIGHT_TIMEOUT": "30000"
+      }
+    }
+  },
+  "securityRules": {
+    "allowedQueries": [
+      "SELECT",
+      "WITH"
+    ],
+    "deniedQueries": [
+      "INSERT",
+      "UPDATE",
+      "DELETE",
+      "DROP",
+      "CREATE",
+      "ALTER",
+      "TRUNCATE"
+    ],
+    "rowLevelSecurity": {
+      "enabled": true,
+      "userContextColumn": "user_id"
+    }
+  }
+}

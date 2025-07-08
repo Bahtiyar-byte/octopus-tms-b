@@ -103,26 +103,17 @@ project(':web') {
     node {
         download.set(true)
         version.set('22.16.0')
-        nodeProjectDir.set(file("${project.projectDir}/.."))
+        nodeProjectDir.set(file("${project.projectDir}/src/main/webapp"))
     }
 
     tasks.register('npmRunBuild', NpmTask) {
         args = ['run', 'build']
         dependsOn npmInstall
 
-        inputs.files(fileTree('../node_modules'))
-        inputs.files(fileTree('../base/src/main/webapp'))
-        inputs.files(fileTree('../core/src/main/webapp'))
-        inputs.files(fileTree('../load/src/main/webapp'))
-        inputs.files(fileTree('../broker/src/main/webapp'))
-        inputs.files(fileTree('../shipper/src/main/webapp'))
-        inputs.files(fileTree('../carrier/src/main/webapp'))
-        inputs.files(fileTree('../financial/src/main/webapp'))
-        inputs.files(fileTree('../web/src/main/webapp'))
-        inputs.file('../.env')
-        inputs.file('../package.json')
-        inputs.file('../tsconfig.json')
-        inputs.file('../webpack.config.js')
+        inputs.files(fileTree('src/main/webapp/app'))
+        inputs.file('src/main/webapp/package.json')
+        inputs.file('src/main/webapp/tsconfig.json')
+        inputs.file('src/main/webapp/vite.config.ts')
         outputs.dir(layout.buildDirectory.dir('resources/main/static'))
     }
 

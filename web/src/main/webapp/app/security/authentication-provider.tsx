@@ -1,7 +1,7 @@
 import React, { createContext, useEffect, useState, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMatches, useNavigate } from 'react-router';
-import { AuthenticationResponse } from 'app/security/authentication-model';
+import { AuthenticationResponse } from './authentication-model';
 import axios from 'axios';
 
 
@@ -33,7 +33,7 @@ export const AuthenticationProvider = ({ children }: AuthenticationProviderParam
   const { t } = useTranslation();
   const [initCompleted, setInitCompleted] = useState(false);
   const [token, setToken] = useState(localStorage.getItem('access_token'));
-  const [loginSuccessUrl, setLoginSuccessUrl] = useState('/');
+  const [, setLoginSuccessUrl] = useState('/');
   const navigate = useNavigate();
   const matches = useMatches();
   const roles = matches.reduce((accumulator: string[], currentMatch) => {
@@ -59,8 +59,11 @@ export const AuthenticationProvider = ({ children }: AuthenticationProviderParam
 
   const login = (authenticationResponse: AuthenticationResponse) => {
     localStorage.setItem('access_token', authenticationResponse.accessToken!);
+    // Also store with the key expected by the frontend routes
+    localStorage.setItem('octopus_tms_token', authenticationResponse.accessToken!);
     setToken(authenticationResponse.accessToken!);
-    const navigateTo = loginSuccessUrl;
+    // Redirect to broker dashboard after login
+    const navigateTo = '/broker/dashboard';
     setLoginSuccessUrl('/');
     return navigateTo;
   };

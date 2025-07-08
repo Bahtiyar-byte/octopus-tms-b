@@ -1,0 +1,15 @@
+/* App-specific styles */
+#root {
+  min-height: 100vh;
+  width: 100%;
+}
+
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main#app {
+  flex: 1;
+}
