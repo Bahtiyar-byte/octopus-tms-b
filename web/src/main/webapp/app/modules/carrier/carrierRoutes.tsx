@@ -1,5 +1,6 @@
 import { Navigate, RouteObject } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { UserRole } from '../../types/user';
 
 // Import Carrier pages
 import Dashboard from './pages/Dashboard';
@@ -24,11 +25,11 @@ const CarrierRoute = ({ children }: { children: React.ReactNode }) => {
   
   // Allow access to users with carrier-related roles or admin role
   const allowedRoles = [
-    'carrier',
-    'dispatcher',
-    'operator',
-    'supervisor',
-    'admin'
+    UserRole.CARRIER,
+    UserRole.DISPATCHER,
+    UserRole.DRIVER,
+    UserRole.SUPERVISOR,
+    UserRole.ADMIN
   ];
   
   if (!user?.role || !allowedRoles.includes(user.role)) {

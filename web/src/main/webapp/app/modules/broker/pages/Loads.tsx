@@ -158,12 +158,12 @@ const Loads: React.FC = () => {
                 <div className="flex justify-between items-start mb-3">
                   <h3 className="text-lg font-semibold">{load.id}</h3>
                   <div className="flex items-center gap-2">
-                    {load.status === 'new' && (
+                    {load.status === 'draft' && (
                       <span className="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs font-medium animate-pulse">
-                        NEW
+                        DRAFT
                       </span>
                     )}
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusBadgeClass(load.status.replace('_', ' '))}`}>
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusBadgeClass(load.status.replace('_', ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()) as any)}`}>
                       {load.status.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
                     </span>
                   </div>
@@ -283,12 +283,12 @@ const Loads: React.FC = () => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center gap-2">
-                        {load.status === 'new' && (
+                        {load.status === 'draft' && (
                           <span className="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs font-medium animate-pulse">
-                            NEW
+                            DRAFT
                           </span>
                         )}
-                        <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusBadgeClass(load.status.replace('_', ' '))}`}>
+                        <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusBadgeClass(load.status.replace('_', ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()) as any)}`}>
                           {load.status.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
                         </span>
                       </div>

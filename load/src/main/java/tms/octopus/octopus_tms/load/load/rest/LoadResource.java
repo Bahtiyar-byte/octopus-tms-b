@@ -70,6 +70,33 @@ public class LoadResource {
         return ResponseEntity.ok(loadService.findAll(filter, pageable));
     }
 
+    @Operation(
+            parameters = {
+                    @Parameter(
+                            name = "page",
+                            in = ParameterIn.QUERY,
+                            schema = @Schema(implementation = Integer.class)
+                    ),
+                    @Parameter(
+                            name = "size",
+                            in = ParameterIn.QUERY,
+                            schema = @Schema(implementation = Integer.class)
+                    ),
+                    @Parameter(
+                            name = "sort",
+                            in = ParameterIn.QUERY,
+                            schema = @Schema(implementation = String.class)
+                    )
+            }
+    )
+    @GetMapping("/broker/{brokerId}")
+    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SUPERVISOR + "', '" + UserRole.Fields.DISPATCHER + "', '" + UserRole.Fields.SALES + "')")
+    public ResponseEntity<Page<LoadDTO>> getLoadsByBrokerId(
+            @PathVariable(name = "brokerId") final UUID brokerId,
+            @Parameter(hidden = true) @SortDefault(sort = "id") @PageableDefault(size = 20) final Pageable pageable) {
+        return ResponseEntity.ok(loadService.findAllByBrokerId(brokerId, pageable));
+    }
+
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SUPERVISOR + "', '" + UserRole.Fields.DISPATCHER + "', '" + UserRole.Fields.DRIVER + "', '" + UserRole.Fields.SALES + "')")
     public ResponseEntity<LoadDTO> getLoad(@PathVariable(name = "id") final UUID id) {

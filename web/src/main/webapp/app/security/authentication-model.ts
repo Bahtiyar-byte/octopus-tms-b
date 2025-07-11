@@ -11,4 +11,15 @@ export class AuthenticationRequest {
 
 export class AuthenticationResponse {
   accessToken?: string;
+  token?: string;
+  refreshToken?: string;
+  tokenExpiry?: string;
+  user?: {
+    id: string;
+    username: string;
+    role: string;
+    firstName?: string;
+    lastName?: string;
+  };
+  permissions?: string[];
 }

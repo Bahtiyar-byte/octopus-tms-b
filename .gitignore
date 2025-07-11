@@ -44,3 +44,20 @@ bin/
 /dist/
 /nbdist/
 /.nb-gradle/
+
+## Debug and test artifacts
+debug/
+screenshots/
+test-results/
+tests/
+*.tsbuildinfo
+
+## Test scripts in webapp root
+web/src/main/webapp/test-*.cjs
+
+## Test artifacts
+web/src/main/webapp/tests/frontend-check-report.json
+web/src/main/webapp/tests/e2e/trace.zip
+
+## Ad-hoc scripts
+scripts/generate_hash.sh

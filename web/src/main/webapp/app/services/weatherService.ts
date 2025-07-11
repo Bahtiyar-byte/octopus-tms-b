@@ -117,9 +117,9 @@ export const fetchWeatherAlerts = async (): Promise<WeatherAlert[]> => {
 
     const alerts: WeatherAlert[] = [];
 
-    // Fetch weather data for each city
+    // Fetch weather data for each city using our backend proxy
     const promises = CITIES.map(city => 
-      axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${city.lat}&lon=${city.lon}&appid=${API_KEY}&units=imperial`)
+      axios.get(`/api/weather?lat=${city.lat}&lon=${city.lon}&units=imperial`)
     );
 
     const responses = await Promise.all(promises);
@@ -201,7 +201,7 @@ const getFallbackWeatherAlerts = (): WeatherAlert[] => {
 export const getCurrentWeather = async (lat: number, lon: number, units: 'imperial' | 'metric' = 'imperial') => {
   try {
     const response = await axios.get(
-      `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=${units}`
+      `/api/weather?lat=${lat}&lon=${lon}&units=${units}`
     );
     return response.data;
   } catch (error) {

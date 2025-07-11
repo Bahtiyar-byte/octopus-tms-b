@@ -38,7 +38,7 @@ export const authService = {
         email: payload.email || credentials.username,
         firstName: payload.firstName || payload.given_name || credentials.username.split('@')[0].split('.')[0] || credentials.username,
         lastName: payload.lastName || payload.family_name || credentials.username.split('@')[0].split('.')[1] || '',
-        role: (payload.roles?.[0]?.toLowerCase() || payload.role?.toLowerCase() || 'broker') as UserRole,
+        role: (payload.roles?.[0] || payload.role || 'BROKER') as UserRole,
         avatar: payload.avatar || payload.picture || '',
         phone: payload.phone || payload.phoneNumber || '',
         department: payload.department || payload.dept || '',

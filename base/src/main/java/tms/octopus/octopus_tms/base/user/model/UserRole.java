@@ -19,6 +19,11 @@ public enum UserRole {
     @FieldNameConstants.Include
     SALES,
     @FieldNameConstants.Include
-    SUPPORT
-
+    SUPPORT,
+    @FieldNameConstants.Include
+    BROKER,
+    @FieldNameConstants.Include
+    SHIPPER,
+    @FieldNameConstants.Include
+    CARRIER
 }

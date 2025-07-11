@@ -75,6 +75,16 @@ public class LoadServiceImpl implements LoadService {
     }
 
     @Override
+    public Page<LoadDTO> findAllByBrokerId(final UUID brokerId, final Pageable pageable) {
+        Page<Load> page = loadRepository.findAllByBrokerId(brokerId, pageable);
+        return new PageImpl<>(page.getContent()
+                .stream()
+                .map(load -> loadMapper.updateLoadDTO(load, new LoadDTO()))
+                .toList(),
+                pageable, page.getTotalElements());
+    }
+
+    @Override
     public LoadDTO get(final UUID id) {
         return loadRepository.findById(id)
                 .map(load -> loadMapper.updateLoadDTO(load, new LoadDTO()))

@@ -15,10 +15,15 @@ import tms.octopus.octopus_tms.core.ai_provider_config.model.AiProviderConfigDTO
 )
 public interface AiProviderConfigMapper {
 
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
     AiProviderConfigDTO updateAiProviderConfigDTO(AiProviderConfig aiProviderConfig,
             @MappingTarget AiProviderConfigDTO aiProviderConfigDTO);
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
     AiProviderConfig updateAiProviderConfig(AiProviderConfigDTO aiProviderConfigDTO,
             @MappingTarget AiProviderConfig aiProviderConfig);
 

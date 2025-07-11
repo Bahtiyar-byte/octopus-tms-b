@@ -11,6 +11,8 @@ public interface LoadService {
 
     Page<LoadDTO> findAll(String filter, Pageable pageable);
 
+    Page<LoadDTO> findAllByBrokerId(UUID brokerId, Pageable pageable);
+
     LoadDTO get(UUID id);
 
     UUID create(LoadDTO loadDTO);

@@ -1,20 +1,13 @@
 package tms.octopus.octopus_tms.core.ai_provider_config.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.Setter;
 
-
 @Entity
-@Table(name = "AiProviderConfigs")
+@Table(name = "ai_provider_configs")
 @Getter
 @Setter
 public class AiProviderConfig {
@@ -62,5 +55,7 @@ public class AiProviderConfig {
 
     @Column(nullable = false)
     private OffsetDateTime updatedAt;
-
+    
+    @Column(columnDefinition = "text")
+    private String additionalSettings;
 }

@@ -10,11 +10,14 @@ interface AIProvider {
 interface AIProviderConfig {
   id: number;
   provider: string;
-  hasApiKey: boolean;
-  hasOAuthToken: boolean;
-  active: boolean;
+  apiKey: string;
+  oauthToken?: string;
+  oauthRefreshToken?: string;
+  isActive: boolean;
   connectionStatus: 'VALID' | 'INVALID' | 'PENDING';
-  lastTested: string | null;
+  lastTested?: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 const AI_PROVIDERS: AIProvider[] = [
@@ -42,13 +45,30 @@ export const AIIntegrationSettings: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [testingConnection, setTestingConnection] = useState<string | null>(null);
 
+  const getDefaultModel = (provider: string): string => {
+    switch (provider) {
+      case 'OPENAI':
+        return 'gpt-4';
+      case 'ANTHROPIC':
+        return 'claude-3-opus-20240229';
+      case 'GOOGLE':
+        return 'gemini-pro';
+      default:
+        return '';
+    }
+  };
+
   useEffect(() => {
     fetchConfigurations();
   }, []);
 
   const fetchConfigurations = async () => {
     try {
-      const response = await fetch('/api/integrations/ai/configurations');
+      const response = await fetch('/api/ai/providers', {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('octopus_tms_token') || sessionStorage.getItem('octopus_tms_token')}`
+        }
+      });
       if (response.ok) {
         const data = await response.json();
         setConfigurations(data);
@@ -66,14 +86,16 @@ export const AIIntegrationSettings: React.FC = () => {
 
     setLoading(true);
     try {
-      const response = await fetch('/api/integrations/ai/configure', {
+      const response = await fetch('/api/ai/providers', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('octopus_tms_token') || sessionStorage.getItem('octopus_tms_token')}`
         },
         body: JSON.stringify({
           provider: selectedProvider,
-          apiKey: apiKey
+          apiKey: apiKey,
+          isActive: true
         })
       });
 
@@ -95,22 +117,20 @@ export const AIIntegrationSettings: React.FC = () => {
   const handleTestConnection = async (provider: string) => {
     setTestingConnection(provider);
     try {
-      const response = await fetch('/api/integrations/ai/test', {
+      const response = await fetch(`/api/ai/providers/${provider}/test`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          provider: provider
-        })
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('octopus_tms_token') || sessionStorage.getItem('octopus_tms_token')}`
+        }
       });
 
       if (response.ok) {
         const result = await response.json();
-        if (result.valid) {
+        if (result.success) {
           alert('Connection successful!');
         } else {
-          alert('Connection failed. Please check your API key.');
+          alert('Connection failed: ' + (result.message || 'Please check your API key.'));
         }
         await fetchConfigurations();
       }
@@ -122,10 +142,18 @@ export const AIIntegrationSettings: React.FC = () => {
     }
   };
 
-  const handleToggleActive = async (configId: number) => {
+  const handleToggleActive = async (config: AIProviderConfig) => {
     try {
-      const response = await fetch(`/api/integrations/ai/configurations/${configId}/toggle`, {
-        method: 'PUT'
+      const response = await fetch('/api/ai/providers', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('octopus_tms_token') || sessionStorage.getItem('octopus_tms_token')}`
+        },
+        body: JSON.stringify({
+          ...config,
+          isActive: !config.isActive
+        })
       });
 
       if (response.ok) {
@@ -142,8 +170,11 @@ export const AIIntegrationSettings: React.FC = () => {
     }
 
     try {
-      const response = await fetch(`/api/integrations/ai/configurations/${configId}`, {
-        method: 'DELETE'
+      const response = await fetch(`/api/ai/providers/${configId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('octopus_tms_token') || sessionStorage.getItem('octopus_tms_token')}`
+        }
       });
 
       if (response.ok) {
@@ -248,8 +279,8 @@ export const AIIntegrationSettings: React.FC = () => {
                         <p className="text-sm text-gray-600 mt-1">{provider?.description}</p>
                         
                         <div className="flex items-center gap-4 mt-3 text-sm">
-                          <span className={`px-2 py-1 rounded-full ${config.active ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
-                            {config.active ? 'Active' : 'Inactive'}
+                          <span className={`px-2 py-1 rounded-full ${config.isActive ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
+                            {config.isActive ? 'Active' : 'Inactive'}
                           </span>
                           {config.lastTested && (
                             <span className="text-gray-500">
@@ -269,11 +300,11 @@ export const AIIntegrationSettings: React.FC = () => {
                           <RefreshCw className={`w-4 h-4 ${testingConnection === config.provider ? 'animate-spin' : ''}`} />
                         </button>
                         <button
-                          onClick={() => handleToggleActive(config.id)}
+                          onClick={() => handleToggleActive(config)}
                           className="p-2 text-gray-600 hover:bg-gray-50 rounded-md"
-                          title={config.active ? 'Deactivate' : 'Activate'}
+                          title={config.isActive ? 'Deactivate' : 'Activate'}
                         >
-                          {config.active ? 'Deactivate' : 'Activate'}
+                          {config.isActive ? 'Deactivate' : 'Activate'}
                         </button>
                         <button
                           onClick={() => handleDelete(config.id)}

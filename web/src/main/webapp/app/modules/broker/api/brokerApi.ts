@@ -210,7 +210,7 @@ export const brokerApi = {
       }));
 
       if (status) {
-        return loads.filter(load => load.status === status);
+        return loads.filter((load: any) => load.status === status);
       }
       return loads;
     } catch (error) {

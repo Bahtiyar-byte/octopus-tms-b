@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
 import { User, Role } from '../../types/settings';
-import { UserRole } from '../../types/user';
+import { UserRole } from '../../types';
 import ToggleSwitch from '../ToggleSwitch';
 import Modal from '../ui/Modal';
-import { userService } from '../../services/userService';
+import { userService } from '../../services';
 
 interface UserSettingsProps {
-  initialUsers: User[];
   initialRoles: Role[];
 }
 
-const UserSettings: React.FC<UserSettingsProps> = ({ initialUsers, initialRoles }) => {
+const UserSettings: React.FC<UserSettingsProps> = ({ initialRoles }) => {
   const [users, setUsers] = useState<User[]>([]);
   const [roles, setRoles] = useState<Role[]>(initialRoles);
   const [showAddUserModal, setShowAddUserModal] = useState(false);
@@ -57,8 +56,8 @@ const UserSettings: React.FC<UserSettingsProps> = ({ initialUsers, initialRoles 
     } catch (error) {
       console.error('Error fetching users:', error);
       toast.error('Failed to load users');
-      // Fall back to initial users if fetch fails
-      setUsers(initialUsers);
+      // Set empty array on error
+      setUsers([]);
     } finally {
       setIsLoading(false);
     }
@@ -237,7 +236,22 @@ const UserSettings: React.FC<UserSettingsProps> = ({ initialUsers, initialRoles 
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {users.map(user => (
+                {isLoading ? (
+                  <tr>
+                    <td colSpan={6} className="px-6 py-8 text-center">
+                      <div className="flex justify-center items-center">
+                        <i className="fas fa-spinner fa-spin text-2xl text-gray-400 mr-2"></i>
+                        <span className="text-gray-500">Loading users...</span>
+                      </div>
+                    </td>
+                  </tr>
+                ) : users.length === 0 ? (
+                  <tr>
+                    <td colSpan={6} className="px-6 py-8 text-center">
+                      <p className="text-gray-500">No users found</p>
+                    </td>
+                  </tr>
+                ) : users.map(user => (
                   <tr key={user.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">

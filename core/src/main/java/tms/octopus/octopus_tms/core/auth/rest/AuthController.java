@@ -3,6 +3,7 @@ package tms.octopus.octopus_tms.core.auth.rest;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,17 +17,21 @@ import tms.octopus.octopus_tms.base.user.model.UserRole;
 import tms.octopus.octopus_tms.core.auth.model.LoginRequestDTO;
 import tms.octopus.octopus_tms.core.auth.model.RefreshTokenRequestDTO;
 import tms.octopus.octopus_tms.core.auth.model.UserAuthDTO;
+import tms.octopus.octopus_tms.core.auth.service.AuthService;
 import tms.octopus.octopus_tms.core.user.model.UserDTO;
 
 
 @RestController
 @RequestMapping(value = "/auth", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequiredArgsConstructor
 public class AuthController {
+
+    private final AuthService authService;
 
     @PostMapping("/login")
     public ResponseEntity<UserAuthDTO> login(
             @RequestBody @Valid final LoginRequestDTO loginRequestDTO) {
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(authService.authenticate(loginRequestDTO));
     }
 
     @PostMapping("/logout")

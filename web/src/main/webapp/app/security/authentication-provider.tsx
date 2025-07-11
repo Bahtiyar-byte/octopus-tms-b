@@ -12,6 +12,9 @@ export const DRIVER = 'DRIVER';
 export const ACCOUNTING = 'ACCOUNTING';
 export const SALES = 'SALES';
 export const SUPPORT = 'SUPPORT';
+export const BROKER = 'BROKER';
+export const CARRIER = 'CARRIER';
+export const SHIPPER = 'SHIPPER';
 
 export const AuthenticationContext = createContext<{
   isLoggedIn: () => boolean;
@@ -58,12 +61,38 @@ export const AuthenticationProvider = ({ children }: AuthenticationProviderParam
   };
 
   const login = (authenticationResponse: AuthenticationResponse) => {
-    localStorage.setItem('access_token', authenticationResponse.accessToken!);
+    // Handle the response format from backend
+    const token = authenticationResponse.token || authenticationResponse.accessToken;
+    localStorage.setItem('access_token', token!);
     // Also store with the key expected by the frontend routes
-    localStorage.setItem('octopus_tms_token', authenticationResponse.accessToken!);
-    setToken(authenticationResponse.accessToken!);
-    // Redirect to broker dashboard after login
-    const navigateTo = '/broker/dashboard';
+    localStorage.setItem('octopus_tms_token', token!);
+    setToken(token!);
+    
+    // Get user role from response or token
+    let userRole = null;
+    if (authenticationResponse.user && authenticationResponse.user.role) {
+      userRole = authenticationResponse.user.role;
+    } else {
+      // Fallback to parsing token
+      const tokenData = JSON.parse(atob(token!.split('.')[1]!));
+      const userRoles = tokenData.roles || [];
+      userRole = userRoles[0];
+    }
+    
+    // Redirect based on primary role
+    let navigateTo = '/';
+    if (userRole === 'BROKER') {
+      navigateTo = '/broker/dashboard';
+    } else if (userRole === 'CARRIER') {
+      navigateTo = '/carrier/dashboard';
+    } else if (userRole === 'SHIPPER') {
+      navigateTo = '/shipper/dashboard';
+    } else if (userRole === 'ADMIN' || userRole === 'SUPERVISOR') {
+      navigateTo = '/broker/dashboard'; // Default admin/supervisor to broker dashboard
+    } else {
+      navigateTo = '/'; // Default fallback
+    }
+    
     setLoginSuccessUrl('/');
     return navigateTo;
   };

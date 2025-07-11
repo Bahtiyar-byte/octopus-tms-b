@@ -1,12 +1,16 @@
 // User related types
 export enum UserRole {
-  OPERATOR = 'operator',
-  DISPATCHER = 'dispatcher',
-  SUPERVISOR = 'supervisor',
-  ADMIN = 'admin',
-  CARRIER = 'carrier',
-  BROKER = 'broker',
-  SHIPPER = 'shipper'
+  OPERATOR = 'OPERATOR',
+  DISPATCHER = 'DISPATCHER',
+  SUPERVISOR = 'SUPERVISOR',
+  ADMIN = 'ADMIN',
+  CARRIER = 'CARRIER',
+  BROKER = 'BROKER',
+  SHIPPER = 'SHIPPER',
+  DRIVER = 'DRIVER',
+  ACCOUNTING = 'ACCOUNTING',
+  SALES = 'SALES',
+  SUPPORT = 'SUPPORT'
 }
 
 export interface User {

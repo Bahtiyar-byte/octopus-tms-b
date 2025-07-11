@@ -16,8 +16,11 @@ Octopus TMS is a Transportation Management System built as a modular monolith wi
 # Install frontend dependencies
 npm install
 
-# Start PostgreSQL database (required for backend)
-docker compose up
+# NO DOCKER - Local PostgreSQL 14 running
+# Database: octopus-tms-b
+# Username: haydarovbahtiyar
+# Password: password
+# URL: jdbc:postgresql://localhost:5432/octopus-tms-b
 
 # Run frontend dev server (port 3000)
 npm run devserver
@@ -44,8 +47,8 @@ npm run test
 # Build production JAR
 ./gradlew bootJar
 
-# Build Docker image
-./gradlew bootBuildImage --imageName=tms.octopus/octopus-tms
+# Build Docker image (only if needed - user prefers no Docker)
+# ./gradlew bootBuildImage --imageName=tms.octopus/octopus-tms
 ```
 
 ### Running the Application
@@ -103,10 +106,10 @@ React code lives in `web/src/main/webapp/app/`:
 
 ### Development Environment
 
-- **Database**: PostgreSQL on port 5433 (via Docker Compose)
+- **Database**: Local PostgreSQL 14 on port 5432 (NO DOCKER - user preference)
 - **Backend**: Spring Boot on port 8080
 - **Frontend Dev Server**: Webpack on port 3000 (proxies to backend)
-- **Required Tools**: Java 21, Node.js 22, Docker
+- **Required Tools**: Java 21, Node.js 22
 
 ### Testing Approach
 
@@ -128,9 +131,29 @@ Frontend tests:
 
 ### Important Notes
 
-1. **Lombok**: Requires IDE plugin with annotation processing enabled
-2. **MapStruct**: Generates mapper implementations at compile time
-3. **Flyway**: All migrations must be idempotent (use CREATE TABLE IF NOT EXISTS)
-4. **Frontend Build**: Integrated into Gradle build, outputs to Spring Boot static resources
-5. **Environment Config**: Use Spring profiles (local, production) and .env files
-6. **Module Dependencies**: Core modules should not depend on domain-specific modules
+1. **NO DOCKER**: Local PostgreSQL 14 running. Never suggest Docker.
+2. **NO FLYWAY**: Temporarily removed for simplification
+3. **Lombok**: Requires IDE plugin with annotation processing enabled
+4. **MapStruct**: Generates mapper implementations at compile time
+5. **Frontend Build**: Integrated into Gradle build, outputs to Spring Boot static resources
+6. **Environment Config**: Use Spring profiles (local, production) and .env files
+7. **Module Dependencies**: Core modules should not depend on domain-specific modules
+8. **Focus**: Complete modules one at a time, starting with Broker module
+
+### Test Users (Simplified)
+
+Only 3 test users during development:
+- **BROKER**: emily.anderson@octopus-tms.com (password: password)
+- **SHIPPER**: shipper1@octopustms.com (password: password)  
+- **CARRIER**: carrier1@octopustms.com (password: password)
+
+### Authentication & Authorization
+
+**Current Issue**: Role confusion - multiple employees at same company type (e.g., broker company) all have same role ("BROKER").
+
+**Proposed Solution**: Multi-tenant architecture with Companies and User Profiles
+- Companies have types: BROKER_COMPANY, SHIPPER_COMPANY, CARRIER_COMPANY
+- Users belong to companies and have profiles/positions within company
+- Permissions based on company type + user profile combination
+
+**Focus**: Simplify authentication and complete one module at a time, starting with Broker module.

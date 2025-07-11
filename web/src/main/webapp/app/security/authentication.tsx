@@ -34,7 +34,7 @@ export default function Authentication() {
   const login = async (data: AuthenticationRequest) => {
     window.scrollTo(0, 0);
     try {
-      const response = await axios.post('/authenticate', data);
+      const response = await axios.post('/auth/login', data);
       navigate(authenticationContext.login(response.data));
     } catch (error: any) {
       if (error.status === 401) {

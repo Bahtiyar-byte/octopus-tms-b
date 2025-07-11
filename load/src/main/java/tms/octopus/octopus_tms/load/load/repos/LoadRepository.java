@@ -11,4 +11,6 @@ public interface LoadRepository extends JpaRepository<Load, UUID> {
 
     Page<Load> findAllById(UUID id, Pageable pageable);
 
+    Page<Load> findAllByBrokerId(UUID brokerId, Pageable pageable);
+
 }

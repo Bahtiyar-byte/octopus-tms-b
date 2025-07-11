@@ -13,6 +13,7 @@ import BackupSettings from '../components/settings/BackupSettings';
 import LogSettings from '../components/settings/LogSettings';
 import ToggleSwitch from '../components/ToggleSwitch';
 import { useAuth } from '../context/AuthContext';
+import { UserRole } from '../types/user';
 import { toast } from 'react-hot-toast';
 
 // Broker-specific types
@@ -33,7 +34,7 @@ interface BrokerIntegration {
 const Settings: React.FC = () => {
   const { user } = useAuth();
   const location = useLocation();
-  const isBroker = user?.role === 'broker' || user?.role === 'admin';
+  const isBroker = user?.role === UserRole.BROKER || user?.role === UserRole.ADMIN || user?.role === UserRole.SUPERVISOR;
   const [activeTab, setActiveTab] = useState<ExtendedTabType>('company');
 
   // Check if we're navigating from the notification settings link
@@ -57,56 +58,7 @@ const Settings: React.FC = () => {
     email: 'info@octopustms.com'
   };
 
-  const initialUsers = [
-    {
-      id: '1',
-      firstName: 'Salim',
-      lastName: 'Vaid',
-      email: 'salim@octopustms.com',
-      role: 'Admin' as const,
-      department: 'Super Admin',
-      status: 'active' as const,
-      lastLogin: 'Today, 9:45 AM',
-      initials: 'SA',
-      avatarColor: 'blue'
-    },
-    {
-      id: '2',
-      firstName: 'Maria',
-      lastName: 'Rodriguez',
-      email: 'maria@octopustms.com',
-      role: 'Dispatcher' as const,
-      department: 'Operations',
-      status: 'active' as const,
-      lastLogin: 'Today, 8:30 AM',
-      initials: 'MR',
-      avatarColor: 'green'
-    },
-    {
-      id: '3',
-      firstName: 'James',
-      lastName: 'Wilson',
-      email: 'james@octopustms.com',
-      role: 'Accountant' as const,
-      department: 'Finance',
-      status: 'active' as const,
-      lastLogin: 'Yesterday, 5:15 PM',
-      initials: 'JW',
-      avatarColor: 'orange'
-    },
-    {
-      id: '4',
-      firstName: 'Sarah',
-      lastName: 'Johnson',
-      email: 'sarah@octopustms.com',
-      role: 'Dispatcher' as const,
-      department: 'Operations',
-      status: 'inactive' as const,
-      lastLogin: 'May 15, 2025',
-      initials: 'SJ',
-      avatarColor: 'gray'
-    }
-  ];
+  // Users are now fetched from backend
 
   const initialRoles = [
     {
@@ -464,7 +416,7 @@ const Settings: React.FC = () => {
 
           {activeTab === 'users' && (
             <Card className="shadow-sm">
-              <UserSettings initialUsers={initialUsers} initialRoles={initialRoles} />
+              <UserSettings initialRoles={initialRoles} />
             </Card>
           )}
 

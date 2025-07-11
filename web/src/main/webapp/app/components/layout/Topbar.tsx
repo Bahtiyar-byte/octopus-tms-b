@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { toast } from 'react-hot-toast';
+import { UserRole } from '../../types';
 
 // Notification types
 type NotificationType = 'location_update' | 'delay_alert' | 'status_change' | 'weather_alert' | 'system';
@@ -79,7 +80,7 @@ const Topbar: React.FC = () => {
   let routes = [];
 
   // If user is a broker, show only broker-specific routes
-  if (user?.role === 'broker') {
+  if (user?.role === UserRole.BROKER) {
     routes = [
       { path: '/broker/dashboard', label: 'Dashboard' },
       { path: '/broker/loads', label: 'Loads' },
@@ -89,7 +90,7 @@ const Topbar: React.FC = () => {
     ];
   } 
   // If user is a shipper, show shipper-specific routes
-  else if (user?.role === 'shipper') {
+  else if (user?.role === UserRole.SHIPPER) {
     routes = [
       { path: '/shipper/dashboard', label: 'Dashboard' },
       { path: '/shipper/loads', label: 'Loads' },
@@ -102,7 +103,7 @@ const Topbar: React.FC = () => {
     routes = [...carrierRoutes];
 
     // Add supervisor route if user has the right role
-    if (user?.role === 'supervisor' || user?.role === 'admin') {
+    if (user?.role === UserRole.SUPERVISOR || user?.role === UserRole.ADMIN) {
       routes.push({ path: '/supervisor', label: 'Supervisor Dashboard' });
     }
   }
@@ -233,7 +234,7 @@ const Topbar: React.FC = () => {
                   <button
                     type="button"
                     className={`px-3 py-2 rounded-md text-sm font-medium flex items-center ${
-                      (user?.role === 'broker' 
+                      (user?.role === UserRole.BROKER 
                         ? location.pathname.includes('/broker/reports') || 
                           location.pathname.includes('/broker/customers') || 
                           location.pathname.includes('/broker/carriers') ||
@@ -241,7 +242,7 @@ const Topbar: React.FC = () => {
                           location.pathname.includes('/broker/contracts') ||
                           location.pathname.includes('/broker/payments') ||
                           location.pathname.includes('/broker/commissions')
-                        : user?.role === 'shipper'
+                        : user?.role === UserRole.SHIPPER
                         ? location.pathname.includes('/shipper/documents') ||
                           location.pathname.includes('/shipper/reports') ||
                           location.pathname.includes('/shipper/settings')
@@ -258,8 +259,8 @@ const Topbar: React.FC = () => {
 
                   {isResourcesMenuOpen && (
                     <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-20">
-                      {(user?.role === 'broker' ? brokerResourcesItems : 
-                        user?.role === 'shipper' ? shipperResourcesItems : 
+                      {(user?.role === UserRole.BROKER ? brokerResourcesItems : 
+                        user?.role === UserRole.SHIPPER ? shipperResourcesItems : 
                         carrierResourcesItems).map((item) => (
                         <Link
                           key={item.path}
@@ -460,8 +461,8 @@ const Topbar: React.FC = () => {
 
               {isResourcesMenuOpen && (
                 <div className="pl-6 py-1">
-                  {(user?.role === 'broker' ? brokerResourcesItems : 
-                    user?.role === 'shipper' ? shipperResourcesItems : 
+                  {(user?.role === UserRole.BROKER ? brokerResourcesItems : 
+                    user?.role === UserRole.SHIPPER ? shipperResourcesItems : 
                     carrierResourcesItems).map((item) => (
                     <Link
                       key={item.path}
