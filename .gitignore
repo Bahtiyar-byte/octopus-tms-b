@@ -58,6 +58,7 @@ web/src/main/webapp/test-*.cjs
 ## Test artifacts
 web/src/main/webapp/tests/frontend-check-report.json
 web/src/main/webapp/tests/e2e/trace.zip
+web/src/main/webapp/temp
 
 ## Ad-hoc scripts
 scripts/generate_hash.sh
