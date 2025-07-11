@@ -1,6 +1,7 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { MainLayout } from '../layouts';
-import { AuthProvider } from '../context/AuthContext';
+import { AuthProvider, useAuth } from '../context/AuthContext';
+import { UserRole } from '../types/user';
 import brokerRoutes from '../modules/broker/brokerRoutes';
 import carrierRoutes from '../modules/carrier/carrierRoutes';
 import shipperRoutes from '../modules/shipper/shipperRoutes';
@@ -14,6 +15,7 @@ import SupervisorDashboard from '../pages/SupervisorDashboard';
 import ForgotPassword from '../pages/ForgotPassword';
 import LoadDetails from '../pages/LoadDetails';
 import TestBackend from '../pages/TestBackend';
+import DashboardRedirect from '../components/DashboardRedirect';
 
 // Auth guard component to protect routes
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -68,6 +70,10 @@ const router = createBrowserRouter([
         path: '/',
         element: <Navigate to="/dashboard" replace />,
       },
+      {
+        path: '/dashboard',
+        element: <DashboardRedirect />,
+      },
       // Shared pages
       {
         path: '/reports',
@@ -91,10 +97,13 @@ const router = createBrowserRouter([
       },
       // Carrier module routes
       {
-        path: 'carrier',
+        path: 'carrier/*',
         children: carrierRoutes,
       },
-      ...carrierRoutes, // Keep old routes for backward compatibility
+      ...carrierRoutes.map(route => ({
+        ...route,
+        path: `carrier/${route.path}`
+      })), // Map carrier routes to include 'carrier' prefix
       // Broker module routes
       ...brokerRoutes,
       // Shipper module routes

@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import tms.octopus.octopus_tms.core.user.domain.User;
+import tms.octopus.octopus_tms.core.user.repos.UserRepository;
 
 
 @Service
@@ -22,16 +24,23 @@ public class OctopusTMSSecurityConfigTokenService {
 
     private final Algorithm hmac512;
     private final JWTVerifier verifier;
+    private final UserRepository userRepository;
 
     public OctopusTMSSecurityConfigTokenService(
-            @Value("${octopusTMSSecurityConfig.secret}") final String secret) {
+            @Value("${octopusTMSSecurityConfig.secret}") final String secret,
+            final UserRepository userRepository) {
         this.hmac512 = Algorithm.HMAC512(secret);
         this.verifier = JWT.require(this.hmac512).build();
+        this.userRepository = userRepository;
     }
 
     public String generateToken(final UserDetails userDetails) {
         final Instant now = Instant.now();
-        return JWT.create()
+        
+        // Get the user entity to include more details in the token
+        User user = userRepository.findByUsernameIgnoreCase(userDetails.getUsername());
+        
+        var jwtBuilder = JWT.create()
                 .withSubject(userDetails.getUsername())
                 // only for client information
                 .withArrayClaim("roles", userDetails.getAuthorities().stream()
@@ -39,8 +48,18 @@ public class OctopusTMSSecurityConfigTokenService {
                         .toArray(String[]::new))
                 .withIssuer("app")
                 .withIssuedAt(now)
-                .withExpiresAt(now.plus(JWT_TOKEN_VALIDITY))
-                .sign(this.hmac512);
+                .withExpiresAt(now.plus(JWT_TOKEN_VALIDITY));
+        
+        // Add user details if available
+        if (user != null) {
+            jwtBuilder.withClaim("userId", user.getId().toString())
+                    .withClaim("email", user.getEmail())
+                    .withClaim("firstName", user.getFirstName())
+                    .withClaim("lastName", user.getLastName())
+                    .withClaim("role", user.getRole() != null ? user.getRole().name() : null);
+        }
+        
+        return jwtBuilder.sign(this.hmac512);
     }
 
     public DecodedJWT validateToken(final String token) {
