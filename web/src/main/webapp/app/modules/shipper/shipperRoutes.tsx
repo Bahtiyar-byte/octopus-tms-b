@@ -6,7 +6,8 @@ import { UserRole } from '../../types/user';
 import Dashboard from './pages/Dashboard';
 import Loads from './pages/Loads';
 import CreateLoad from './pages/CreateLoad';
-import Documents from './pages/Documents';
+// import Documents from './pages/Documents'; // Replaced with UniversalDocuments
+import UniversalDocuments from '../shared/components/UniversalDocuments';
 import Reports from './pages/Reports';
 import Settings from './pages/Settings';
 import Tracking from './pages/Tracking';
@@ -52,7 +53,7 @@ const shipperRoutes: RouteObject[] = [
   },
   {
     path: 'shipper/documents',
-    element: <ShipperRoute><Documents /></ShipperRoute>,
+    element: <ShipperRoute><UniversalDocuments /></ShipperRoute>,
   },
   {
     path: 'shipper/reports',

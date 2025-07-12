@@ -9,7 +9,8 @@ import Loads from './pages/Loads';
 import CarrierMatch from './pages/CarrierMatch';
 import Contracts from './pages/Contracts';
 import Invoices from './pages/Invoices';
-import Documents from './pages/Documents';
+// import Documents from './pages/Documents'; // Replaced with UniversalDocuments
+import UniversalDocuments from '../shared/components/UniversalDocuments';
 import Reports from './pages/Reports';
 import Customers from './pages/Customers';
 import Carriers from './pages/Carriers';
@@ -73,7 +74,7 @@ const brokerRoutes: RouteObject[] = [
   },
   {
     path: 'broker/documents',
-    element: <BrokerRoute><Documents /></BrokerRoute>,
+    element: <BrokerRoute><UniversalDocuments /></BrokerRoute>,
   },
   {
     path: 'broker/reports',

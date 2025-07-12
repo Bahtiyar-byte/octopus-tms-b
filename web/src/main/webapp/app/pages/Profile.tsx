@@ -429,7 +429,11 @@ const EditProfileModal: React.FC<{
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      await onSave(formData);
+      await onSave({
+        ...formData,
+        username: user.username,
+        role: user.role
+      });
     } finally {
       setIsSubmitting(false);
     }
