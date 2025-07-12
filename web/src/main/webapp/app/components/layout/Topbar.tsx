@@ -378,8 +378,8 @@ const Topbar: React.FC = () => {
                   onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
                 >
                   <span className="sr-only">Open user menu</span>
-                  {user?.avatar ? (
-                    <img className="h-8 w-8 rounded-full" src={user.avatar} alt={user.firstName} />
+                  {user?.avatarUrl ? (
+                    <img className="h-8 w-8 rounded-full" src={user.avatarUrl} alt={user.firstName} />
                   ) : (
                     <div className="h-8 w-8 rounded-full bg-blue-300 flex items-center justify-center text-blue-800 font-bold">
                       {user?.firstName?.charAt(0) || 'U'}

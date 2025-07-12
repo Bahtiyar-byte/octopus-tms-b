@@ -39,7 +39,7 @@ export const authService = {
         firstName: payload.firstName || payload.given_name || credentials.username.split('@')[0].split('.')[0] || credentials.username,
         lastName: payload.lastName || payload.family_name || credentials.username.split('@')[0].split('.')[1] || '',
         role: (payload.roles?.[0] || payload.role || 'BROKER') as UserRole,
-        avatar: payload.avatar || payload.picture || '',
+        avatarUrl: payload.avatarUrl || payload.picture || '',
         phone: payload.phone || payload.phoneNumber || '',
         department: payload.department || payload.dept || '',
         lastLogin: payload.lastLogin || new Date().toISOString()
@@ -173,7 +173,7 @@ export const authService = {
 
     try {
       // Call backend update profile endpoint
-      const response = await axios.put('/api/users/profile', userData);
+      const response = await axios.put('/api/profile', userData);
       const updatedUser = response.data;
       
       // Update in storage
@@ -186,6 +186,59 @@ export const authService = {
         throw new Error(error.response?.data?.message || 'Failed to update profile');
       }
       throw new Error('Failed to update profile');
+    }
+  },
+
+  // Get current user profile from backend
+  getProfile: async (): Promise<User> => {
+    try {
+      const response = await axios.get('/api/profile');
+      const user = response.data;
+      
+      // Update in storage
+      const storageType = localStorage.getItem(USER_KEY) ? localStorage : sessionStorage;
+      storageType.setItem(USER_KEY, JSON.stringify(user));
+      
+      return user;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        throw new Error(error.response?.data?.message || 'Failed to get profile');
+      }
+      throw new Error('Failed to get profile');
+    }
+  },
+
+  // Upload avatar
+  uploadAvatar: async (file: File): Promise<string> => {
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      
+      const response = await axios.post('/api/profile/avatar', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        throw new Error(error.response?.data?.message || 'Failed to upload avatar');
+      }
+      throw new Error('Failed to upload avatar');
+    }
+  },
+
+  // Get user statistics
+  getUserStats: async (): Promise<any> => {
+    try {
+      const response = await axios.get('/api/profile/stats');
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        throw new Error(error.response?.data?.message || 'Failed to get user stats');
+      }
+      throw new Error('Failed to get user stats');
     }
   }
 };

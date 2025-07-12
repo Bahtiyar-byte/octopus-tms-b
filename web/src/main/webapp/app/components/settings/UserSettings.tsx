@@ -26,7 +26,7 @@ const UserSettings: React.FC<UserSettingsProps> = ({ initialRoles }) => {
     email: '',
     username: '',
     password: '',
-    role: 'broker' as UserRole,
+    role: 'BROKER' as UserRole,
     department: '',
     phone: ''
   });
@@ -99,7 +99,7 @@ const UserSettings: React.FC<UserSettingsProps> = ({ initialRoles }) => {
       email: '',
       username: '',
       password: '',
-      role: 'broker' as UserRole,
+      role: 'BROKER' as UserRole,
       department: '',
       phone: ''
     });
@@ -114,7 +114,7 @@ const UserSettings: React.FC<UserSettingsProps> = ({ initialRoles }) => {
       email: user.email,
       username: user.email,
       password: '',
-      role: user.role.toLowerCase() as UserRole,
+      role: user.role.toUpperCase() as UserRole,
       department: user.department,
       phone: ''
     });
@@ -159,7 +159,7 @@ const UserSettings: React.FC<UserSettingsProps> = ({ initialRoles }) => {
           password: formData.password || 'Ronin!1991',
           firstName: formData.firstName,
           lastName: formData.lastName,
-          role: formData.role,
+          role: formData.role.toUpperCase() as UserRole,
           department: formData.department,
           phone: formData.phone
         });
@@ -428,14 +428,14 @@ const UserSettings: React.FC<UserSettingsProps> = ({ initialRoles }) => {
                   onChange={(e) => setFormData({...formData, role: e.target.value as UserRole})}
                   className="form-control"
                 >
-                  <option value="admin">Admin</option>
-                  <option value="supervisor">Supervisor</option>
-                  <option value="dispatcher">Dispatcher</option>
-                  <option value="driver">Driver</option>
-                  <option value="accounting">Accounting</option>
-                  <option value="broker">Broker</option>
-                  <option value="carrier">Carrier</option>
-                  <option value="shipper">Shipper</option>
+                  <option value="ADMIN">Admin</option>
+                  <option value="SUPERVISOR">Supervisor</option>
+                  <option value="DISPATCHER">Dispatcher</option>
+                  <option value="DRIVER">Driver</option>
+                  <option value="ACCOUNTING">Accounting</option>
+                  <option value="BROKER">Broker</option>
+                  <option value="CARRIER">Carrier</option>
+                  <option value="SHIPPER">Shipper</option>
                 </select>
               </div>
               <div>
@@ -542,14 +542,14 @@ const UserSettings: React.FC<UserSettingsProps> = ({ initialRoles }) => {
                   onChange={(e) => setFormData({...formData, role: e.target.value as UserRole})}
                   className="form-control"
                 >
-                  <option value="admin">Admin</option>
-                  <option value="supervisor">Supervisor</option>
-                  <option value="dispatcher">Dispatcher</option>
-                  <option value="driver">Driver</option>
-                  <option value="accounting">Accounting</option>
-                  <option value="broker">Broker</option>
-                  <option value="carrier">Carrier</option>
-                  <option value="shipper">Shipper</option>
+                  <option value="ADMIN">Admin</option>
+                  <option value="SUPERVISOR">Supervisor</option>
+                  <option value="DISPATCHER">Dispatcher</option>
+                  <option value="DRIVER">Driver</option>
+                  <option value="ACCOUNTING">Accounting</option>
+                  <option value="BROKER">Broker</option>
+                  <option value="CARRIER">Carrier</option>
+                  <option value="SHIPPER">Shipper</option>
                 </select>
               </div>
               <div>

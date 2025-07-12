@@ -1,38 +1,63 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { User, Edit2, Key, Activity, Truck, CheckSquare, Star, Bell, Globe, Layout } from 'lucide-react';
+import { authService } from '../services';
+import { User as UserIcon, Edit2, Key, Activity, Truck, CheckSquare, Star, Bell, Globe, Layout, Upload, Camera } from 'lucide-react';
+import { toast } from 'react-hot-toast';
+import { User } from '../types/user';
 
 const Profile: React.FC = () => {
-  const { user } = useAuth();
+  const { user, updateUser } = useAuth();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+  const [userStats, setUserStats] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   
   // Profile data from authenticated user
   const profileData = {
-    fullName: user ? `${user.firstName} ${user.lastName}`.trim() : '',
+    fullName: user ? `${user.firstName || ''} ${user.lastName || ''}`.trim() : 'User',
     email: user?.email || '',
     username: user?.username || '',
-    phone: user?.phone || '(555) 000-0000',
-    department: user?.department || 'Not specified',
+    phone: user?.phone || '',
+    department: user?.department || '',
     lastLogin: user?.lastLogin ? new Date(user.lastLogin).toLocaleString() : 'N/A',
-    role: user?.role || 'user',
-    avatar: user?.avatar || null
+    role: user?.role || 'USER',
+    avatarUrl: user?.avatarUrl || null
   };
+
+  // Load user stats on component mount
+  useEffect(() => {
+    const loadUserStats = async () => {
+      try {
+        setIsLoading(true);
+        const stats = await authService.getUserStats();
+        setUserStats(stats);
+      } catch (error) {
+        console.error('Failed to load user stats:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    if (user) {
+      loadUserStats();
+    }
+  }, [user]);
 
   // Statistics data
   const statistics = {
-    activeDriversToday: 28,
-    totalDriversManaged: 42,
-    totalCustomersServed: 76,
-    avgResponseTime: '2.4 min'
+    activeDriversToday: userStats?.activeDriversToday || 0,
+    totalDriversManaged: userStats?.totalDriversManaged || 0,
+    totalCustomersServed: userStats?.totalCustomersServed || 0,
+    avgResponseTime: userStats?.avgResponseTime || '0 min'
   };
 
   // Activity data
   const activityData = {
-    actionsToday: 38,
-    loadsDispatched: 156,
-    tasksCompleted: 324,
-    performanceScore: 92
+    actionsToday: userStats?.actionsToday || 0,
+    loadsDispatched: userStats?.loadsDispatched || 0,
+    tasksCompleted: userStats?.tasksCompleted || 0,
+    performanceScore: userStats?.performanceScore || 0
   };
 
   // Preferences state
@@ -52,11 +77,33 @@ const Profile: React.FC = () => {
     }));
   };
 
-  const handleSavePreferences = () => {
-    // Here you would save preferences to backend
-    console.log('Saving preferences:', preferences);
-    // Show success message
-    alert('Preferences saved successfully!');
+  const handleSavePreferences = async () => {
+    try {
+      // Here you would save preferences to backend
+      console.log('Saving preferences:', preferences);
+      toast.success('Preferences saved successfully!');
+    } catch (error) {
+      toast.error('Failed to save preferences');
+    }
+  };
+
+  const handleAvatarUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // Check file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('File size must be less than 5MB');
+      return;
+    }
+
+    try {
+      const avatarUrl = await authService.uploadAvatar(file);
+      await updateUser({ ...user!, avatarUrl: avatarUrl });
+      toast.success('Profile picture updated successfully');
+    } catch (error) {
+      toast.error('Failed to upload profile picture');
+    }
   };
 
   return (
@@ -73,16 +120,38 @@ const Profile: React.FC = () => {
           {/* Profile Information Card */}
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
             <h2 className="text-xl font-semibold mb-6 flex items-center gap-2">
-              <User className="w-5 h-5 text-blue-600" />
+              <UserIcon className="w-5 h-5 text-blue-600" />
               Profile Information
             </h2>
 
             <div className="flex items-start gap-6">
               {/* Avatar */}
-              <div className="flex-shrink-0">
-                <div className="w-32 h-32 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white text-3xl font-bold">
-                  EA
-                </div>
+              <div className="flex-shrink-0 relative group">
+                {profileData.avatarUrl ? (
+                  <img 
+                    src={profileData.avatarUrl} 
+                    alt={profileData.fullName}
+                    className="w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg"
+                  />
+                ) : (
+                  <div className="w-32 h-32 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white text-3xl font-bold">
+                    {profileData.fullName.split(' ').map(n => n[0]?.toUpperCase() || '').join('') || 'U'}
+                  </div>
+                )}
+                <button
+                  onClick={() => fileInputRef.current?.click()}
+                  className="absolute bottom-0 right-0 p-2 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 transition-colors group-hover:scale-110"
+                  title="Change profile picture"
+                >
+                  <Camera className="w-4 h-4" />
+                </button>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleAvatarUpload}
+                  className="hidden"
+                />
               </div>
 
               {/* Profile Details */}
@@ -306,108 +375,240 @@ const Profile: React.FC = () => {
 
       {/* Edit Profile Modal */}
       {isEditModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md">
-            <h3 className="text-xl font-semibold mb-4">Edit Profile</h3>
-            <form className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-                <input
-                  type="text"
-                  defaultValue={profileData.fullName}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                <input
-                  type="email"
-                  defaultValue={profileData.email}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
-                <input
-                  type="tel"
-                  defaultValue={profileData.phone}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Department</label>
-                <input
-                  type="text"
-                  defaultValue={profileData.department}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-              </div>
-              <div className="flex gap-3 mt-6">
-                <button
-                  type="button"
-                  onClick={() => setIsEditModalOpen(false)}
-                  className="flex-1 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="flex-1 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                >
-                  Save Changes
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
+        <EditProfileModal
+          user={user!}
+          onClose={() => setIsEditModalOpen(false)}
+          onSave={async (updatedData) => {
+            try {
+              const updated = await authService.updateProfile(updatedData);
+              await updateUser(updated);
+              toast.success('Profile updated successfully');
+              setIsEditModalOpen(false);
+            } catch (error) {
+              toast.error('Failed to update profile');
+            }
+          }}
+        />
       )}
 
       {/* Change Password Modal */}
       {isPasswordModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md">
-            <h3 className="text-xl font-semibold mb-4">Change Password</h3>
-            <form className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Current Password</label>
-                <input
-                  type="password"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">New Password</label>
-                <input
-                  type="password"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Confirm New Password</label>
-                <input
-                  type="password"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-              </div>
-              <div className="flex gap-3 mt-6">
-                <button
-                  type="button"
-                  onClick={() => setIsPasswordModalOpen(false)}
-                  className="flex-1 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="flex-1 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                >
-                  Update Password
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
+        <ChangePasswordModal
+          onClose={() => setIsPasswordModalOpen(false)}
+          onSave={async (oldPassword, newPassword) => {
+            try {
+              await authService.changePassword({ oldPassword, newPassword });
+              toast.success('Password changed successfully');
+              setIsPasswordModalOpen(false);
+            } catch (error) {
+              toast.error('Failed to change password. Please check your current password.');
+            }
+          }}
+        />
       )}
+    </div>
+  );
+};
+
+// Edit Profile Modal Component
+const EditProfileModal: React.FC<{
+  user: User;
+  onClose: () => void;
+  onSave: (data: Partial<User>) => Promise<void>;
+}> = ({ user, onClose, onSave }) => {
+  const [formData, setFormData] = useState({
+    firstName: user.firstName || '',
+    lastName: user.lastName || '',
+    email: user.email || '',
+    phone: user.phone || '',
+    department: user.department || ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    try {
+      await onSave(formData);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white rounded-lg p-6 w-full max-w-md">
+        <h3 className="text-xl font-semibold mb-4">Edit Profile</h3>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+              <input
+                type="text"
+                value={formData.firstName}
+                onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+              <input
+                type="text"
+                value={formData.lastName}
+                onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <input
+              type="email"
+              value={formData.email}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+            <input
+              type="tel"
+              value={formData.phone}
+              onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+              placeholder="(555) 123-4567"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Department</label>
+            <input
+              type="text"
+              value={formData.department}
+              onChange={(e) => setFormData({ ...formData, department: e.target.value })}
+              placeholder="e.g., Operations, Sales, etc."
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+          </div>
+          <div className="flex gap-3 mt-6">
+            <button
+              type="button"
+              onClick={onClose}
+              className="flex-1 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+              disabled={isSubmitting}
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="flex-1 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? 'Saving...' : 'Save Changes'}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+// Change Password Modal Component
+const ChangePasswordModal: React.FC<{
+  onClose: () => void;
+  onSave: (oldPassword: string, newPassword: string) => Promise<void>;
+}> = ({ onClose, onSave }) => {
+  const [passwords, setPasswords] = useState({
+    oldPassword: '',
+    newPassword: '',
+    confirmPassword: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+
+    if (passwords.newPassword !== passwords.confirmPassword) {
+      setError('New passwords do not match');
+      return;
+    }
+
+    if (passwords.newPassword.length < 8) {
+      setError('Password must be at least 8 characters long');
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      await onSave(passwords.oldPassword, passwords.newPassword);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white rounded-lg p-6 w-full max-w-md">
+        <h3 className="text-xl font-semibold mb-4">Change Password</h3>
+        {error && (
+          <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg">
+            {error}
+          </div>
+        )}
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Current Password</label>
+            <input
+              type="password"
+              value={passwords.oldPassword}
+              onChange={(e) => setPasswords({ ...passwords, oldPassword: e.target.value })}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">New Password</label>
+            <input
+              type="password"
+              value={passwords.newPassword}
+              onChange={(e) => setPasswords({ ...passwords, newPassword: e.target.value })}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              required
+              minLength={8}
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Confirm New Password</label>
+            <input
+              type="password"
+              value={passwords.confirmPassword}
+              onChange={(e) => setPasswords({ ...passwords, confirmPassword: e.target.value })}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              required
+              minLength={8}
+            />
+          </div>
+          <div className="flex gap-3 mt-6">
+            <button
+              type="button"
+              onClick={onClose}
+              className="flex-1 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+              disabled={isSubmitting}
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="flex-1 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? 'Updating...' : 'Update Password'}
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

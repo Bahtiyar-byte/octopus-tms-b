@@ -23,6 +23,15 @@ public interface UserMapper {
 
     @Mapping(target = "company", ignore = true)
     @Mapping(target = "passwordHash", ignore = true)
+    UserDTO toDto(User user);
+
+    @AfterMapping
+    default void afterToDto(User user, @MappingTarget UserDTO userDTO) {
+        userDTO.setCompany(user.getCompany() == null ? null : user.getCompany().getId());
+    }
+
+    @Mapping(target = "company", ignore = true)
+    @Mapping(target = "passwordHash", ignore = true)
     UserDTO updateUserDTO(User user, @MappingTarget UserDTO userDTO);
 
     @AfterMapping
@@ -43,7 +52,18 @@ public interface UserMapper {
         final Company company = userDTO.getCompany() == null ? null : companyRepository.findById(userDTO.getCompany())
                 .orElseThrow(() -> new NotFoundException("company not found"));
         user.setCompany(company);
-        user.setPasswordHash(passwordEncoder.encode(userDTO.getPasswordHash()));
+        
+        // Handle password encoding
+        if (userDTO.getPassword() != null && !userDTO.getPassword().isEmpty()) {
+            user.setPasswordHash(passwordEncoder.encode(userDTO.getPassword()));
+        } else if (userDTO.getPasswordHash() != null && !userDTO.getPasswordHash().isEmpty()) {
+            // Only use passwordHash if it's already encoded
+            if (userDTO.getPasswordHash().startsWith("$2a$") || userDTO.getPasswordHash().startsWith("$2b$")) {
+                user.setPasswordHash(userDTO.getPasswordHash());
+            } else {
+                user.setPasswordHash(passwordEncoder.encode(userDTO.getPasswordHash()));
+            }
+        }
     }
 
 }

@@ -34,7 +34,7 @@ import tms.octopus.octopus_tms.core.user.service.UserService;
 
 @RestController
 @RequestMapping(value = "/api/users", produces = MediaType.APPLICATION_JSON_VALUE)
-@PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SUPERVISOR + "', '" + UserRole.Fields.SUPPORT + "')")
+@PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SUPERVISOR + "', '" + UserRole.Fields.SUPPORT + "', '" + UserRole.Fields.BROKER + "')")
 @SecurityRequirement(name = "bearer-jwt")
 public class UserResource {
 

@@ -64,7 +64,7 @@ export const AIIntegrationSettings: React.FC = () => {
 
   const fetchConfigurations = async () => {
     try {
-      const response = await fetch('/api/ai/providers', {
+      const response = await fetch('/api/integrations/ai/configurations', {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('octopus_tms_token') || sessionStorage.getItem('octopus_tms_token')}`
         }
@@ -86,7 +86,7 @@ export const AIIntegrationSettings: React.FC = () => {
 
     setLoading(true);
     try {
-      const response = await fetch('/api/ai/providers', {
+      const response = await fetch('/api/integrations/ai/configure', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -117,12 +117,15 @@ export const AIIntegrationSettings: React.FC = () => {
   const handleTestConnection = async (provider: string) => {
     setTestingConnection(provider);
     try {
-      const response = await fetch(`/api/ai/providers/${provider}/test`, {
+      const response = await fetch('/api/integrations/ai/test', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('octopus_tms_token') || sessionStorage.getItem('octopus_tms_token')}`
-        }
+        },
+        body: JSON.stringify({
+          provider: provider
+        })
       });
 
       if (response.ok) {
@@ -144,16 +147,12 @@ export const AIIntegrationSettings: React.FC = () => {
 
   const handleToggleActive = async (config: AIProviderConfig) => {
     try {
-      const response = await fetch('/api/ai/providers', {
-        method: 'POST',
+      const response = await fetch(`/api/integrations/ai/configurations/${config.id}/toggle`, {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('octopus_tms_token') || sessionStorage.getItem('octopus_tms_token')}`
-        },
-        body: JSON.stringify({
-          ...config,
-          isActive: !config.isActive
-        })
+        }
       });
 
       if (response.ok) {
@@ -170,7 +169,7 @@ export const AIIntegrationSettings: React.FC = () => {
     }
 
     try {
-      const response = await fetch(`/api/ai/providers/${configId}`, {
+      const response = await fetch(`/api/integrations/ai/configurations/${configId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('octopus_tms_token') || sessionStorage.getItem('octopus_tms_token')}`
