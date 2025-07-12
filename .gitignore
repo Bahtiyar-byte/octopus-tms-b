@@ -62,3 +62,14 @@ web/src/main/webapp/temp
 
 ## Ad-hoc scripts
 scripts/generate_hash.sh
+/backend-requirements.md
+/docs/
+/docs/BROKER_MODULE_ACTION_PLAN.md
+/docs/BROKER_MODULE_ENDPOINTS.md
+/docs/planned-features/DYNAMIC-CONFIGURABLE-DASHBOARD-GUIDE.md
+/docs/feature-detection-algorithm.md
+/docs/feature-preservation-matrix.md
+/docs/frontend-standardization-implementation-prompt.md
+/docs/frontend-standardization-plan.md
+/docs/FRONTEND_CLEANUP_AND_MIGRATION_PLAN.md
+/project-structure.md
