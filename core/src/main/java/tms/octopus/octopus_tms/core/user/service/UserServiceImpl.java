@@ -1,12 +1,14 @@
 package tms.octopus.octopus_tms.core.user.service;
 
 import java.io.IOException;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import tms.octopus.octopus_tms.base.util.NotFoundException;
 import tms.octopus.octopus_tms.base.util.ReferencedWarning;
@@ -240,6 +242,24 @@ public class UserServiceImpl implements UserService {
         stats.setAvgResponseTime("2.4 min");
         
         return stats;
+    }
+    
+    @Override
+    @Transactional
+    public UserDTO toggleStatus(UUID id) {
+        final User user = userRepository.findById(id)
+                .orElseThrow(NotFoundException::new);
+        
+        // Toggle status between ACTIVE and INACTIVE
+        if ("ACTIVE".equals(user.getStatus())) {
+            user.setStatus("INACTIVE");
+        } else {
+            user.setStatus("ACTIVE");
+        }
+        
+        user.setUpdatedAt(OffsetDateTime.now());
+        final User savedUser = userRepository.save(user);
+        return userMapper.toDto(savedUser);
     }
 
 }

@@ -1,13 +1,18 @@
 package tms.octopus.octopus_tms.core.ai_provider_config.service;
 
-import java.util.List;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import tms.octopus.octopus_tms.base.util.NotFoundException;
+import tms.octopus.octopus_tms.base.util.ReferencedWarning;
 import tms.octopus.octopus_tms.core.ai_provider_config.domain.AiProviderConfig;
 import tms.octopus.octopus_tms.core.ai_provider_config.model.AiProviderConfigDTO;
 import tms.octopus.octopus_tms.core.ai_provider_config.repos.AiProviderConfigRepository;
+import tms.octopus.octopus_tms.core.ai_provider_config.service.AiProviderConfigMapper;
 
+import java.util.List;
+import java.util.UUID;
 
 @Service
 public class AiProviderConfigServiceImpl implements AiProviderConfigService {
@@ -23,10 +28,20 @@ public class AiProviderConfigServiceImpl implements AiProviderConfigService {
 
     @Override
     public List<AiProviderConfigDTO> findAll() {
-        final List<AiProviderConfig> aiProviderConfigs = aiProviderConfigRepository.findAll(Sort.by("id"));
+        final List<AiProviderConfig> aiProviderConfigs = aiProviderConfigRepository.findAll();
         return aiProviderConfigs.stream()
                 .map(aiProviderConfig -> aiProviderConfigMapper.updateAiProviderConfigDTO(aiProviderConfig, new AiProviderConfigDTO()))
                 .toList();
+    }
+
+    @Override
+    public Page<AiProviderConfigDTO> findAll(final String filter, final Pageable pageable) {
+        Page<AiProviderConfig> page = aiProviderConfigRepository.findAll(pageable);
+        return new PageImpl<>(page.getContent()
+                .stream()
+                .map(aiProviderConfig -> aiProviderConfigMapper.updateAiProviderConfigDTO(aiProviderConfig, new AiProviderConfigDTO()))
+                .toList(),
+                pageable, page.getTotalElements());
     }
 
     @Override
@@ -54,6 +69,14 @@ public class AiProviderConfigServiceImpl implements AiProviderConfigService {
     @Override
     public void delete(final Long id) {
         aiProviderConfigRepository.deleteById(id);
+    }
+
+    @Override
+    public ReferencedWarning getReferencedWarning(final Long id) {
+        final ReferencedWarning referencedWarning = new ReferencedWarning();
+        final AiProviderConfig aiProviderConfig = aiProviderConfigRepository.findById(id)
+                .orElseThrow(NotFoundException::new);
+        return null;
     }
 
 }

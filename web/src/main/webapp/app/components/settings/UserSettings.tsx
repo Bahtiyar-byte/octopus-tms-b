@@ -142,6 +142,7 @@ const UserSettings: React.FC<UserSettingsProps> = ({ initialRoles }) => {
       if (currentUser) {
         // Update existing user
         await userService.updateUser(currentUser.id, {
+          username: formData.username || formData.email,
           firstName: formData.firstName,
           lastName: formData.lastName,
           email: formData.email,

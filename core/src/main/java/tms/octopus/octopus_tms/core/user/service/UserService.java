@@ -34,5 +34,7 @@ public interface UserService {
     String uploadAvatar(String username, MultipartFile file) throws IOException;
     
     UserStatsDTO getUserStats(String username);
+    
+    UserDTO toggleStatus(UUID id);
 
 }
