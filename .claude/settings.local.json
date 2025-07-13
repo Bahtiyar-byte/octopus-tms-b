@@ -35,15 +35,7 @@
       "mcp__ide__getDiagnostics",
       "Bash(psql:*)",
       "Bash(curl:*)",
-      "Bash(grep:*)",
-      "Bash(mkdir:*)",
-      "Bash(cp:*)",
-      "Bash(npm install)",
-      "Bash(npm install:*)",
-      "Bash(npm run build:*)",
-      "Bash(rm:*)",
       "Bash(kill:*)",
-      "Bash(node:*)",
       "Bash(pkill:*)",
       "Bash(true)",
       "Bash(npm run test:e2e:*)",
@@ -56,7 +48,16 @@
       "Bash(java:*)",
       "Bash(docker compose:*)",
       "Bash(docker exec:*)",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "Bash(npx playwright:*)",
+      "Bash(grep:*)",
+      "Bash(mkdir:*)",
+      "Bash(cp:*)",
+      "Bash(npm install)",
+      "Bash(npm install:*)",
+      "Bash(npm run build:*)",
+      "Bash(rm:*)",
+      "Bash(node:*)"
     ],
     "deny": []
   }

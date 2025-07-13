@@ -1,10 +1,18 @@
+import { useEffect } from 'react'
 import { RouterProvider } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 import ErrorBoundary from './components/ErrorBoundary'
 import router from './routes'
+import { setupAxiosInterceptors, initializeAuth } from './utils/axiosConfig'
 import './App.css'
 
 function App() {
+  useEffect(() => {
+    // Initialize auth and setup interceptors
+    initializeAuth();
+    setupAxiosInterceptors();
+  }, []);
+
   return (
     <ErrorBoundary>
       <RouterProvider router={router} />

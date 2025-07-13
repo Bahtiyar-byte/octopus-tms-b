@@ -25,24 +25,49 @@ const Profile: React.FC = () => {
     avatarUrl: user?.avatarUrl || null
   };
 
-  // Load user stats on component mount
+  // Load user stats and profile on component mount
   useEffect(() => {
-    const loadUserStats = async () => {
+    const loadData = async () => {
       try {
         setIsLoading(true);
-        const stats = await authService.getUserStats();
-        setUserStats(stats);
+        
+        // Try to load stats, but don't fail if it errors
+        try {
+          const stats = await authService.getUserStats();
+          setUserStats(stats);
+        } catch (statsError) {
+          console.warn('Failed to load user stats:', statsError);
+          // Set default stats if API fails
+          setUserStats({
+            actionsToday: 0,
+            loadsDispatched: 0,
+            tasksCompleted: 0,
+            performanceScore: 0,
+            activeDriversToday: 0,
+            totalDriversManaged: 0,
+            totalCustomersServed: 0,
+            avgResponseTime: '0 min'
+          });
+        }
+        
+        // Try to load fresh profile data
+        try {
+          const profile = await authService.getProfile();
+          await updateUser(profile);
+        } catch (profileError) {
+          console.warn('Failed to load fresh profile, using cached data:', profileError);
+        }
       } catch (error) {
-        console.error('Failed to load user stats:', error);
+        console.error('Failed to load profile data:', error);
       } finally {
         setIsLoading(false);
       }
     };
     
     if (user) {
-      loadUserStats();
+      loadData();
     }
-  }, [user]);
+  }, []);
 
   // Statistics data
   const statistics = {
@@ -174,11 +199,11 @@ const Profile: React.FC = () => {
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="text-sm">Phone:</span>
-                    <span className="font-medium">{profileData.phone}</span>
+                    <span className="font-medium">{profileData.phone || 'Not set'}</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="text-sm">Department:</span>
-                    <span className="font-medium">{profileData.department}</span>
+                    <span className="font-medium">{profileData.department || 'Not set'}</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="text-sm">Last Login:</span>

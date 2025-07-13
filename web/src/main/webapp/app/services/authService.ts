@@ -95,6 +95,13 @@ export const authService = {
   getCurrentUser: (): User | null => {
     try {
       const userStr = localStorage.getItem(USER_KEY) || sessionStorage.getItem(USER_KEY);
+      const token = localStorage.getItem(TOKEN_KEY) || sessionStorage.getItem(TOKEN_KEY);
+      
+      // If token exists, ensure axios header is set
+      if (token) {
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      }
+      
       return userStr ? JSON.parse(userStr) : null;
     } catch (error) {
       console.error('Error parsing user from storage:', error);
