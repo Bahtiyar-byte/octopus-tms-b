@@ -196,6 +196,16 @@ const Settings: React.FC = () => {
     },
     {
       id: '4',
+      name: 'Samsara ELD Integration',
+      description: 'Connect to Samsara for real-time ELD and GPS data',
+      isConnected: true,
+      apiKey: 'SAMSARA-API-67890-FGHIJ',
+      icon: 'fa-truck',
+      iconBg: 'bg-green-100 text-green-600',
+      category: 'tracking'
+    },
+    {
+      id: '5',
       name: 'Project44 Visibility',
       description: 'Real-time shipment tracking and visibility platform',
       isConnected: true,
@@ -205,7 +215,7 @@ const Settings: React.FC = () => {
       category: 'tracking'
     },
     {
-      id: '5',
+      id: '6',
       name: 'FourKites Tracking',
       description: 'Supply chain visibility and predictive analytics',
       isConnected: false,
@@ -215,7 +225,7 @@ const Settings: React.FC = () => {
       category: 'tracking'
     },
     {
-      id: '6',
+      id: '7',
       name: 'QuickBooks Integration',
       description: 'Sync invoices, payments, and financial data',
       isConnected: true,
@@ -225,7 +235,7 @@ const Settings: React.FC = () => {
       category: 'accounting'
     },
     {
-      id: '7',
+      id: '8',
       name: 'Triumph Factoring',
       description: 'Automated factoring and quick pay services',
       isConnected: false,
@@ -235,7 +245,7 @@ const Settings: React.FC = () => {
       category: 'accounting'
     },
     {
-      id: '8',
+      id: '9',
       name: 'RMIS Insurance',
       description: 'Carrier insurance verification and monitoring',
       isConnected: true,
@@ -245,7 +255,7 @@ const Settings: React.FC = () => {
       category: 'compliance'
     },
     {
-      id: '9',
+      id: '10',
       name: 'CarrierWatch',
       description: 'Carrier vetting and compliance monitoring',
       isConnected: false,
@@ -255,7 +265,7 @@ const Settings: React.FC = () => {
       category: 'compliance'
     },
     {
-      id: '10',
+      id: '11',
       name: 'Twilio SMS',
       description: 'Automated SMS notifications for carriers and customers',
       isConnected: true,
