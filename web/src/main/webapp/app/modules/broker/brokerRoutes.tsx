@@ -2,19 +2,22 @@ import { Navigate, RouteObject } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { UserRole } from '../../types/user';
 
-// Import Broker pages
-import Dashboard from './pages/Dashboard';
+// Import Shared pages
+import Dashboard from '../shared/pages/Dashboard/Dashboard';
+import Loads from '../shared/pages/Loads/Loads';
+import Tracking from '../shared/pages/Tracking/Tracking';
+import Reports from '../shared/pages/Reports/Reports';
+import Documents from '../shared/pages/Documents/Documents';
+
+// Import Shared pages
+import Customers from '../shared/pages/Customers/Customers';
+
+// Import Broker-specific pages (not yet migrated to shared)
 import CreateLoad from './pages/CreateLoad';
-import Loads from './pages/Loads';
 import CarrierMatch from './pages/CarrierMatch';
 import Contracts from './pages/Contracts';
 import Invoices from './pages/Invoices';
-// import Documents from './pages/Documents'; // Replaced with UniversalDocuments
-import UniversalDocuments from '../shared/components/UniversalDocuments';
-import Reports from './pages/Reports';
-import Customers from './pages/Customers';
 import Carriers from './pages/Carriers';
-import Tracking from './pages/Tracking';
 import SupervisorDashboard from './pages/SupervisorDashboard';
 import Commissions from './pages/Commissions';
 import { SmartLoadMatch } from './pages/SmartLoadMatch';
@@ -74,7 +77,7 @@ const brokerRoutes: RouteObject[] = [
   },
   {
     path: 'broker/documents',
-    element: <BrokerRoute><UniversalDocuments /></BrokerRoute>,
+    element: <BrokerRoute><Documents /></BrokerRoute>,
   },
   {
     path: 'broker/reports',

@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Modal } from '../../../components';
-import DocumentViewer from '../../../components/DocumentViewer';
-import { mockActions, notify } from '../../../services';
-import { getSamplePdfUrlById, getSampleImageUrl } from '../../../services/documentService';
-import { useAuth } from '../../../context/AuthContext';
-import { PageLayout } from '../layouts/PageLayout';
+import { Card, Modal } from '../../../../components';
+import DocumentViewer from '../../../../components/DocumentViewer';
+import { mockActions, notify } from '../../../../services';
+import { getSamplePdfUrlById, getSampleImageUrl } from '../../../../services/documentService';
+import { useAuth } from '../../../../context/AuthContext';
+import PageLayout from '../../layouts/PageLayout';
 import { 
   getDocumentConfig, 
   getDocTypeLabel, 
   getDocTypeIcon, 
   getDocTypeColor,
   DOCUMENT_TYPES 
-} from '../config/documentConfig';
+} from '../../config/documentConfig';
 
 interface Document {
   id: string;
@@ -28,7 +28,7 @@ interface Document {
   expiryDate?: string;
 }
 
-export const UniversalDocuments: React.FC = () => {
+export const Documents: React.FC = () => {
   const { user } = useAuth();
   const config = getDocumentConfig(user?.role || 'BROKER');
   
@@ -277,7 +277,7 @@ export const UniversalDocuments: React.FC = () => {
                   </div>
                 </div>
 
-                {config.documentCategories.map(category => (
+                {config.documentCategories.map((category: any) => (
                   <div
                     key={category.key}
                     className={`px-3 py-2 rounded-md cursor-pointer ${selectedType === category.key ? `bg-${category.color}-50 text-${category.color}-700` : 'hover:bg-gray-50'}`}
@@ -482,7 +482,7 @@ export const UniversalDocuments: React.FC = () => {
                                 </button>
                               )}
                               {/* Custom actions */}
-                              {config.customActions?.map((action, idx) => (
+                              {config.customActions?.map((action: any, idx: number) => (
                                 <button
                                   key={idx}
                                   className="p-1 rounded-full text-gray-600 hover:bg-gray-100"
@@ -678,7 +678,7 @@ export const UniversalDocuments: React.FC = () => {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Document Type</label>
               <select className="block w-full border border-gray-300 rounded-md py-2 px-3">
-                {config.documentCategories.map(category => (
+                {config.documentCategories.map((category: any) => (
                   <option key={category.key} value={category.key}>
                     {getDocTypeLabel(category.key)}
                   </option>
@@ -738,7 +738,7 @@ export const UniversalDocuments: React.FC = () => {
                         name="file-upload" 
                         type="file" 
                         className="sr-only"
-                        accept={config.allowedTypes.map(t => `.${t.toLowerCase()}`).join(',')}
+                        accept={config.allowedTypes.map((t: any) => `.${t.toLowerCase()}`).join(',')}
                       />
                     </label>
                     <p className="pl-1">or drag and drop</p>
@@ -962,7 +962,7 @@ export const UniversalDocuments: React.FC = () => {
                       </button>
                     )}
                     {/* Custom actions */}
-                    {config.customActions?.map((action, idx) => (
+                    {config.customActions?.map((action: any, idx: number) => (
                       <button
                         key={idx}
                         className="w-full flex items-center justify-center px-3 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50"
@@ -1021,4 +1021,4 @@ export const UniversalDocuments: React.FC = () => {
   );
 };
 
-export default UniversalDocuments;
+export default Documents;

@@ -8,9 +8,9 @@ import shipperRoutes from '../modules/shipper/shipperRoutes';
 
 // Import shared pages
 import Reports from '../pages/Reports';
-import Settings from '../pages/Settings';
+import Settings from '../modules/shared/pages/Settings/Settings';
 import Login from '../pages/Login';
-import Profile from '../pages/Profile';
+import Profile from '../modules/shared/pages/Profile/Profile';
 import SupervisorDashboard from '../pages/SupervisorDashboard';
 import ForgotPassword from '../pages/ForgotPassword';
 import LoadDetails from '../pages/LoadDetails';

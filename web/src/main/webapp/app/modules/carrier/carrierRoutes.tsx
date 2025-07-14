@@ -6,8 +6,8 @@ import { UserRole } from '../../types/user';
 import Dashboard from './pages/Dashboard';
 import SmartLoadSearch from './pages/SmartLoadSearch';
 import DispatchBoard from './pages/DispatchBoard';
-// import Documents from './pages/Documents'; // Replaced with UniversalDocuments
-import UniversalDocuments from '../shared/components/UniversalDocuments';
+// import Documents from './pages/Documents'; // Replaced with shared Documents
+import Documents from '../shared/pages/Documents/Documents';
 import Tracking from './pages/Tracking';
 import AllLoads from './pages/AllLoads';
 import Drivers from './pages/Drivers';
@@ -56,7 +56,7 @@ const carrierRoutes: RouteObject[] = [
   },
   {
     path: 'documents',
-    element: <CarrierRoute><UniversalDocuments /></CarrierRoute>,
+    element: <CarrierRoute><Documents /></CarrierRoute>,
   },
   {
     path: 'tracking',

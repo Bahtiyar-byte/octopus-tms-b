@@ -1,6 +1,6 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
-import Topbar from '../components/layout/Topbar';
+import Topbar from '../modules/shared/components/navigation/TopBar';
 
 const MainLayout: React.FC = () => {
   return (

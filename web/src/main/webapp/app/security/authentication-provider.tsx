@@ -25,6 +25,7 @@ export const AuthenticationContext = createContext<{
   isLoggedIn: () => false,
   getToken: () => null,
   login: () => '',
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   logout: () => {}
 });
 

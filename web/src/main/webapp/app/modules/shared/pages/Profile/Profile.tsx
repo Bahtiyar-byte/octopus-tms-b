@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useAuth } from '../context/AuthContext';
-import { authService } from '../services';
+import { useAuth } from '../../../../context/AuthContext';
+import { authService } from '../../../../services';
 import { User as UserIcon, Edit2, Key, Activity, Truck, CheckSquare, Star, Bell, Globe, Layout, Upload, Camera } from 'lucide-react';
 import { toast } from 'react-hot-toast';
-import { User } from '../types/user';
+import { User } from '../../../../types/user';
+import { useRoleConfig } from '../../hooks/useRoleConfig';
 
 const Profile: React.FC = () => {
   const { user, updateUser } = useAuth();

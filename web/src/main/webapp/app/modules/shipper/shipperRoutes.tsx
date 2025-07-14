@@ -6,8 +6,8 @@ import { UserRole } from '../../types/user';
 import Dashboard from './pages/Dashboard';
 import Loads from './pages/Loads';
 import CreateLoad from './pages/CreateLoad';
-// import Documents from './pages/Documents'; // Replaced with UniversalDocuments
-import UniversalDocuments from '../shared/components/UniversalDocuments';
+// import Documents from './pages/Documents'; // Replaced with shared Documents
+import Documents from '../shared/pages/Documents/Documents';
 import Reports from './pages/Reports';
 import Settings from './pages/Settings';
 import Tracking from './pages/Tracking';
@@ -53,7 +53,7 @@ const shipperRoutes: RouteObject[] = [
   },
   {
     path: 'shipper/documents',
-    element: <ShipperRoute><UniversalDocuments /></ShipperRoute>,
+    element: <ShipperRoute><Documents /></ShipperRoute>,
   },
   {
     path: 'shipper/reports',
