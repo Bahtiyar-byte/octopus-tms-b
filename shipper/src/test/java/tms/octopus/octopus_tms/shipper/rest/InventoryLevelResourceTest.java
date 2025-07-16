@@ -112,7 +112,7 @@ public class InventoryLevelResourceTest extends BaseIT {
                     .put("/api/inventoryLevels/a945de21-a1bb-3714-a0bc-8a897ed32e9f")
                 .then()
                     .statusCode(HttpStatus.OK.value());
-        assertEquals(UUID.fromString("f4a814aa-020a-3b32-8467-4a5887a35022"), inventoryLevelRepository.findById(UUID.fromString("a945de21-a1bb-3714-a0bc-8a897ed32e9f")).orElseThrow().getItemId());
+        assertEquals(UUID.fromString("f4a814aa-020a-3b32-8467-4a5887a35022"), inventoryLevelRepository.findById(UUID.fromString("a945de21-a1bb-3714-a0bc-8a897ed32e9f")).orElseThrow());
         assertEquals(2, inventoryLevelRepository.count());
     }
 

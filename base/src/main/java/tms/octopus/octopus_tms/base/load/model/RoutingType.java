@@ -8,6 +8,7 @@ public enum RoutingType {
     MULTI_DELIVERY,
     CROSS_DOCK,
     PARTIAL,
-    COMPLEX
+    COMPLEX,
+    DIRECT
 
 }

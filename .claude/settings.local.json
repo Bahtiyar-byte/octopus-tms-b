@@ -42,7 +42,7 @@
       "Bash(npm run:*)",
       "Bash(npx playwright test:*)",
       "Bash(./scripts/gradlew:*)",
-      "Bash(PGPASSWORD=octopus_tms psql -h localhost -p 5433 -U octopus_tms -d octopus_tms -f create-test-user.sql)",
+      "Bash(PGPASSWORD=octopus-tms-b psql -h localhost -p 5433 -U haydarovbahtiyar -d octopus-tms-b -f create-test-user.sql)",
       "Bash(PGPASSWORD=password psql:*)",
       "Bash(sed:*)",
       "Bash(java:*)",
@@ -50,14 +50,7 @@
       "Bash(docker exec:*)",
       "Bash(git checkout:*)",
       "Bash(npx playwright:*)",
-      "Bash(grep:*)",
-      "Bash(mkdir:*)",
-      "Bash(cp:*)",
-      "Bash(npm install)",
-      "Bash(npm install:*)",
-      "Bash(npm run build:*)",
-      "Bash(rm:*)",
-      "Bash(node:*)"
+      "Bash(/Users/haydarovbahtiyar/Desktop/octopus-tms-b/test-aliases.sh)"
     ],
     "deny": []
   }

@@ -1,0 +1,32 @@
+{
+  "project_name": "Octopus TMS",
+  "default_system_prompt": "Octopus TMS: Java 21, Spring Boot 3.5.1, React 19.1, Multi-module architecture. NO Docker, local PostgreSQL. Check CLAUDE.md for conventions.",
+  "prefer_edit_over_write": true,
+  "auto_run_tests": true,
+  "test_commands": {
+    "backend": "./gradlew test",
+    "frontend": "npm run test",
+    "integration": "./gradlew test -Dspring.profiles.active=test",
+    "e2e": "npm run test:e2e",
+    "screenshots": "npm run screenshots"
+  },
+  "quick_commands": {
+    "run_backend": "./gradlew bootRun -Dspring.profiles.active=local",
+    "run_frontend": "npm run devserver",
+    "build": "./gradlew clean build",
+    "lint": "npm run lint"
+  },
+  "module_contexts": {
+    "broker": "Focus on load management, carrier matching, and rate negotiation",
+    "shipper": "Focus on shipment requests and warehouse integration",
+    "carrier": "Focus on fleet management and load execution",
+    "financial": "Focus on invoicing and payment processing"
+  },
+  "reminders": [
+    "Complete Broker module before moving to others",
+    "Fix role confusion with multi-tenant architecture",
+    "Re-enable Flyway when ready",
+    "Test all changes before marking complete",
+    "No Docker - use local PostgreSQL"
+  ]
+}
