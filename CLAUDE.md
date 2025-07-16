@@ -100,7 +100,9 @@ React code lives in `web/src/main/webapp/app/`:
 3. **Database**: UUID primary keys, Flyway migrations (must be idempotent)
 4. **Testing**: 
    - Backend: Integration tests extend `BaseIT` with Testcontainers
-   - Frontend: Jest with React Testing Library
+   - Frontend: Jest with React Testing Library for unit tests
+   - E2E: Playwright for end-to-end testing
+   - Screenshots: Puppeteer for screenshot generation
 5. **DTO Pattern**: Separate DTOs for requests/responses, MapStruct for mapping
 6. **Security**: Role-based access control, JWT filter chain
 
@@ -124,9 +126,18 @@ class MyControllerIT extends BaseIT {
 
 Frontend tests:
 ```typescript
-// Tests use custom render with router wrapper
+// Unit tests use custom render with router wrapper
 // Mock i18next translations
 // Use React Testing Library queries
+```
+
+End-to-end testing:
+```bash
+# E2E tests with Playwright
+npm run test:e2e
+
+# Screenshot generation with Puppeteer
+npm run screenshots
 ```
 
 ### Important Notes
@@ -157,3 +168,54 @@ Only 3 test users during development:
 - Permissions based on company type + user profile combination
 
 **Focus**: Simplify authentication and complete one module at a time, starting with Broker module.
+
+## Claude Code Workflow Optimization
+
+### Quick Start with Context
+To start Claude Code with full project context:
+```bash
+# Option 1: Use the project prompt file
+claude --append-system-prompt "$(cat .claude-prompt)"
+
+# Option 2: Use aliases (after running: source setup-aliases.sh)
+octi          # General development with full context
+octi-test     # Testing focused mode
+octi-b        # Broker module development
+octi-s        # Shipper module development
+octi-c        # Carrier module development
+octi-ui       # Frontend development
+octi-db       # Database work
+```
+
+### Productivity Tips
+
+1. **Always start with context**: Use `--append-system-prompt` to maintain project awareness
+2. **Use todo tracking**: Claude will use TodoWrite tool to manage complex tasks
+3. **Reference specific sections**: Point Claude to CLAUDE.md sections when needed
+4. **Test before complete**: Always run tests before marking tasks as done
+5. **Module-specific work**: Use focused prompts for specific modules
+
+### Quick Commands
+```bash
+# Run backend
+octi-run         # Alias for: ./gradlew bootRun -Dspring.profiles.active=local
+
+# Run frontend
+octi-ui-run      # Alias for: npm run devserver
+
+# Build project
+octi-build       # Alias for: ./gradlew clean build
+
+# E2E testing
+octi-e2e         # Alias for: npm run test:e2e
+
+# Screenshots
+octi-screenshot  # Alias for: npm run screenshots
+```
+
+### Daily Workflow
+1. Start Claude with project context using aliases
+2. Let Claude manage tasks with TodoWrite tool
+3. Verify changes with appropriate tests
+4. Use Claude's git integration for consistent commits
+5. Focus on completing one feature/module at a time

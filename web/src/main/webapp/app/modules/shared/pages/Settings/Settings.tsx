@@ -8,7 +8,6 @@ import IntegrationSettings from '../../../../components/settings/IntegrationSett
 import { AIIntegrationSettings } from '../../../../components/settings/AIIntegrationSettings';
 import NotificationSettings from '../../../../components/settings/NotificationSettings';
 import BillingSettings from '../../../../components/settings/BillingSettings';
-import AppearanceSettings from '../../../../components/settings/AppearanceSettings';
 import BackupSettings from '../../../../components/settings/BackupSettings';
 import LogSettings from '../../../../components/settings/LogSettings';
 import ToggleSwitch from '../../../../components/ToggleSwitch';
@@ -20,7 +19,7 @@ import { useRoleConfig } from '../../hooks/useRoleConfig';
 
 
 // Broker-specific types
-type BrokerTabType = 'broker-integrations' | 'automation' | 'commissions' | 'team';
+type BrokerTabType = 'automation' | 'commissions' | 'team';
 type ShipperTabType = 'inventory-settings' | 'warehouse' | 'shipping-preferences';
 type CarrierTabType = 'fleet' | 'driver-management' | 'compliance' | 'routes';
 type ExtendedTabType = TabType | BrokerTabType | ShipperTabType | CarrierTabType | 'ai-integration';
@@ -142,18 +141,6 @@ const Settings: React.FC = () => {
     statusChanges: { email: true, sms: false, inApp: true },
     weatherAlerts: { email: true, sms: true, inApp: true },
     systemNotifications: { email: true, sms: false, inApp: true }
-  };
-
-  const initialAppearance = {
-    theme: 'default',
-    sidebarPosition: 'left',
-    navbarStyle: 'fixed',
-    contentWidth: 'container',
-    density: 'comfortable',
-    fontFamily: 'poppins',
-    fontSize: 'medium',
-    primaryColor: '#2563eb',
-    secondaryColor: '#4f46e5'
   };
 
   const initialBackupSettings = {
@@ -314,13 +301,11 @@ const Settings: React.FC = () => {
     { id: 'ai-integration' as ExtendedTabType, label: 'AI Integration', icon: 'fa-robot' },
     { id: 'notifications' as ExtendedTabType, label: 'Notification Settings', icon: 'fa-bell' },
     { id: 'billing' as ExtendedTabType, label: 'Billing & Subscription', icon: 'fa-credit-card' },
-    { id: 'appearance' as ExtendedTabType, label: 'Appearance', icon: 'fa-paint-brush' },
     { id: 'backup' as ExtendedTabType, label: 'Backup & Restore', icon: 'fa-database' },
     { id: 'logs' as ExtendedTabType, label: 'System Logs', icon: 'fa-history' }
   ];
 
   const brokerTabItems = [
-    { id: 'broker-integrations' as ExtendedTabType, label: 'Broker Integrations', icon: 'fa-link' },
     { id: 'automation' as ExtendedTabType, label: 'Automation', icon: 'fa-cogs' },
     { id: 'commissions' as ExtendedTabType, label: 'Commission Structure', icon: 'fa-percentage' },
     { id: 'team' as ExtendedTabType, label: 'Team Settings', icon: 'fa-users-cog' }
@@ -436,9 +421,101 @@ const Settings: React.FC = () => {
             )}
 
             {activeTab === 'integrations' && (
-                <Card className="shadow-sm">
-                  <IntegrationSettings initialIntegrations={initialIntegrations} />
-                </Card>
+                <div>
+                  <Card className="shadow-sm mb-6">
+                    <IntegrationSettings initialIntegrations={initialIntegrations} />
+                  </Card>
+                  {/* Broker Integrations Section */}
+                  {isBroker && (
+                    <Card className="shadow-sm">
+                      <div className="p-6">
+                        <div className="flex justify-between items-center mb-4">
+                          <h2 className="text-xl font-semibold text-gray-900">Broker Services</h2>
+                          <button className="btn btn-sm btn-primary">
+                            <i className="fas fa-plus mr-2"></i> Add Integration
+                          </button>
+                        </div>
+                        <p className="text-sm text-gray-600 mb-6">
+                          Connect your broker account with industry-leading platforms for seamless operations
+                        </p>
+
+                        {Object.entries(groupedIntegrations).map(([category, categoryIntegrations]) => (
+                            <div key={category} className="mb-8">
+                              <h3 className="text-lg font-medium text-gray-900 mb-4">
+                                {categoryLabels[category as keyof typeof categoryLabels]}
+                              </h3>
+                              <div className="space-y-4">
+                                {categoryIntegrations.map(integration => (
+                                    <div key={integration.id} className="bg-white rounded-lg border border-gray-200 overflow-hidden shadow-sm">
+                                      <div className="p-4">
+                                        <div className="flex items-start justify-between">
+                                          <div className="flex items-start">
+                                            <div className={`w-10 h-10 rounded-full flex items-center justify-center ${integration.iconBg}`}>
+                                              <i className={`fas ${integration.icon}`}></i>
+                                            </div>
+                                            <div className="ml-3">
+                                              <h4 className="text-base font-medium text-gray-900">{integration.name}</h4>
+                                              <p className="text-sm text-gray-600 mt-1">{integration.description}</p>
+                                            </div>
+                                          </div>
+                                          <ToggleSwitch
+                                              isOn={integration.isConnected}
+                                              onToggle={() => handleToggleIntegration(integration.id)}
+                                          />
+                                        </div>
+
+                                        {integration.isConnected && (
+                                            <div className="mt-4 pt-4 border-t border-gray-100">
+                                              <div className="mb-3">
+                                                <label className="block text-xs font-medium text-gray-700 mb-1">API Key</label>
+                                                <div className="flex">
+                                                  <input
+                                                      type="text"
+                                                      value={integration.apiKey}
+                                                      readOnly
+                                                      className="form-control text-sm bg-gray-50 flex-grow"
+                                                  />
+                                                  <button
+                                                      className="btn btn-sm btn-white ml-2"
+                                                      onClick={() => {
+                                                        navigator.clipboard.writeText(integration.apiKey);
+                                                        toast.success('API key copied to clipboard');
+                                                      }}
+                                                  >
+                                                    <i className="fas fa-copy"></i>
+                                                  </button>
+                                                </div>
+                                              </div>
+
+                                              <div className="flex space-x-2">
+                                                <button
+                                                    className="btn btn-sm btn-white"
+                                                    onClick={() => handleSyncIntegration(integration.id)}
+                                                >
+                                                  <i className="fas fa-sync-alt mr-1"></i> Sync Now
+                                                </button>
+                                                <button
+                                                    className="btn btn-sm btn-white"
+                                                    onClick={() => handleTestIntegration(integration.id)}
+                                                >
+                                                  <i className="fas fa-vial mr-1"></i> Test Connection
+                                                </button>
+                                                <button className="btn btn-sm btn-white">
+                                                  <i className="fas fa-cog mr-1"></i> Settings
+                                                </button>
+                                              </div>
+                                            </div>
+                                        )}
+                                      </div>
+                                    </div>
+                                ))}
+                              </div>
+                            </div>
+                        ))}
+                      </div>
+                    </Card>
+                  )}
+                </div>
             )}
 
             {activeTab === 'ai-integration' && (
@@ -460,12 +537,6 @@ const Settings: React.FC = () => {
                 </Card>
             )}
 
-            {activeTab === 'appearance' && (
-                <Card className="shadow-sm">
-                  <AppearanceSettings initialAppearance={initialAppearance} />
-                </Card>
-            )}
-
             {activeTab === 'backup' && (
                 <Card className="shadow-sm">
                   <BackupSettings initialBackupSettings={initialBackupSettings} />
@@ -479,98 +550,6 @@ const Settings: React.FC = () => {
             )}
 
             {/* Broker-specific tabs */}
-            {activeTab === 'broker-integrations' && (
-                <div>
-                  <Card className="shadow-sm mb-6">
-                    <div className="p-6">
-                      <div className="flex justify-between items-center mb-4">
-                        <h2 className="text-xl font-semibold text-gray-900">Broker Services</h2>
-                        <button className="btn btn-sm btn-primary">
-                          <i className="fas fa-plus mr-2"></i> Add Integration
-                        </button>
-                      </div>
-                      <p className="text-sm text-gray-600 mb-6">
-                        Connect your broker account with industry-leading platforms for seamless operations
-                      </p>
-
-                      {Object.entries(groupedIntegrations).map(([category, categoryIntegrations]) => (
-                          <div key={category} className="mb-8">
-                            <h3 className="text-lg font-medium text-gray-900 mb-4">
-                              {categoryLabels[category as keyof typeof categoryLabels]}
-                            </h3>
-                            <div className="space-y-4">
-                              {categoryIntegrations.map(integration => (
-                                  <div key={integration.id} className="bg-white rounded-lg border border-gray-200 overflow-hidden shadow-sm">
-                                    <div className="p-4">
-                                      <div className="flex items-start justify-between">
-                                        <div className="flex items-start">
-                                          <div className={`w-10 h-10 rounded-full flex items-center justify-center ${integration.iconBg}`}>
-                                            <i className={`fas ${integration.icon}`}></i>
-                                          </div>
-                                          <div className="ml-3">
-                                            <h4 className="text-base font-medium text-gray-900">{integration.name}</h4>
-                                            <p className="text-sm text-gray-600 mt-1">{integration.description}</p>
-                                          </div>
-                                        </div>
-                                        <ToggleSwitch
-                                            isOn={integration.isConnected}
-                                            onToggle={() => handleToggleIntegration(integration.id)}
-                                        />
-                                      </div>
-
-                                      {integration.isConnected && (
-                                          <div className="mt-4 pt-4 border-t border-gray-100">
-                                            <div className="mb-3">
-                                              <label className="block text-xs font-medium text-gray-700 mb-1">API Key</label>
-                                              <div className="flex">
-                                                <input
-                                                    type="text"
-                                                    value={integration.apiKey}
-                                                    readOnly
-                                                    className="form-control text-sm bg-gray-50 flex-grow"
-                                                />
-                                                <button
-                                                    className="btn btn-sm btn-white ml-2"
-                                                    onClick={() => {
-                                                      navigator.clipboard.writeText(integration.apiKey);
-                                                      toast.success('API key copied to clipboard');
-                                                    }}
-                                                >
-                                                  <i className="fas fa-copy"></i>
-                                                </button>
-                                              </div>
-                                            </div>
-
-                                            <div className="flex space-x-2">
-                                              <button
-                                                  className="btn btn-sm btn-white"
-                                                  onClick={() => handleSyncIntegration(integration.id)}
-                                              >
-                                                <i className="fas fa-sync-alt mr-1"></i> Sync Now
-                                              </button>
-                                              <button
-                                                  className="btn btn-sm btn-white"
-                                                  onClick={() => handleTestIntegration(integration.id)}
-                                              >
-                                                <i className="fas fa-vial mr-1"></i> Test Connection
-                                              </button>
-                                              <button className="btn btn-sm btn-white">
-                                                <i className="fas fa-cog mr-1"></i> Settings
-                                              </button>
-                                            </div>
-                                          </div>
-                                      )}
-                                    </div>
-                                  </div>
-                              ))}
-                            </div>
-                          </div>
-                      ))}
-                    </div>
-                  </Card>
-                </div>
-            )}
-
             {activeTab === 'automation' && (
                 <Card className="shadow-sm">
                   <div className="p-6">
