@@ -15,7 +15,8 @@ coverage/
 .env.production.local
 
 ## IntelliJ IDEA
-.idea
+.idea/*
+!.idea/rcb-settings.xml
 *.iws
 *.iml
 *.ipr
@@ -80,7 +81,7 @@ web/app.log
 ## Environment Files
 .env
 .env.*
-!.env.example
+!.env.local
 
 ## Build Tools - Gradle Wrapper
 gradlew
