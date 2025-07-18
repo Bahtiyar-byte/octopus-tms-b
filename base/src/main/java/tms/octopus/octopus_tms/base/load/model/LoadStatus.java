@@ -12,6 +12,30 @@ public enum LoadStatus {
     DELIVERED,
     INVOICED,
     PAID,
-    CANCELLED
+    CANCELLED,
+    NEW,
+    New,
+    Posted,
+
+    // Additional statuses from frontend
+    AWAITING_DOCS,
+    POD_RECEIVED,
+    CLOSED,
+    CARRIER_ASSIGNED,
+    EN_ROUTE,
+
+    // Mixed-case versions to match frontend exactly
+    Awaiting_Docs,
+    POD_Received,
+    Closed,
+    Carrier_Assigned,
+    En_Route,
+    Assigned,
+    InTransit,
+    Delivered,
+    Invoiced,
+    Paid,
+    Cancelled
+
 
 }

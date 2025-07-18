@@ -15,7 +15,8 @@ coverage/
 .env.production.local
 
 ## IntelliJ IDEA
-.idea
+.idea/*
+!.idea/rcb-settings.xml
 *.iws
 *.iml
 *.ipr
@@ -45,21 +46,69 @@ bin/
 /nbdist/
 /.nb-gradle/
 
-## Debug and test artifacts
+## Debug and Test Artifacts
 debug/
 screenshots/
 test-results/
-tests/
+playwright-report/
+playwright-results/
+coverage/
 *.tsbuildinfo
+test-*.js
+test-*.cjs
+test-*.sh
 
-## Test scripts in webapp root
-web/src/main/webapp/test-*.cjs
+## Test Directories
+web/src/main/webapp/test-results/
+web/src/main/webapp/playwright-report/
+web/src/main/webapp/tests/
+web/src/main/webapp/temp/
 
-## Test artifacts
-web/src/main/webapp/tests/frontend-check-report.json
-web/src/main/webapp/tests/e2e/trace.zip
-web/src/main/webapp/temp
-
-## Ad-hoc scripts
+## Documentation and Scripts
 /docs/
 /scripts/
+/configs/
+*.md
+!README.md
+!CLAUDE.md
+octopus-tms-architecture-overview.html
+
+## Logs
+*.log
+logs/
+web/app.log
+
+## Environment Files
+.env
+.env.*
+!.env.local
+
+## Build Tools - Gradle Wrapper
+gradlew
+gradlew.bat
+
+## Backend specific
+backend-requirements.md
+project-structure.md
+action-plan
+create-test-*.sql
+load-sample-data.sql
+
+## IDE and Editor Files
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+## OS Files
+.DS_Store
+Thumbs.db
+
+## Temporary Files
+tmp/
+temp/
+*.tmp
+*.bak
+*.swp
+*~

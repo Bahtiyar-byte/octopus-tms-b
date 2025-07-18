@@ -86,7 +86,6 @@ const Topbar: React.FC = () => {
       { path: '/broker/loads', label: 'Loads' },
       { path: '/broker/carrier-match', label: 'Carrier Match' },
       { path: '/broker/tracking', label: 'Tracking' },
-      { path: '/broker/supervisor', label: 'Supervisor' },
     ];
   } 
   // If user is a shipper, show shipper-specific routes
@@ -101,11 +100,6 @@ const Topbar: React.FC = () => {
   // Otherwise show carrier routes
   else {
     routes = [...carrierRoutes];
-
-    // Add supervisor route if user has the right role
-    if (user?.role === UserRole.SUPERVISOR || user?.role === UserRole.ADMIN) {
-      routes.push({ path: '/supervisor', label: 'Supervisor Dashboard' });
-    }
   }
 
   // Get notification type badge class

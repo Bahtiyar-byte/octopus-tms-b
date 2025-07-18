@@ -203,6 +203,7 @@ const Dashboard: React.FC = () => {
         </section>
       </div>
 
+      {/*Top Performing Drivers Section*/}
       <section className="mb-8">
         <h2 className="flex items-center text-xl font-semibold mb-4">
           <i className="fas fa-award mr-2 text-blue-600"></i>
@@ -276,6 +277,7 @@ const Dashboard: React.FC = () => {
         </Card>
       </section>
 
+      {/*Recent Activity and Weather Widgets*/}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-8">
         <div className="lg:col-span-8">
           <section>
@@ -366,6 +368,7 @@ const Dashboard: React.FC = () => {
             </Card>
           </section>
 
+          {/* Weather Widget Section */}
           <section className="mb-6">
             <h2 className="flex items-center text-xl font-semibold mb-4">
               <i className="fas fa-cloud-sun mr-2 text-blue-600"></i>
@@ -378,6 +381,7 @@ const Dashboard: React.FC = () => {
             />
           </section>
 
+          {/* Weather Alerts */}
           <section>
             <h2 className="flex items-center text-xl font-semibold mb-4">
               <i className="fas fa-cloud-sun-rain mr-2 text-blue-600"></i>

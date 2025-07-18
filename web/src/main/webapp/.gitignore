@@ -7,10 +7,29 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Dependencies
 node_modules
+package-lock.json
+
+# Build outputs
 dist
 dist-ssr
 *.local
+
+# Test artifacts
+test-results/
+playwright-report/
+playwright-results/
+coverage/
+tests/
+test-*.js
+test-*.cjs
+*.tsbuildinfo
+
+# Temporary files
+temp/
+tmp/
+src/assets/temp/
 
 # Editor directories and files
 .vscode/*
@@ -22,10 +41,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-src/assets/temp/
-/src/assets/temp
-/src/assets/temp/
-src/assets/temp
 
 # TypeScript compiled files
 src/**/*.js
@@ -38,3 +53,8 @@ src/**/*.js.map
 
 # Exclude specific directories from JS rule
 !public/**/*.js
+
+# Environment files
+.env
+.env.*
+!.env.example

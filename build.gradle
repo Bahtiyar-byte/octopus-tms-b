@@ -180,6 +180,9 @@ project(':core') {
     dependencies {
         api project(':base')
 
+        // Add runtime dependency on load module to resolve AILoadService implementation
+        runtimeOnly project(':load')
+
         testImplementation project(path: ':base', configuration: 'testArtifacts')
     }
 }
