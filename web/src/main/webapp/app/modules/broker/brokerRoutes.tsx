@@ -8,6 +8,7 @@ import Loads from '../shared/pages/Loads/Loads';
 import Tracking from '../shared/pages/Tracking/Tracking';
 import Reports from '../shared/pages/Reports/Reports';
 import Documents from '../shared/pages/Documents/Documents';
+import Invoices from '../shared/pages/Invoices/Invoices';
 
 // Import Shared pages
 import Customers from '../shared/pages/Customers/Customers';
@@ -16,9 +17,7 @@ import Customers from '../shared/pages/Customers/Customers';
 import CreateLoad from './pages/CreateLoad';
 import CarrierMatch from './pages/CarrierMatch';
 import Contracts from './pages/Contracts';
-import Invoices from './pages/Invoices';
 import Carriers from './pages/Carriers';
-import SupervisorDashboard from './pages/SupervisorDashboard';
 import Commissions from './pages/Commissions';
 import { SmartLoadMatch } from './pages/SmartLoadMatch';
 import WorkflowBuilder from './pages/WorkflowBuilder';
@@ -95,10 +94,10 @@ const brokerRoutes: RouteObject[] = [
     path: 'broker/tracking',
     element: <BrokerRoute><Tracking /></BrokerRoute>,
   },
-  {
-    path: 'broker/supervisor',
-    element: <BrokerRoute><SupervisorDashboard /></BrokerRoute>,
-  },
+  // {
+  //   path: 'broker/supervisor',
+  //   element: <BrokerRoute><SupervisorDashboard /></BrokerRoute>,
+  // },
   {
     path: 'broker/commissions',
     element: <BrokerRoute><Commissions /></BrokerRoute>,

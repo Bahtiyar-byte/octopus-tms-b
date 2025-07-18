@@ -37,7 +37,7 @@ const Dashboard: React.FC = () => {
         <div className="p-6 space-y-6">
             {/* Header */}
             <div className="mb-8">
-                <h1 className="text-3xl font-bold text-gray-900">Broker Dashboard</h1>
+                <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
                 <p className="text-gray-600">Overview of your freight brokerage operations</p>
             </div>
 

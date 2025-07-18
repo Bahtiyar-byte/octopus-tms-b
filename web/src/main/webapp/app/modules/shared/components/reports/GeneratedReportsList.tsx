@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card } from '../../../../components';
-import { GeneratedReport, ExportFormat } from '../../pages/Reports/Reports';
+import { GeneratedReport } from '../../pages/Reports/Reports';
+import { ExportFormat } from '../../../shared/pages/Reports/Reports';
 
 interface GeneratedReportsListProps {
   reports: GeneratedReport[];

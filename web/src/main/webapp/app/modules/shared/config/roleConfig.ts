@@ -110,7 +110,7 @@ const roleConfig: RoleConfiguration = {
   dashboard: {
     ...BASE_CONFIG.dashboard,
     BROKER: {
-      title: 'Broker Dashboard',
+      title: 'Dashboard',
       widgets: [
         {
           id: 'revenue',

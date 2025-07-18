@@ -1,7 +1,6 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { MainLayout } from '../layouts';
 import { AuthProvider, useAuth } from '../context/AuthContext';
-import { UserRole } from '../types/user';
 import brokerRoutes from '../modules/broker/brokerRoutes';
 import carrierRoutes from '../modules/carrier/carrierRoutes';
 import shipperRoutes from '../modules/shipper/shipperRoutes';
@@ -11,7 +10,6 @@ import Reports from '../pages/Reports';
 import Settings from '../modules/shared/pages/Settings/Settings';
 import Login from '../pages/Login';
 import Profile from '../modules/shared/pages/Profile/Profile';
-import SupervisorDashboard from '../pages/SupervisorDashboard';
 import ForgotPassword from '../pages/ForgotPassword';
 import LoadDetails from '../pages/LoadDetails';
 import TestBackend from '../pages/TestBackend';
@@ -86,10 +84,6 @@ const router = createBrowserRouter([
       {
         path: '/profile',
         element: <Profile />,
-      },
-      {
-        path: '/supervisor',
-        element: <SupervisorDashboard />,
       },
       {
         path: '/load-details/:id',
