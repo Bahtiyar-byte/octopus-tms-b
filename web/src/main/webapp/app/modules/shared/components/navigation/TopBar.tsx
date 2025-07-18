@@ -55,7 +55,7 @@ const Topbar: React.FC = () => {
     { path: '/broker/carriers', label: 'Carriers' },
     { path: '/broker/documents', label: 'Documents' },
     { path: '/broker/contracts', label: 'Contracts' },
-    { path: '/broker/payments', label: 'Payments' },
+    { path: '/broker/payments', label: 'Invoices' },
     { path: '/broker/commissions', label: 'Commissions' },
   ];
 
@@ -64,7 +64,7 @@ const Topbar: React.FC = () => {
     { path: '/shipper/workflows', label: 'Workflows' },
     { path: '/shipper/documents', label: 'Documents' },
     { path: '/shipper/reports', label: 'Reports' },
-    { path: '/shipper/payments', label: 'Payments' },
+    { path: '/shipper/payments', label: 'Invoices' },
     { path: '/shipper/settings', label: 'Settings' },
   ];
 
@@ -72,10 +72,10 @@ const Topbar: React.FC = () => {
   // Main navigation routes for Carrier role
   const carrierRoutes = [
     { path: '/carrier/dashboard', label: 'Dashboard' },
+    { path: '/carrier/all-loads', label: 'Loads' },
     { path: '/carrier/smart-load-search', label: 'Smart Load Search' },
     { path: '/carrier/dispatch-board', label: 'Dispatch Board' },
     { path: '/carrier/tracking', label: 'Tracking' },
-    { path: '/carrier/all-loads', label: 'All Loads' },
     // Resources dropdown will be rendered separately
   ];
 
