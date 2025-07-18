@@ -1,7 +1,7 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { UserRole } from '../types/user';
+import { UserRole } from '../types/core/user.types';
 
 const DashboardRedirect: React.FC = () => {
   const { user } = useAuth();

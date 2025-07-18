@@ -12,7 +12,7 @@ import BackupSettings from '../../../../components/settings/BackupSettings';
 import LogSettings from '../../../../components/settings/LogSettings';
 import ToggleSwitch from '../../../../components/ToggleSwitch';
 import { useAuth } from '../../../../context/AuthContext';
-import { UserRole } from '../../../../types/user';
+import { UserRole } from '../../../../types/core/user.types';
 import { toast } from 'react-hot-toast';
 import { useRoleConfig } from '../../hooks/useRoleConfig';
 

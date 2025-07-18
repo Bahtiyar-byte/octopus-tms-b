@@ -1,6 +1,6 @@
 import { Navigate, RouteObject } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { UserRole } from '../../types/user';
+import { UserRole } from '../../types/core/user.types';
 
 // Import Shared pages
 import Dashboard from '../shared/pages/Dashboard/Dashboard';
@@ -14,8 +14,8 @@ import SmartLoadSearch from './pages/SmartLoadSearch';
 import DispatchBoard from './pages/DispatchBoard';
 import AllLoads from './pages/AllLoads';
 import Drivers from './pages/Drivers';
-import Workflows from './pages/Workflows';
-import WorkflowBuilder from './pages/WorkflowBuilder';
+import Workflows from '../../pages/Workflows';
+import WorkflowBuilder from '../../pages/WorkflowBuilder';
 
 // Role-based access control component
 const CarrierRoute = ({ children }: { children: React.ReactNode }) => {

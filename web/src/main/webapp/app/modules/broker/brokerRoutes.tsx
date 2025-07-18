@@ -1,6 +1,6 @@
 import { Navigate, RouteObject } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { UserRole } from '../../types/user';
+import { UserRole } from '../../types/core/user.types';
 
 // Import Shared pages
 import Dashboard from '../shared/pages/Dashboard/Dashboard';
@@ -20,8 +20,8 @@ import Contracts from './pages/Contracts';
 import Carriers from './pages/Carriers';
 import Commissions from './pages/Commissions';
 import { SmartLoadMatch } from './pages/SmartLoadMatch';
-import WorkflowBuilder from './pages/WorkflowBuilder';
-import Workflows from './pages/Workflows';
+import WorkflowBuilder from '../../pages/WorkflowBuilder';
+import Workflows from '../../pages/Workflows';
 
 // Role-based access control component
 const BrokerRoute = ({ children }: { children: React.ReactNode }) => {

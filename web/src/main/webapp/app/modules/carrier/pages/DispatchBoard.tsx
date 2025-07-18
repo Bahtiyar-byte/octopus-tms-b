@@ -2,8 +2,7 @@ import React, { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, Modal } from '../../../components';
 import { mockActions, Driver } from '../../../services/mockActions';
-
-// Define load data types
+// Define load data types for dispatch board
 interface Load {
   id: string;
   origin: string;
@@ -317,20 +316,29 @@ const DispatchBoard: React.FC = () => {
     setLoading(true);
     try {
       const newLoadData = {
-        origin: 'New Origin, NY',
-        destination: 'New Destination, CA',
-        customer: 'New Customer',
-        equipment: 'Dry Van',
-        date: new Date().toLocaleDateString(),
-        price: 1500
+        pickupLocation: 'New Origin, NY',
+        deliveryLocation: 'New Destination, CA',
+        customerId: 'New Customer',
+        equipmentType: 'Dry Van',
+        pickupDate: new Date().toISOString().split('T')[0],
+        deliveryDate: new Date().toISOString().split('T')[0],
+        rate: 1500
       };
 
       const result = await mockActions.createLoad(newLoadData);
 
       const newLoad: Load = {
         id: result.id,
-        ...newLoadData,
-        status: 'Booked'
+        origin: newLoadData.pickupLocation,
+        destination: newLoadData.deliveryLocation,
+        customer: newLoadData.customerId || 'New Customer',
+        equipment: newLoadData.equipmentType,
+        date: newLoadData.pickupDate,
+        price: newLoadData.rate,
+        status: 'Booked',
+        pickupDate: newLoadData.pickupDate,
+        deliveryDate: newLoadData.deliveryDate,
+        driver: 'Unassigned'
       };
 
       setBookedLoads([...bookedLoads, newLoad]);

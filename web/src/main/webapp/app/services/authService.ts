@@ -5,7 +5,7 @@ import {
   ResetPasswordRequest, 
   ChangePasswordRequest,
   UserRole 
-} from '../types/user';
+} from '../types/core/user.types';
 import axios from 'axios';
 
 // API base URL
@@ -104,7 +104,7 @@ export const authService = {
       
       return userStr ? JSON.parse(userStr) : null;
     } catch (error) {
-      console.error('Error parsing user from storage:', error);
+      // Error parsing user from storage
       return null;
     }
   },
@@ -144,7 +144,7 @@ export const authService = {
         email: request.email
       });
       
-      console.log(`Password reset requested for ${request.email}`);
+      // Password reset requested
     } catch (error) {
       if (axios.isAxiosError(error)) {
         throw new Error(error.response?.data?.message || 'Failed to request password reset');
@@ -162,7 +162,7 @@ export const authService = {
         newPassword: request.newPassword
       });
       
-      console.log('Password changed successfully');
+      // Password changed successfully
     } catch (error) {
       if (axios.isAxiosError(error)) {
         throw new Error(error.response?.data?.message || 'Failed to change password');

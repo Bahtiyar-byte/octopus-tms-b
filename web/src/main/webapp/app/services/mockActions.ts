@@ -1,5 +1,6 @@
 // Mock service for simulating actions and providing feedback
 import { toast } from 'react-hot-toast';
+import { CreateLoadData, EditLoadData, ReportFilters, UserSettings } from '../types/core/actions.types';
 
 // Simulated delay for actions
 const simulateAction = <T>(data: T, delay = 800): Promise<T> => {
@@ -114,7 +115,7 @@ export const mockActions = {
     return { invoiceId, loadId };
   },
   
-  createLoad: async (loadData: any): Promise<{ id: string }> => {
+  createLoad: async (loadData: CreateLoadData): Promise<{ id: string }> => {
     const loadId = 'LD' + Math.floor(1000 + Math.random() * 9000);
     
     await simulateAction({ id: loadId });
@@ -122,7 +123,7 @@ export const mockActions = {
     return { id: loadId };
   },
   
-  editLoad: async (loadId: string, loadData: any): Promise<{ id: string }> => {
+  editLoad: async (loadId: string, loadData: EditLoadData): Promise<{ id: string }> => {
     await simulateAction({ id: loadId });
     notify(`Load ${loadId} updated successfully`);
     return { id: loadId };
@@ -208,7 +209,7 @@ export const mockActions = {
   },
   
   // Reports
-  generateReport: async (reportType: string, filters: any): Promise<{ reportId: string; url: string }> => {
+  generateReport: async (reportType: string, filters: ReportFilters): Promise<{ reportId: string; url: string }> => {
     const reportId = 'RPT-' + Math.floor(10000 + Math.random() * 90000);
     
     await simulateAction({ reportId, url: `reports/${reportId}.pdf` });
@@ -217,9 +218,18 @@ export const mockActions = {
   },
   
   // Settings
-  saveSettings: async (settings: any): Promise<void> => {
+  saveSettings: async (settings: UserSettings): Promise<void> => {
     await simulateAction({});
     notify('Settings saved successfully');
+  },
+  
+  // Driver actions
+  addDriver: async (driverData: { name: string; license: string; phone: string }): Promise<{ id: string }> => {
+    const driverId = 'DRV-' + Math.floor(10000 + Math.random() * 90000);
+    
+    await simulateAction({ id: driverId });
+    notify(`Driver ${driverData.name} added successfully`);
+    return { id: driverId };
   }
 };
 

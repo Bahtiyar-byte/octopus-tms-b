@@ -40,7 +40,7 @@ export default function PasswordResetComplete() {
               }
             });
       }
-    } catch (error: any) {
+    } catch (error) {
       handleServerError(error, navigate);
     }
   };
@@ -59,7 +59,7 @@ export default function PasswordResetComplete() {
               msgSuccess: t('passwordReset.completed')
             }
           });
-    } catch (error: any) {
+    } catch (error) {
       handleServerError(error, navigate, useFormResult.setError, t);
     }
   };

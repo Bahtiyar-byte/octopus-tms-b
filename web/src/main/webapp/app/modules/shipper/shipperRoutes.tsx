@@ -1,6 +1,6 @@
 import { Navigate, RouteObject } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { UserRole } from '../../types/user';
+import { UserRole } from '../../types/core/user.types';
 
 // Import Shared pages
 import Dashboard from '../shared/pages/Dashboard/Dashboard';
@@ -14,8 +14,8 @@ import Loads from '../shared/pages/Loads/Loads';
 import CreateLoad from './pages/CreateLoad';
 import Settings from './pages/Settings';
 import { WarehouseDashboard } from './pages/WarehouseDashboard';
-import Workflows from './pages/Workflows';
-import WorkflowBuilder from './pages/WorkflowBuilder';
+import Workflows from '../../pages/Workflows';
+import WorkflowBuilder from '../../pages/WorkflowBuilder';
 import Payments from './pages/Payments';
 
 // Role-based access control component

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { User, UserRole } from '../types';
+import { User, UserRole } from '../types/core/user.types';
 
 export interface CreateUserRequest {
   username: string;
@@ -42,7 +42,7 @@ class UserService {
       });
       return response.data;
     } catch (error) {
-      console.error('Error fetching users:', error);
+      // Error fetching users
       throw error;
     }
   }
@@ -53,7 +53,7 @@ class UserService {
       const response = await axios.get(`${this.baseUrl}/${id}`);
       return response.data;
     } catch (error) {
-      console.error('Error fetching user:', error);
+      // Error fetching user
       throw error;
     }
   }
@@ -69,7 +69,7 @@ class UserService {
       const response = await axios.post(this.baseUrl, requestData);
       return response.data;
     } catch (error) {
-      console.error('Error creating user:', error);
+      // Error creating user
       throw error;
     }
   }
@@ -80,7 +80,7 @@ class UserService {
       const response = await axios.put(`${this.baseUrl}/${id}`, userData);
       return response.data;
     } catch (error) {
-      console.error('Error updating user:', error);
+      // Error updating user
       throw error;
     }
   }
@@ -90,7 +90,7 @@ class UserService {
     try {
       await axios.delete(`${this.baseUrl}/${id}`);
     } catch (error) {
-      console.error('Error deleting user:', error);
+      // Error deleting user
       throw error;
     }
   }
@@ -101,7 +101,7 @@ class UserService {
       const response = await axios.patch(`${this.baseUrl}/${id}/toggle-status`);
       return response.data;
     } catch (error) {
-      console.error('Error toggling user status:', error);
+      // Error toggling user status
       throw error;
     }
   }
@@ -111,7 +111,7 @@ class UserService {
     try {
       await axios.post(`${this.baseUrl}/${id}/reset-password`, { newPassword });
     } catch (error) {
-      console.error('Error resetting password:', error);
+      // Error resetting password
       throw error;
     }
   }

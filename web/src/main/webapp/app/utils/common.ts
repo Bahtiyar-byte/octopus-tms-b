@@ -1,6 +1,7 @@
 import * as yup from 'yup';
-import { UseFormSetError } from 'react-hook-form';
+import { UseFormSetError, FieldValues } from 'react-hook-form';
 import { NavigateFunction } from 'react-router-dom';
+import { ApiAxiosError } from '../types/core/error.types';
 
 export function setYupDefaults() {
   yup.setLocale({
@@ -14,24 +15,25 @@ export function setYupDefaults() {
   });
 }
 
-export function handleServerError(
-  error: any,
+export function handleServerError<TFieldValues extends FieldValues = FieldValues>(
+  error: unknown,
   navigate: NavigateFunction,
-  setError?: UseFormSetError<any>,
+  setError?: UseFormSetError<TFieldValues>,
   t?: (key: string) => string,
   getMessage?: (key: string) => string
 ) {
-  if (error.response?.status === 422 && error.response?.data?.fieldErrors && setError) {
-    Object.keys(error.response.data.fieldErrors).forEach((field) => {
-      setError(field, {
+  const axiosError = error as ApiAxiosError;
+  if (axiosError.response?.status === 422 && axiosError.response?.data?.fieldErrors && setError) {
+    Object.entries(axiosError.response.data.fieldErrors).forEach(([field, message]) => {
+      setError(field as any, {
         type: 'manual',
-        message: error.response.data.fieldErrors[field],
+        message: message,
       });
     });
-  } else if (error.response?.status === 400) {
-    console.error('Bad request:', error.response.data);
+  } else if (axiosError.response?.status === 400) {
+    console.error('Bad request:', axiosError.response.data);
   } else {
-    console.error('Server error:', error);
+    console.error('Server error:', axiosError);
   }
 }
 

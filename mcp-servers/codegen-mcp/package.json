@@ -1,0 +1,16 @@
+{
+  "name": "octopus-codegen-mcp",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Code generation MCP server for Octopus TMS",
+  "main": "server.js",
+  "bin": {
+    "octopus-codegen-mcp": "./server.js"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^0.6.0"
+  }
+}
