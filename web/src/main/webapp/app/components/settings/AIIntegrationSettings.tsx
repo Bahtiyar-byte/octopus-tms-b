@@ -44,6 +44,7 @@ export const AIIntegrationSettings: React.FC = () => {
   const [apiKey, setApiKey] = useState('');
   const [loading, setLoading] = useState(false);
   const [testingConnection, setTestingConnection] = useState<string | null>(null);
+  const DEFAULT_GEMINI_TOKEN = 'AIzaSyDdDZPX0c_pWLZHgiWdzimDFcYhDrF7XD4';
 
   const getDefaultModel = (provider: string): string => {
     switch (provider) {
@@ -64,7 +65,7 @@ export const AIIntegrationSettings: React.FC = () => {
 
   const fetchConfigurations = async () => {
     try {
-      const response = await fetch('/api/ai/providers', {
+      const response = await fetch('/api/integrations/ai/configurations', {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('octopus_tms_token') || sessionStorage.getItem('octopus_tms_token')}`
         }
@@ -86,7 +87,7 @@ export const AIIntegrationSettings: React.FC = () => {
 
     setLoading(true);
     try {
-      const response = await fetch('/api/ai/providers', {
+      const response = await fetch('/api/integrations/ai/configure', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -117,12 +118,15 @@ export const AIIntegrationSettings: React.FC = () => {
   const handleTestConnection = async (provider: string) => {
     setTestingConnection(provider);
     try {
-      const response = await fetch(`/api/ai/providers/${provider}/test`, {
+      const response = await fetch('/api/integrations/ai/test', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('octopus_tms_token') || sessionStorage.getItem('octopus_tms_token')}`
-        }
+        },
+        body: JSON.stringify({
+          provider: provider
+        })
       });
 
       if (response.ok) {
@@ -144,16 +148,12 @@ export const AIIntegrationSettings: React.FC = () => {
 
   const handleToggleActive = async (config: AIProviderConfig) => {
     try {
-      const response = await fetch('/api/ai/providers', {
-        method: 'POST',
+      const response = await fetch(`/api/integrations/ai/configurations/${config.id}/toggle`, {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('octopus_tms_token') || sessionStorage.getItem('octopus_tms_token')}`
-        },
-        body: JSON.stringify({
-          ...config,
-          isActive: !config.isActive
-        })
+        }
       });
 
       if (response.ok) {
@@ -170,7 +170,7 @@ export const AIIntegrationSettings: React.FC = () => {
     }
 
     try {
-      const response = await fetch(`/api/ai/providers/${configId}`, {
+      const response = await fetch(`/api/integrations/ai/configurations/${configId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('octopus_tms_token') || sessionStorage.getItem('octopus_tms_token')}`
@@ -214,7 +214,15 @@ export const AIIntegrationSettings: React.FC = () => {
               </label>
               <select
                 value={selectedProvider}
-                onChange={(e) => setSelectedProvider(e.target.value)}
+                onChange={(e) => {
+                  setSelectedProvider(e.target.value);
+                  // Auto-fill default Gemini token when Google is selected
+                  if (e.target.value === 'GOOGLE') {
+                    setApiKey(DEFAULT_GEMINI_TOKEN);
+                  } else {
+                    setApiKey('');
+                  }
+                }}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="">Choose a provider...</option>
@@ -251,6 +259,16 @@ export const AIIntegrationSettings: React.FC = () => {
                     Add Provider
                   </button>
                 </div>
+                {selectedProvider === 'GOOGLE' && (
+                  <div className="mt-2">
+                    <button
+                      onClick={() => setApiKey(DEFAULT_GEMINI_TOKEN)}
+                      className="text-sm text-blue-600 hover:text-blue-700 underline"
+                    >
+                      Use default Gemini token
+                    </button>
+                  </div>
+                )}
               </div>
             )}
           </div>

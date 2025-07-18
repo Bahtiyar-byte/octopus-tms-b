@@ -37,11 +37,11 @@ const Topbar: React.FC = () => {
 
   // Resources submenu items for Carrier
   const carrierResourcesItems = [
-    { path: '/workflows', label: 'Workflows' },
-    { path: '/documents', label: 'Documents' },
-    { path: '/invoices', label: 'Invoices' },
-    { path: '/reports', label: 'Reports' },
-    { path: '/drivers', label: 'Drivers' },
+    { path: '/carrier/workflows', label: 'Workflows' },
+    { path: '/carrier/documents', label: 'Documents' },
+    { path: '/carrier/invoices', label: 'Invoices' },
+    { path: '/carrier/reports', label: 'Reports' },
+    { path: '/carrier/drivers', label: 'Drivers' },
   ];
   
   // Resources submenu items for Broker
@@ -68,11 +68,11 @@ const Topbar: React.FC = () => {
 
   // Main navigation routes for Carrier role
   const carrierRoutes = [
-    { path: '/dashboard', label: 'Dashboard' },
-    { path: '/smart-load-search', label: 'Smart Load Search' },
-    { path: '/dispatch-board', label: 'Dispatch Board' },
-    { path: '/tracking', label: 'Tracking' },
-    { path: '/all-loads', label: 'All Loads' },
+    { path: '/carrier/dashboard', label: 'Dashboard' },
+    { path: '/carrier/smart-load-search', label: 'Smart Load Search' },
+    { path: '/carrier/dispatch-board', label: 'Dispatch Board' },
+    { path: '/carrier/tracking', label: 'Tracking' },
+    { path: '/carrier/all-loads', label: 'All Loads' },
     // Resources dropdown will be rendered separately
   ];
 
@@ -86,7 +86,6 @@ const Topbar: React.FC = () => {
       { path: '/broker/loads', label: 'Loads' },
       { path: '/broker/carrier-match', label: 'Carrier Match' },
       { path: '/broker/tracking', label: 'Tracking' },
-      { path: '/broker/supervisor', label: 'Supervisor' },
     ];
   } 
   // If user is a shipper, show shipper-specific routes
@@ -101,11 +100,6 @@ const Topbar: React.FC = () => {
   // Otherwise show carrier routes
   else {
     routes = [...carrierRoutes];
-
-    // Add supervisor route if user has the right role
-    if (user?.role === UserRole.SUPERVISOR || user?.role === UserRole.ADMIN) {
-      routes.push({ path: '/supervisor', label: 'Supervisor Dashboard' });
-    }
   }
 
   // Get notification type badge class
@@ -204,11 +198,25 @@ const Topbar: React.FC = () => {
     }
   };
 
+  // Get the correct dashboard path based on user role
+  const getDashboardPath = () => {
+    if (user?.role === UserRole.BROKER || user?.role === UserRole.ADMIN) {
+      return '/broker/dashboard';
+    } else if (user?.role === UserRole.SHIPPER) {
+      return '/shipper/dashboard';
+    } else if (user?.role === UserRole.CARRIER) {
+      return '/carrier/dashboard';
+    } else {
+      // Default to carrier dashboard for other roles
+      return '/carrier/dashboard';
+    }
+  };
+
   return (
     <nav className="bg-blue-600 text-white sticky top-0 z-10 shadow-md">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-16">
-          <Link to="/dashboard" className="font-bold text-xl mr-6">
+          <Link to={getDashboardPath()} className="font-bold text-xl mr-6">
             Octopus TMS
           </Link>
 
@@ -246,7 +254,7 @@ const Topbar: React.FC = () => {
                         ? location.pathname.includes('/shipper/documents') ||
                           location.pathname.includes('/shipper/reports') ||
                           location.pathname.includes('/shipper/settings')
-                        : ['/documents', '/invoices', '/reports', '/drivers', '/workflows'].includes(location.pathname)
+                        : carrierResourcesItems.some(item => location.pathname === item.path)
                       ) ? 'bg-blue-700 text-white' : 'text-white hover:bg-blue-500'
                     }`}
                     onClick={() => setIsResourcesMenuOpen(!isResourcesMenuOpen)}
@@ -364,8 +372,8 @@ const Topbar: React.FC = () => {
                   onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
                 >
                   <span className="sr-only">Open user menu</span>
-                  {user?.avatar ? (
-                    <img className="h-8 w-8 rounded-full" src={user.avatar} alt={user.firstName} />
+                  {user?.avatarUrl ? (
+                    <img className="h-8 w-8 rounded-full" src={user.avatarUrl} alt={user.firstName} />
                   ) : (
                     <div className="h-8 w-8 rounded-full bg-blue-300 flex items-center justify-center text-blue-800 font-bold">
                       {user?.firstName?.charAt(0) || 'U'}
@@ -447,7 +455,11 @@ const Topbar: React.FC = () => {
             <div className="mt-1">
               <button
                 className={`block w-full text-left px-3 py-2 rounded-md text-base font-medium ${
-                  ['/documents', '/invoices', '/reports', '/drivers', '/workflows'].includes(location.pathname)
+                  (user?.role === UserRole.BROKER 
+                    ? brokerResourcesItems.some(item => location.pathname === item.path)
+                    : user?.role === UserRole.SHIPPER
+                    ? shipperResourcesItems.some(item => location.pathname === item.path)
+                    : carrierResourcesItems.some(item => location.pathname === item.path))
                     ? 'bg-blue-700 text-white'
                     : 'text-white hover:bg-blue-500'
                 }`}

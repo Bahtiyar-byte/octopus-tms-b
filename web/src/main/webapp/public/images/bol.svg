@@ -1,0 +1,39 @@
+<svg width="200" height="260" viewBox="0 0 200 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Document background -->
+  <rect x="10" y="10" width="180" height="240" rx="4" fill="#f8fafc" stroke="#e2e8f0" stroke-width="2"/>
+  
+  <!-- Header -->
+  <rect x="10" y="10" width="180" height="40" rx="4" fill="#1e40af" />
+  <text x="100" y="35" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="white" text-anchor="middle">
+    BILL OF LADING
+  </text>
+  
+  <!-- Content lines -->
+  <rect x="25" y="65" width="150" height="8" rx="2" fill="#cbd5e1" />
+  <rect x="25" y="80" width="120" height="8" rx="2" fill="#cbd5e1" />
+  <rect x="25" y="95" width="140" height="8" rx="2" fill="#cbd5e1" />
+  
+  <!-- Boxes section -->
+  <rect x="25" y="115" width="70" height="30" rx="2" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1"/>
+  <rect x="105" y="115" width="70" height="30" rx="2" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1"/>
+  
+  <!-- More content lines -->
+  <rect x="25" y="160" width="150" height="8" rx="2" fill="#cbd5e1" />
+  <rect x="25" y="175" width="130" height="8" rx="2" fill="#cbd5e1" />
+  <rect x="25" y="190" width="145" height="8" rx="2" fill="#cbd5e1" />
+  
+  <!-- Signature area -->
+  <rect x="25" y="210" width="70" height="25" rx="2" fill="#f8fafc" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="60" y="227" font-family="Arial, sans-serif" font-size="10" fill="#64748b" text-anchor="middle">
+    Signature
+  </text>
+  
+  <!-- Stamp/Date area -->
+  <rect x="105" y="210" width="70" height="25" rx="2" fill="#fef3c7" stroke="#f59e0b" stroke-width="1"/>
+  <text x="140" y="220" font-family="Arial, sans-serif" font-size="8" fill="#92400e" text-anchor="middle">
+    DATE STAMP
+  </text>
+  <text x="140" y="230" font-family="Arial, sans-serif" font-size="8" fill="#92400e" text-anchor="middle">
+    05/21/2025
+  </text>
+</svg>

@@ -20,7 +20,7 @@ export interface User {
   lastName: string;
   email: string;
   role: UserRole;
-  avatar?: string;
+  avatarUrl?: string;
   phone?: string;
   lastLogin?: string;
   department?: string;

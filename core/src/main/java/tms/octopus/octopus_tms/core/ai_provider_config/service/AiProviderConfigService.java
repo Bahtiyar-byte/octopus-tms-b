@@ -1,12 +1,17 @@
 package tms.octopus.octopus_tms.core.ai_provider_config.service;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import tms.octopus.octopus_tms.base.util.ReferencedWarning;
 import tms.octopus.octopus_tms.core.ai_provider_config.model.AiProviderConfigDTO;
 
+import java.util.List;
 
 public interface AiProviderConfigService {
 
     List<AiProviderConfigDTO> findAll();
+
+    Page<AiProviderConfigDTO> findAll(String filter, Pageable pageable);
 
     AiProviderConfigDTO get(Long id);
 
@@ -15,5 +20,7 @@ public interface AiProviderConfigService {
     void update(Long id, AiProviderConfigDTO aiProviderConfigDTO);
 
     void delete(Long id);
+
+    ReferencedWarning getReferencedWarning(Long id);
 
 }

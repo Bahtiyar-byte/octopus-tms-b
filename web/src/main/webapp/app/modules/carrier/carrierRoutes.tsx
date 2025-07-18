@@ -2,16 +2,18 @@ import { Navigate, RouteObject } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { UserRole } from '../../types/user';
 
-// Import Carrier pages
-import Dashboard from './pages/Dashboard';
+// Import Shared pages
+import Dashboard from '../shared/pages/Dashboard/Dashboard';
+import Documents from '../shared/pages/Documents/Documents';
+import Tracking from '../shared/pages/Tracking/Tracking';
+import Invoices from '../shared/pages/Invoices/Invoices';
+import Reports from '../shared/pages/Reports/Reports';
+
+// Import Carrier-specific pages
 import SmartLoadSearch from './pages/SmartLoadSearch';
 import DispatchBoard from './pages/DispatchBoard';
-import Documents from './pages/Documents';
-import Tracking from './pages/Tracking';
 import AllLoads from './pages/AllLoads';
 import Drivers from './pages/Drivers';
-import Invoices from './pages/Invoices';
-import Reports from './pages/Reports';
 import Workflows from './pages/Workflows';
 import WorkflowBuilder from './pages/WorkflowBuilder';
 

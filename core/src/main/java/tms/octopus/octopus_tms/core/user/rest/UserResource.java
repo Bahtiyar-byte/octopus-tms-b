@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -34,7 +35,7 @@ import tms.octopus.octopus_tms.core.user.service.UserService;
 
 @RestController
 @RequestMapping(value = "/api/users", produces = MediaType.APPLICATION_JSON_VALUE)
-@PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SUPERVISOR + "', '" + UserRole.Fields.SUPPORT + "')")
+@PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SUPERVISOR + "', '" + UserRole.Fields.SUPPORT + "', '" + UserRole.Fields.BROKER + "')")
 @SecurityRequirement(name = "bearer-jwt")
 public class UserResource {
 
@@ -98,6 +99,12 @@ public class UserResource {
         }
         userService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}/toggle-status")
+    @ApiResponse(responseCode = "200")
+    public ResponseEntity<UserDTO> toggleUserStatus(@PathVariable(name = "id") final UUID id) {
+        return ResponseEntity.ok(userService.toggleStatus(id));
     }
 
 }

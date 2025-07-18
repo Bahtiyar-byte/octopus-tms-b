@@ -5,7 +5,7 @@
       "args": [
         "-y",
         "@modelcontextprotocol/server-postgresql",
-        "postgresql://octopus:password@localhost:5432/octopus_tms"
+        "postgresql://octopus:password@localhost:5432/octopus-tms-b"
       ],
       "env": {
         "POSTGRES_SCHEMAS": "public",

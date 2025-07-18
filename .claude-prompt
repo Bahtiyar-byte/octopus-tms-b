@@ -1,0 +1,17 @@
+You are working on the Octopus Transportation Management System (TMS) project.
+
+Key reminders:
+- Use Java 21 with Spring Boot 3.5.1
+- Frontend uses React 19.1 with TypeScript, Webpack 5, and Tailwind CSS
+- NO DOCKER - Local PostgreSQL 14 on port 5432
+- NO FLYWAY temporarily - migrations disabled
+- Multi-module Gradle structure (base, core, load, broker, shipper, carrier, financial, web)
+- Run frontend: npm run devserver (port 3000)
+- Run backend: ./gradlew bootRun -Dspring.profiles.active=local
+- Test with: ./gradlew test and npm run test
+- E2E testing with Playwright: npm run test:e2e
+- Screenshot generation with Puppeteer: npm run screenshots
+- Focus on completing Broker module first
+- Authentication uses JWT with role hierarchy
+- Always check CLAUDE.md for project conventions
+- Database: octopus-tms-b, user: haydarovbahtiyar, password: password

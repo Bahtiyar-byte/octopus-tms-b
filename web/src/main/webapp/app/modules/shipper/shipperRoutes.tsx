@@ -2,14 +2,17 @@ import { Navigate, RouteObject } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { UserRole } from '../../types/user';
 
-// Import Shipper pages
-import Dashboard from './pages/Dashboard';
-import Loads from './pages/Loads';
+// Import Shared pages
+import Dashboard from '../shared/pages/Dashboard/Dashboard';
+import Documents from '../shared/pages/Documents/Documents';
+import Reports from '../shared/pages/Reports/Reports';
+import Tracking from '../shared/pages/Tracking/Tracking';
+import Invoices from '../shared/pages/Invoices/Invoices';
+import Loads from '../shared/pages/Loads/Loads';
+
+// Import Shipper-specific pages
 import CreateLoad from './pages/CreateLoad';
-import Documents from './pages/Documents';
-import Reports from './pages/Reports';
 import Settings from './pages/Settings';
-import Tracking from './pages/Tracking';
 import { WarehouseDashboard } from './pages/WarehouseDashboard';
 import Workflows from './pages/Workflows';
 import WorkflowBuilder from './pages/WorkflowBuilder';

@@ -1,4 +1,4 @@
-// Document service to provide sample PDF URLs for the document viewer
+// Document service to provide sample PDF URLs and image previews for the document viewer
 
 // Sample PDF URLs from Mozilla's PDF.js examples
 const samplePDFs = {
@@ -7,6 +7,14 @@ const samplePDFs = {
   pod: 'https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/test/pdfs/annotation-line.pdf',
   invoice: 'https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/test/pdfs/issue6637.pdf',
   other: 'https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/test/pdfs/rotation.pdf'
+};
+
+// Sample image previews for documents
+const sampleImages = {
+  rate_confirmation: '/images/ratecon.svg',
+  bol: '/images/bol.svg',
+  pod: '/images/pod.svg',
+  lumper_receipt: '/images/lumper-receipt.svg'
 };
 
 // Get a sample PDF URL based on document type
@@ -35,6 +43,11 @@ export const getSamplePdfUrlById = (id: string): string => {
   return getSamplePdfUrl(type);
 };
 
+// Get a sample image preview URL based on document type
+export const getSampleImageUrl = (type: string): string => {
+  return sampleImages[type as keyof typeof sampleImages] || '';
+};
+
 // Function to get document metadata
 export const getDocumentMetadata = (id: string) => {
   // This would typically come from an API
@@ -51,5 +64,6 @@ export const getDocumentMetadata = (id: string) => {
 export default {
   getSamplePdfUrl,
   getSamplePdfUrlById,
+  getSampleImageUrl,
   getDocumentMetadata
 };

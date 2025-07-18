@@ -1,18 +1,24 @@
 package tms.octopus.octopus_tms.core.user.service;
 
+import java.io.IOException;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import tms.octopus.octopus_tms.base.util.NotFoundException;
 import tms.octopus.octopus_tms.base.util.ReferencedWarning;
 import tms.octopus.octopus_tms.core.company.repos.CompanyRepository;
 import tms.octopus.octopus_tms.core.notification.domain.Notification;
 import tms.octopus.octopus_tms.core.notification.repos.NotificationRepository;
 import tms.octopus.octopus_tms.core.user.domain.User;
+import tms.octopus.octopus_tms.core.user.model.ChangePasswordRequest;
 import tms.octopus.octopus_tms.core.user.model.UserDTO;
+import tms.octopus.octopus_tms.core.user.model.UserStatsDTO;
 import tms.octopus.octopus_tms.core.user.repos.UserRepository;
 import tms.octopus.octopus_tms.core.user_preference.domain.UserPreference;
 import tms.octopus.octopus_tms.core.user_preference.repos.UserPreferenceRepository;
@@ -106,6 +112,154 @@ public class UserServiceImpl implements UserService {
             return referencedWarning;
         }
         return null;
+    }
+    
+    @Override
+    public UserDTO getCurrentUser(String username) {
+        User user = userRepository.findByUsernameIgnoreCase(username);
+        if (user == null) {
+            throw new NotFoundException("User not found");
+        }
+        return userMapper.toDto(user);
+    }
+    
+    @Override
+    public UserDTO updateCurrentUser(String username, UserDTO userDTO) {
+        User user = userRepository.findByUsernameIgnoreCase(username);
+        if (user == null) {
+            throw new NotFoundException("User not found");
+        }
+        
+        // Only allow updating certain fields
+        if (userDTO.getFirstName() != null) {
+            user.setFirstName(userDTO.getFirstName());
+        }
+        if (userDTO.getLastName() != null) {
+            user.setLastName(userDTO.getLastName());
+        }
+        if (userDTO.getPhone() != null) {
+            user.setPhone(userDTO.getPhone());
+        }
+        if (userDTO.getDepartment() != null) {
+            user.setDepartment(userDTO.getDepartment());
+        }
+        if (userDTO.getEmail() != null && !userDTO.getEmail().equals(user.getEmail())) {
+            // Check if email is already taken
+            if (userRepository.existsByEmailIgnoreCase(userDTO.getEmail())) {
+                throw new IllegalArgumentException("Email already in use");
+            }
+            user.setEmail(userDTO.getEmail());
+        }
+        
+        userRepository.save(user);
+        return userMapper.toDto(user);
+    }
+    
+    @Override
+    public void changePassword(String username, ChangePasswordRequest request) {
+        User user = userRepository.findByUsernameIgnoreCase(username);
+        if (user == null) {
+            throw new NotFoundException("User not found");
+        }
+        
+        // Verify old password
+        if (!passwordEncoder.matches(request.getOldPassword(), user.getPasswordHash())) {
+            throw new IllegalArgumentException("Current password is incorrect");
+        }
+        
+        // Set new password
+        user.setPasswordHash(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
+    }
+    
+    @Override
+    public String uploadAvatar(String username, MultipartFile file) throws IOException {
+        User user = userRepository.findByUsernameIgnoreCase(username);
+        if (user == null) {
+            throw new NotFoundException("User not found");
+        }
+        
+        // For now, we'll store the base64 encoded image
+        // In production, you would upload to S3 or similar service
+        String contentType = file.getContentType();
+        byte[] bytes = file.getBytes();
+        String base64 = java.util.Base64.getEncoder().encodeToString(bytes);
+        String dataUri = "data:" + contentType + ";base64," + base64;
+        
+        user.setAvatarUrl(dataUri);
+        userRepository.save(user);
+        
+        return dataUri;
+    }
+    
+    @Override
+    public UserStatsDTO getUserStats(String username) {
+        User user = userRepository.findByUsernameIgnoreCase(username);
+        if (user == null) {
+            throw new NotFoundException("User not found");
+        }
+        
+        UserStatsDTO stats = new UserStatsDTO();
+        
+        // These would be calculated from actual data in production
+        // For now, returning mock data based on role
+        switch (user.getRole()) {
+            case BROKER:
+                stats.setActionsToday(38);
+                stats.setLoadsDispatched(156);
+                stats.setTasksCompleted(324);
+                stats.setPerformanceScore(92);
+                stats.setDealsClosedThisMonth(12);
+                stats.setRevenueGenerated(125000.00);
+                break;
+            case SHIPPER:
+                stats.setActionsToday(24);
+                stats.setLoadsDispatched(89);
+                stats.setTasksCompleted(145);
+                stats.setPerformanceScore(88);
+                stats.setShipmentsThisMonth(89);
+                stats.setWarehouseCapacityUsed(76);
+                break;
+            case CARRIER:
+            case DISPATCHER:
+            case DRIVER:
+                stats.setActionsToday(42);
+                stats.setLoadsDispatched(178);
+                stats.setTasksCompleted(356);
+                stats.setPerformanceScore(94);
+                stats.setActiveDriversToday(28);
+                stats.setTotalDriversManaged(42);
+                break;
+            default:
+                stats.setActionsToday(15);
+                stats.setLoadsDispatched(45);
+                stats.setTasksCompleted(78);
+                stats.setPerformanceScore(85);
+                break;
+        }
+        
+        stats.setTotalCustomersServed(76);
+        stats.setAvgResponseTime("2.4 min");
+        
+        return stats;
+    }
+    
+    @Override
+    @Transactional
+    public UserDTO toggleStatus(UUID id) {
+        final User user = userRepository.findById(id)
+                .orElseThrow(NotFoundException::new);
+        
+        // Toggle status between ACTIVE and INACTIVE
+        if ("ACTIVE".equals(user.getStatus())) {
+            user.setStatus("INACTIVE");
+        } else {
+            user.setStatus("ACTIVE");
+        }
+        
+        user.setUpdatedAt(OffsetDateTime.now());
+        final User savedUser = userRepository.save(user);
+        return userMapper.toDto(savedUser);
     }
 
 }

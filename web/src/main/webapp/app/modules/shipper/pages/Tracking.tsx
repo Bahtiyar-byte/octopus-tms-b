@@ -305,7 +305,7 @@ const Tracking: React.FC = () => {
     useEffect(() => {
       if (shipments.length > 0) {
         const bounds = L.latLngBounds([]);
-        
+
         // Add all coordinates to bounds
         shipments.forEach(shipment => {
           bounds.extend([shipment.coordinates.origin.lat, shipment.coordinates.origin.lng]);
@@ -368,9 +368,9 @@ const Tracking: React.FC = () => {
 
       <Card className="mb-8 shadow-md overflow-hidden">
         <div className="relative h-96 w-full">
-          <MapContainer 
+          <MapContainer
             center={[39.8283, -98.5795]} // Center of USA
-            zoom={4} 
+            zoom={4}
             style={{ height: '100%', width: '100%', zIndex: 0 }}
           >
             <TileLayer
@@ -415,8 +415,8 @@ const Tracking: React.FC = () => {
               return (
                 <React.Fragment key={shipment.id}>
                   {/* Origin marker */}
-                  <Marker 
-                    position={[shipment.coordinates.origin.lat, shipment.coordinates.origin.lng]} 
+                  <Marker
+                    position={[shipment.coordinates.origin.lat, shipment.coordinates.origin.lng]}
                     icon={originIcon}
                     eventHandlers={{
                       click: () => setSelectedShipmentId(shipment.id)
@@ -431,8 +431,8 @@ const Tracking: React.FC = () => {
                   </Marker>
 
                   {/* Current location marker */}
-                  <Marker 
-                    position={[shipment.coordinates.current.lat, shipment.coordinates.current.lng]} 
+                  <Marker
+                    position={[shipment.coordinates.current.lat, shipment.coordinates.current.lng]}
                     icon={currentIcon}
                     eventHandlers={{
                       click: () => setSelectedShipmentId(shipment.id)
@@ -449,8 +449,8 @@ const Tracking: React.FC = () => {
                   </Marker>
 
                   {/* Destination marker */}
-                  <Marker 
-                    position={[shipment.coordinates.destination.lat, shipment.coordinates.destination.lng]} 
+                  <Marker
+                    position={[shipment.coordinates.destination.lat, shipment.coordinates.destination.lng]}
                     icon={destinationIcon}
                     eventHandlers={{
                       click: () => setSelectedShipmentId(shipment.id)
@@ -466,22 +466,22 @@ const Tracking: React.FC = () => {
                   </Marker>
 
                   {/* Route from origin to current */}
-                  <Polyline 
+                  <Polyline
                     positions={[
                       [shipment.coordinates.origin.lat, shipment.coordinates.origin.lng],
                       [shipment.coordinates.current.lat, shipment.coordinates.current.lng]
-                    ]} 
+                    ]}
                     color={color}
                     weight={isSelected ? 4 : 3}
                     opacity={isSelected ? 0.8 : 0.5}
                   />
 
                   {/* Route from current to destination */}
-                  <Polyline 
+                  <Polyline
                     positions={[
                       [shipment.coordinates.current.lat, shipment.coordinates.current.lng],
                       [shipment.coordinates.destination.lat, shipment.coordinates.destination.lng]
-                    ]} 
+                    ]}
                     color={color}
                     weight={isSelected ? 4 : 3}
                     opacity={isSelected ? 0.5 : 0.3}
@@ -537,7 +537,7 @@ const Tracking: React.FC = () => {
           </h2>
 
           {/* Scrollable container showing 3 cards */}
-          <div 
+          <div
             ref={activeShipmentsRef}
             className="space-y-3 max-h-[600px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100"
             style={{
@@ -550,18 +550,18 @@ const Tracking: React.FC = () => {
               const progress = Math.round((shipment.distanceTraveled / shipment.distance) * 100);
 
               return (
-                <div 
+                <div
                   key={shipment.id}
                   className={`bg-white rounded-xl shadow-sm border overflow-hidden transition-all duration-300 cursor-pointer
-                    ${isSelected 
-                      ? 'border-blue-300 ring-2 ring-blue-300 transform scale-[1.02] shadow-md' 
+                    ${isSelected
+                      ? 'border-blue-300 ring-2 ring-blue-300 transform scale-[1.02] shadow-md'
                       : 'border-gray-200 hover:border-blue-200 hover:shadow'}`}
                   onClick={() => setSelectedShipmentId(shipment.id)}
                 >
                   <div className="p-4">
                     <div className="flex justify-between items-start mb-2">
                       <h3 className="font-semibold text-gray-900">{shipment.loadId}: {shipment.origin} → {shipment.destination}</h3>
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
+                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
                         ${getStatusBadgeClass(shipment.status)}`}>
                         {getStatusLabel(shipment.status)}
                       </span>
@@ -581,8 +581,8 @@ const Tracking: React.FC = () => {
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-1.5">
                         <div className={`h-1.5 rounded-full ${
-                          shipment.status === 'delayed' 
-                            ? 'bg-red-500' 
+                          shipment.status === 'delayed'
+                            ? 'bg-red-500'
                             : shipment.status === 'arriving_soon'
                               ? 'bg-green-500'
                               : 'bg-blue-500'
@@ -697,8 +697,8 @@ const Tracking: React.FC = () => {
                         </div>
                         <div className="w-full bg-gray-200 rounded-full h-2.5">
                           <div className={`h-2.5 rounded-full ${
-                            selectedShipment.status === 'delayed' 
-                              ? 'bg-red-500' 
+                            selectedShipment.status === 'delayed'
+                              ? 'bg-red-500'
                               : selectedShipment.status === 'arriving_soon'
                                 ? 'bg-green-500'
                                 : 'bg-blue-500'
@@ -715,8 +715,8 @@ const Tracking: React.FC = () => {
                     {shipmentTimeline.map((event) => (
                       <div key={event.id} className="relative">
                         <div className={`absolute -left-10 w-5 h-5 rounded-full flex items-center justify-center ${
-                          event.status === 'completed' 
-                            ? 'bg-green-500' 
+                          event.status === 'completed'
+                            ? 'bg-green-500'
                             : event.status === 'current'
                               ? 'bg-blue-500'
                               : 'bg-gray-300'
@@ -731,8 +731,8 @@ const Tracking: React.FC = () => {
                         </div>
 
                         <div className={`mb-1 font-medium ${
-                          event.status === 'current' 
-                            ? 'text-blue-600' 
+                          event.status === 'current'
+                            ? 'text-blue-600'
                             : 'text-gray-900'
                         }`}>
                           {event.title}
@@ -808,7 +808,7 @@ const Tracking: React.FC = () => {
                       {notification.message}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <button 
+                      <button
                         className="btn-sm btn-outline-primary"
                         onClick={() => {
                           // Set selected shipment based on notification

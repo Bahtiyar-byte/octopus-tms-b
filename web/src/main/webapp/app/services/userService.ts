@@ -1,12 +1,6 @@
 import axios from 'axios';
 import { User, UserRole } from '../types';
 
-// Ensure authorization header is set if token exists
-const token = localStorage.getItem('octopus_tms_token') || sessionStorage.getItem('octopus_tms_token');
-if (token) {
-  axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-}
-
 export interface CreateUserRequest {
   username: string;
   email: string;
@@ -19,6 +13,7 @@ export interface CreateUserRequest {
 }
 
 export interface UpdateUserRequest {
+  username?: string;
   firstName?: string;
   lastName?: string;
   email?: string;
@@ -66,7 +61,12 @@ class UserService {
   // Create new user
   async createUser(userData: CreateUserRequest): Promise<User> {
     try {
-      const response = await axios.post(this.baseUrl, userData);
+      // Ensure role is uppercase
+      const requestData = {
+        ...userData,
+        role: userData.role.toUpperCase() as UserRole
+      };
+      const response = await axios.post(this.baseUrl, requestData);
       return response.data;
     } catch (error) {
       console.error('Error creating user:', error);

@@ -1,19 +1,19 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { MainLayout } from '../layouts';
-import { AuthProvider } from '../context/AuthContext';
+import { AuthProvider, useAuth } from '../context/AuthContext';
 import brokerRoutes from '../modules/broker/brokerRoutes';
 import carrierRoutes from '../modules/carrier/carrierRoutes';
 import shipperRoutes from '../modules/shipper/shipperRoutes';
 
 // Import shared pages
 import Reports from '../pages/Reports';
-import Settings from '../pages/Settings';
+import Settings from '../modules/shared/pages/Settings/Settings';
 import Login from '../pages/Login';
-import Profile from '../pages/Profile';
-import SupervisorDashboard from '../pages/SupervisorDashboard';
+import Profile from '../modules/shared/pages/Profile/Profile';
 import ForgotPassword from '../pages/ForgotPassword';
 import LoadDetails from '../pages/LoadDetails';
 import TestBackend from '../pages/TestBackend';
+import DashboardRedirect from '../components/DashboardRedirect';
 
 // Auth guard component to protect routes
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -68,6 +68,10 @@ const router = createBrowserRouter([
         path: '/',
         element: <Navigate to="/dashboard" replace />,
       },
+      {
+        path: '/dashboard',
+        element: <DashboardRedirect />,
+      },
       // Shared pages
       {
         path: '/reports',
@@ -82,19 +86,18 @@ const router = createBrowserRouter([
         element: <Profile />,
       },
       {
-        path: '/supervisor',
-        element: <SupervisorDashboard />,
-      },
-      {
         path: '/load-details/:id',
         element: <LoadDetails />,
       },
       // Carrier module routes
       {
-        path: 'carrier',
+        path: 'carrier/*',
         children: carrierRoutes,
       },
-      ...carrierRoutes, // Keep old routes for backward compatibility
+      ...carrierRoutes.map(route => ({
+        ...route,
+        path: `carrier/${route.path}`
+      })), // Map carrier routes to include 'carrier' prefix
       // Broker module routes
       ...brokerRoutes,
       // Shipper module routes

@@ -215,10 +215,13 @@ export const AIAgent: React.FC<AIAgentProps> = ({ className = '' }) => {
     setShowResponse(false);
 
     try {
+      const token = localStorage.getItem('octopus_tms_token') || sessionStorage.getItem('octopus_tms_token');
+      
       const res = await fetch('/api/ai/agent/query', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': token ? `Bearer ${token}` : ''
         },
         body: JSON.stringify({
           query: input,

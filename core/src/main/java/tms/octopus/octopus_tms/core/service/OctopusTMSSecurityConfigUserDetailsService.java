@@ -29,12 +29,8 @@ public class OctopusTMSSecurityConfigUserDetailsService implements UserDetailsSe
             log.warn("user not found: {}", username);
             throw new UsernameNotFoundException("User " + username + " not found");
         }
-        final String role = "supervisor@invalid.bootify.io".equals(username) ? UserRole.SUPERVISOR.name() : 
-                ("dispatcher@invalid.bootify.io".equals(username) ? UserRole.DISPATCHER.name() : 
-                ("driver@invalid.bootify.io".equals(username) ? UserRole.DRIVER.name() : 
-                ("accounting@invalid.bootify.io".equals(username) ? UserRole.ACCOUNTING.name() : 
-                ("sales@invalid.bootify.io".equals(username) ? UserRole.SALES.name() : 
-                ("support@invalid.bootify.io".equals(username) ? UserRole.SUPPORT.name() : UserRole.ADMIN.name())))));
+        // Get the actual role from the user entity
+        final String role = user.getRole() != null ? user.getRole().name() : UserRole.ADMIN.name();
         final List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(role));
         return new OctopusTMSSecurityConfigUserDetails(user.getId(), username, user.getPasswordHash(), authorities);
     }
