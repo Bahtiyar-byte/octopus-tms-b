@@ -45,7 +45,6 @@ const Login: React.FC = () => {
       }
     } catch (err) {
       setError('Invalid username or password. Please try again.');
-      console.error('Login error:', err);
     }
   };
 

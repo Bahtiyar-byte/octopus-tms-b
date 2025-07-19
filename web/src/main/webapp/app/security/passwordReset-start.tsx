@@ -44,7 +44,7 @@ export default function PasswordResetStart() {
               msgSuccess: t('passwordReset.started')
             }
           });
-    } catch (error: any) {
+    } catch (error: unknown) {
       handleServerError(error, navigate, useFormResult.setError, t, getMessage);
     }
   };

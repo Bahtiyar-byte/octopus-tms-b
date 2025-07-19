@@ -23,7 +23,6 @@ export const WorkflowList: React.FC<WorkflowListProps> = ({ moduleType }) => {
             saved.push(workflow);
           }
         } catch (e) {
-          console.error('Failed to parse workflow:', e);
         }
       }
     }

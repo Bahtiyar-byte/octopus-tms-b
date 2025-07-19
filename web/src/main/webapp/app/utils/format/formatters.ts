@@ -44,7 +44,7 @@ export const formatNumber = (num: number): string => {
   return new Intl.NumberFormat('en-US').format(num);
 };
 
-export const formatPercentage = (num: number, decimals: number = 1): string => {
+export const formatPercentage = (num: number, decimals = 1): string => {
   return `${num.toFixed(decimals)}%`;
 };
 

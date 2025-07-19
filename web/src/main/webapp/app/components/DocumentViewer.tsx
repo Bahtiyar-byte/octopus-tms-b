@@ -27,7 +27,6 @@ const DocumentViewer: React.FC<DocumentViewerProps> = ({file, className = '', do
     };
 
     const onDocumentLoadError = (error: Error) => {
-        console.error('Error loading PDF:', error);
         setError(error);
         setLoading(false);
     };

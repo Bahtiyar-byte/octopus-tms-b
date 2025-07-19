@@ -194,7 +194,6 @@ const Topbar: React.FC = () => {
       await logout();
       navigate('/login');
     } catch (error) {
-      console.error('Logout failed:', error);
     }
   };
 

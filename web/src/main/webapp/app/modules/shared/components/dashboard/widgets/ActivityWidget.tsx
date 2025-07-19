@@ -1,5 +1,5 @@
 import React from 'react';
-import { formatDateTime } from '../../../utils/formatters';
+import { formatDateTime } from '../../../../../utils/format';
 
 interface ActivityWidgetProps {
   id: string;

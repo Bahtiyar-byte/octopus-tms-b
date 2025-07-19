@@ -33,7 +33,6 @@ class GrokService {
   constructor() {
     this.apiKey = process.env.REACT_APP_GROK_API_KEY || '';
     if (!this.apiKey) {
-      console.warn('Grok API key not found. Please set REACT_APP_GROK_API_KEY environment variable.');
     }
   }
 
@@ -53,7 +52,6 @@ class GrokService {
 
       return response.data.choices[0]?.message?.content || '';
     } catch (error) {
-      console.error('Grok API error:', error);
       throw new Error('Failed to communicate with Grok API');
     }
   }

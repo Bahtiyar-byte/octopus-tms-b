@@ -63,7 +63,6 @@ const AddressInputDemo: React.FC = () => {
               onChange={setAddress3}
               onCoordinatesChange={(coords) => {
                 setCoordinates1(coords);
-                console.log('Coordinates:', coords);
               }}
               savedLocations={[...jupiterAluminumLocations, ...commonDestinations]}
               placeholder="Search for warehouse address"

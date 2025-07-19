@@ -3,13 +3,32 @@ import { Card } from '../../../../components';
 import { DateRangeType } from '../../pages/Reports/Reports';
 import { PageConfig } from '../../config/roleConfig';
 
+interface ReportType {
+  value: string;
+  label: string;
+  description?: string;
+}
+
+interface ReportData {
+  name: string;
+  type: string;
+  dateRange: DateRangeType;
+  metrics: string[];
+  format: 'pdf' | 'excel' | 'csv';
+}
+
+interface ScheduleData {
+  type: string;
+  dateRange: DateRangeType;
+}
+
 interface ReportGeneratorProps {
-  reportTypes: any[];
+  reportTypes: ReportType[];
   selectedType: string;
   dateRange: DateRangeType;
   config: PageConfig;
-  onGenerate: (reportData: any) => void;
-  onSchedule: (scheduleData: any) => void;
+  onGenerate: (reportData: ReportData) => void;
+  onSchedule: (scheduleData: ScheduleData) => void;
 }
 
 export const ReportGenerator: React.FC<ReportGeneratorProps> = ({
@@ -100,7 +119,7 @@ export const ReportGenerator: React.FC<ReportGeneratorProps> = ({
                   type="radio"
                   value="pdf"
                   checked={exportFormat === 'pdf'}
-                  onChange={(e) => setExportFormat(e.target.value as any)}
+                  onChange={(e) => setExportFormat(e.target.value as 'pdf' | 'excel' | 'csv')}
                   className="mr-2"
                 />
                 PDF
@@ -110,7 +129,7 @@ export const ReportGenerator: React.FC<ReportGeneratorProps> = ({
                   type="radio"
                   value="excel"
                   checked={exportFormat === 'excel'}
-                  onChange={(e) => setExportFormat(e.target.value as any)}
+                  onChange={(e) => setExportFormat(e.target.value as 'pdf' | 'excel' | 'csv')}
                   className="mr-2"
                 />
                 Excel
@@ -120,7 +139,7 @@ export const ReportGenerator: React.FC<ReportGeneratorProps> = ({
                   type="radio"
                   value="csv"
                   checked={exportFormat === 'csv'}
-                  onChange={(e) => setExportFormat(e.target.value as any)}
+                  onChange={(e) => setExportFormat(e.target.value as 'pdf' | 'excel' | 'csv')}
                   className="mr-2"
                 />
                 CSV

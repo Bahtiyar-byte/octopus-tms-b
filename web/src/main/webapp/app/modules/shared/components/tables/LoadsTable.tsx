@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { Card } from '../../../../components';
 import { Load } from '../../pages/Loads/Loads';
 import { ColumnConfig } from '../../config/roleConfig';
-import { formatLoadId, getLoadStatusColor, formatLoadStatus } from '../../utils/loadUtils';
-import { formatCurrency, formatDate, formatWeight, formatDistance } from '../../utils/formatters';
+import { formatLoadId, getLoadStatusColor, formatLoadStatus } from '../../../../utils/load/loadUtils';
+import { formatCurrency, formatDate, formatWeight, formatDistance } from '../../../../utils/format';
 
 interface LoadsTableProps {
   loads: Load[];

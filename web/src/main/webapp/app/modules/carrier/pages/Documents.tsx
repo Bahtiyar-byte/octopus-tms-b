@@ -58,7 +58,6 @@ const Documents: React.FC = () => {
     try {
       await mockActions.downloadDocument(document.id);
     } catch (error) {
-      console.error('Error downloading document:', error);
     } finally {
       setLoading(false);
     }
@@ -88,7 +87,6 @@ const Documents: React.FC = () => {
         setSelectedDocument(null);
       }
     } catch (error) {
-      console.error('Error deleting document:', error);
     } finally {
       setLoading(false);
     }
@@ -101,7 +99,6 @@ const Documents: React.FC = () => {
       await notify('Document uploaded successfully');
       setShowUploadModal(false);
     } catch (error) {
-      console.error('Error uploading document:', error);
     } finally {
       setLoading(false);
     }
@@ -116,7 +113,6 @@ const Documents: React.FC = () => {
       setShowShareModal(false);
       setShareEmail('');
     } catch (error) {
-      console.error('Error sharing document:', error);
     } finally {
       setLoading(false);
     }
@@ -127,7 +123,6 @@ const Documents: React.FC = () => {
     try {
       await notify(`Printing ${document.name}`);
     } catch (error) {
-      console.error('Error printing document:', error);
     } finally {
       setLoading(false);
     }
@@ -141,7 +136,6 @@ const Documents: React.FC = () => {
       setSelectedType('all');
       // In a real app, we would fetch the recently uploaded documents
     } catch (error) {
-      console.error('Error fetching recently uploaded documents:', error);
     } finally {
       setLoading(false);
     }
@@ -154,7 +148,6 @@ const Documents: React.FC = () => {
       setSelectedType('all');
       // In a real app, we would fetch the starred documents
     } catch (error) {
-      console.error('Error fetching starred documents:', error);
     } finally {
       setLoading(false);
     }
@@ -167,7 +160,6 @@ const Documents: React.FC = () => {
       setSelectedType('all');
       // In a real app, we would fetch the shared documents
     } catch (error) {
-      console.error('Error fetching shared documents:', error);
     } finally {
       setLoading(false);
     }

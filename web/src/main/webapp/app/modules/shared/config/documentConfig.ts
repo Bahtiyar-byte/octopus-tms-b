@@ -19,11 +19,27 @@ export interface DocumentConfig {
   storageQuota?: number; // in GB
 }
 
+// Import Document type for proper typing
+interface Document {
+  id: string;
+  name: string;
+  type: string;
+  date: string;
+  size: string;
+  previewUrl?: string;
+  isImage?: boolean;
+  loadId?: string;
+  status?: string;
+  uploadedBy?: string;
+  warehouse?: string;
+  expiryDate?: string;
+}
+
 export interface CustomAction {
   name: string;
   icon: string;
-  handler: (doc: any) => void;
-  condition?: (doc: any) => boolean;
+  handler: (doc: Document) => void;
+  condition?: (doc: Document) => boolean;
 }
 
 export interface DocumentCategory {
@@ -60,7 +76,10 @@ export const DOCUMENT_CONFIGS: Record<string, DocumentConfig> = {
       {
         name: 'Email',
         icon: 'fa-envelope',
-        handler: (doc) => console.log('Email document:', doc.id)
+        handler: (doc) => { 
+          // Email document handler implementation
+          console.log('Email document:', doc.id);
+        }
       }
     ],
     apiEndpoint: '/api/broker/documents',
@@ -92,7 +111,10 @@ export const DOCUMENT_CONFIGS: Record<string, DocumentConfig> = {
       {
         name: 'Download',
         icon: 'fa-download',
-        handler: (doc) => console.log('Download document:', doc.id)
+        handler: (doc) => { 
+          // Download document handler implementation
+          console.log('Download document:', doc.id);
+        }
       }
     ],
     apiEndpoint: '/api/carrier/documents',
@@ -122,7 +144,10 @@ export const DOCUMENT_CONFIGS: Record<string, DocumentConfig> = {
       {
         name: 'Archive',
         icon: 'fa-archive',
-        handler: (doc) => console.log('Archive document:', doc.id),
+        handler: (doc) => { 
+          // Archive document handler implementation
+          console.log('Archive document:', doc.id);
+        },
         condition: (doc) => doc.status !== 'ARCHIVED'
       }
     ],

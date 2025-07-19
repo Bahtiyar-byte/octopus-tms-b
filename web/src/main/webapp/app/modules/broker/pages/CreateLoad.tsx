@@ -64,7 +64,6 @@ const CreateLoad: React.FC = () => {
       // Navigate to loads page
       navigate('/broker/loads');
     } catch (error) {
-      console.error('Error creating load:', error);
       toast.error('Failed to create load. Please try again.');
     } finally {
       setIsSubmitting(false);

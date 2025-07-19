@@ -83,7 +83,6 @@ const CreateLoad: React.FC = () => {
       // Navigate to loads page
       navigate('/shipper/loads');
     } catch (error) {
-      console.error('Error creating shipment:', error);
       toast.error('Failed to create shipment. Please try again.');
     } finally {
       setIsSubmitting(false);

@@ -55,7 +55,6 @@ export const AIAssistant: React.FC = () => {
         throw new Error('Failed to get response');
       }
     } catch (error) {
-      console.error('Error sending message:', error);
       toast.error('Failed to send message. Please try again.');
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),

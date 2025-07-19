@@ -21,6 +21,12 @@ const formSchema = triggerNodeSchema.extend({
 
 type FormData = z.infer<typeof formSchema>;
 
+type TriggerConfig = {
+  statusFilter?: string;
+  ratingThreshold?: number;
+  amountThreshold?: number;
+};
+
 export const TriggerConfigPanel: React.FC<TriggerConfigPanelProps> = ({ node }) => {
   const { updateNode } = useWorkflowStore();
   const availableTriggers = getTriggersForModule(node.data.moduleType);
@@ -47,7 +53,7 @@ export const TriggerConfigPanel: React.FC<TriggerConfigPanelProps> = ({ node }) 
   const onSubmit = (data: FormData) => {
     const { loadStatusFilter, carrierRatingThreshold, paymentAmountThreshold, ...nodeData } = data;
     
-    const triggerConfig: any = {};
+    const triggerConfig: TriggerConfig = {};
     
     // Add specific config based on trigger type
     if (selectedTriggerType === 'load_status_changed' && loadStatusFilter) {

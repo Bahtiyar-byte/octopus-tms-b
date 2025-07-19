@@ -9,7 +9,7 @@ application-local.properties
 .DS_Store
 node_modules/
 coverage/
-.env.local
+.env
 .env.development.local
 .env.test.local
 .env.production.local
@@ -80,8 +80,8 @@ web/app.log
 
 ## Environment Files
 .env
-.env.*
-!.env.local
+.env
+!.env
 
 ## Build Tools - Gradle Wrapper
 gradlew

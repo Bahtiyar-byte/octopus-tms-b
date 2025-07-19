@@ -202,7 +202,6 @@ const DispatchBoard: React.FC = () => {
       const drivers = await mockActions.getAvailableDrivers();
       setAvailableDrivers(drivers);
     } catch (error) {
-      console.error('Error fetching drivers:', error);
     }
   };
 
@@ -240,7 +239,6 @@ const DispatchBoard: React.FC = () => {
       setSelectedLoad(newAssignedLoad);
       setShowDriverModal(false);
     } catch (error) {
-      console.error('Error assigning driver:', error);
     } finally {
       setDriverAssignLoading(false);
     }
@@ -266,7 +264,6 @@ const DispatchBoard: React.FC = () => {
       setPickedUpLoads([...pickedUpLoads, newPickedUpLoad]);
       setSelectedLoad(newPickedUpLoad);
     } catch (error) {
-      console.error('Error marking as picked up:', error);
     } finally {
       setLoading(false);
     }
@@ -291,7 +288,6 @@ const DispatchBoard: React.FC = () => {
       setDeliveredLoads([...deliveredLoads, newDeliveredLoad]);
       setSelectedLoad(newDeliveredLoad);
     } catch (error) {
-      console.error('Error marking as delivered:', error);
     } finally {
       setLoading(false);
     }
@@ -304,7 +300,6 @@ const DispatchBoard: React.FC = () => {
       await mockActions.createInvoice(load.id);
       // No state update needed for this action
     } catch (error) {
-      console.error('Error creating invoice:', error);
     } finally {
       setLoading(false);
     }
@@ -344,7 +339,6 @@ const DispatchBoard: React.FC = () => {
       setBookedLoads([...bookedLoads, newLoad]);
       setShowNewLoadModal(false);
     } catch (error) {
-      console.error('Error creating new load:', error);
     } finally {
       setLoading(false);
     }
@@ -368,7 +362,6 @@ const DispatchBoard: React.FC = () => {
 
       setBookedLoads([...bookedLoads, newLoad]);
     } catch (error) {
-      console.error('Error duplicating load:', error);
     } finally {
       setLoading(false);
     }

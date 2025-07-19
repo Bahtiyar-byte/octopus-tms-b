@@ -26,7 +26,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         const currentUser = authService.getCurrentUser();
         setUser(currentUser);
       } catch (error) {
-        console.error('Error checking authentication:', error);
       } finally {
         setIsLoading(false);
       }

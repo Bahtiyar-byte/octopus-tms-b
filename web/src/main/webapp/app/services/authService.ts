@@ -6,27 +6,36 @@ import {
   ChangePasswordRequest,
   UserRole 
 } from '../types/core/user.types';
-import axios from 'axios';
-
-// API base URL
-const API_BASE_URL = '';
-
+import { ApiClient } from './api';
 
 // Local storage keys
 const TOKEN_KEY = 'octopus_tms_token';
 const USER_KEY = 'octopus_tms_user';
+const REFRESH_TOKEN_KEY = 'octopus_tms_refresh_token';
+
+// Response types
+interface LoginResponse {
+  accessToken: string;
+  refreshToken?: string;
+  tokenType?: string;
+  expiresIn?: number;
+}
+
+interface RefreshResponse {
+  accessToken: string;
+}
 
 export const authService = {
   // Login function
   login: async (credentials: LoginCredentials): Promise<AuthResponse> => {
     try {
       // Call the real backend API
-      const response = await axios.post('/authenticate', {
+      const response = await ApiClient.post<LoginResponse>('/authenticate', {
         username: credentials.username,
         password: credentials.password
-      });
+      }, { skipAuth: true });
 
-      const { accessToken } = response.data;
+      const { accessToken, refreshToken } = response;
       
       // Decode JWT to get user info
       const payload = JSON.parse(atob(accessToken.split('.')[1]));
@@ -48,204 +57,148 @@ export const authService = {
       const authResponse: AuthResponse = {
         user,
         token: accessToken,
-        expiresAt: payload.exp * 1000 // Convert to milliseconds
+        expiresAt: Date.now() + (payload.exp ? payload.exp * 1000 : 3600000) // Default 1 hour
       };
 
-      // Store in localStorage if remember me is true
+      // Store token and user data based on remember me
       if (credentials.rememberMe) {
-        localStorage.setItem(TOKEN_KEY, authResponse.token);
+        localStorage.setItem(TOKEN_KEY, accessToken);
         localStorage.setItem(USER_KEY, JSON.stringify(user));
+        if (refreshToken) {
+          localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
+        }
       } else {
-        // Use session storage if not remembering
-        sessionStorage.setItem(TOKEN_KEY, authResponse.token);
+        sessionStorage.setItem(TOKEN_KEY, accessToken);
         sessionStorage.setItem(USER_KEY, JSON.stringify(user));
+        if (refreshToken) {
+          sessionStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
+        }
       }
-      
-      // Set axios default header
-      axios.defaults.headers.common['Authorization'] = `Bearer ${authResponse.token}`;
 
       return authResponse;
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        throw new Error(error.response?.data?.message || 'Invalid username or password');
+    } catch (error: unknown) {
+      if (error instanceof Error && 'status' in error && error.status === 401) {
+        throw new Error('Invalid username or password');
       }
-      throw new Error('Invalid username or password');
+      throw new Error(error instanceof Error ? error.message : 'Login failed. Please try again.');
     }
   },
 
   // Logout function
   logout: async (): Promise<void> => {
-    // In a real app, this might invalidate the token on the server
-    localStorage.removeItem(TOKEN_KEY);
-    localStorage.removeItem(USER_KEY);
-    sessionStorage.removeItem(TOKEN_KEY);
-    sessionStorage.removeItem(USER_KEY);
-    
-    // Remove auth header
-    delete axios.defaults.headers.common['Authorization'];
+    try {
+      // Call logout endpoint if available
+      await ApiClient.post('/auth/logout', {});
+    } catch (error) {
+      // Ignore logout errors
+      console.warn('Logout endpoint error:', error);
+    } finally {
+      // Clear local storage
+      localStorage.removeItem(TOKEN_KEY);
+      localStorage.removeItem(USER_KEY);
+      localStorage.removeItem(REFRESH_TOKEN_KEY);
+      sessionStorage.removeItem(TOKEN_KEY);
+      sessionStorage.removeItem(USER_KEY);
+      sessionStorage.removeItem(REFRESH_TOKEN_KEY);
+    }
   },
 
-  // Check if a user is currently authenticated
+  // Get current user
+  getCurrentUser: (): User | null => {
+    const userStr = localStorage.getItem(USER_KEY) || sessionStorage.getItem(USER_KEY);
+    if (userStr) {
+      try {
+        return JSON.parse(userStr);
+      } catch {
+        return null;
+      }
+    }
+    return null;
+  },
+
+  // Check if user is authenticated
   isAuthenticated: (): boolean => {
     const token = localStorage.getItem(TOKEN_KEY) || sessionStorage.getItem(TOKEN_KEY);
-    return !!token;
-  },
-
-  // Get the current user if authenticated
-  getCurrentUser: (): User | null => {
-    try {
-      const userStr = localStorage.getItem(USER_KEY) || sessionStorage.getItem(USER_KEY);
-      const token = localStorage.getItem(TOKEN_KEY) || sessionStorage.getItem(TOKEN_KEY);
-      
-      // If token exists, ensure axios header is set
-      if (token) {
-        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    if (token) {
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        return payload.exp * 1000 > Date.now();
+      } catch {
+        return false;
       }
-      
-      return userStr ? JSON.parse(userStr) : null;
-    } catch (error) {
-      // Error parsing user from storage
-      return null;
     }
+    return false;
   },
 
-  // Refresh token (for extending sessions)
+  // Refresh token
   refreshToken: async (): Promise<string> => {
-    const user = authService.getCurrentUser();
-    const currentToken = localStorage.getItem(TOKEN_KEY) || sessionStorage.getItem(TOKEN_KEY);
+    const refreshToken = localStorage.getItem(REFRESH_TOKEN_KEY) || sessionStorage.getItem(REFRESH_TOKEN_KEY);
     
-    if (!user || !currentToken) {
-      return Promise.reject(new Error('No authenticated user'));
+    if (!refreshToken) {
+      throw new Error('No refresh token available');
     }
 
     try {
-      // Call backend refresh endpoint
-      const response = await axios.post('/api/auth/refresh', {
-        token: currentToken
-      });
-      
-      const newToken = response.data.accessToken;
-      const storageType = localStorage.getItem(TOKEN_KEY) ? localStorage : sessionStorage;
-      
-      storageType.setItem(TOKEN_KEY, newToken);
-      axios.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
-      
-      return newToken;
+      const response = await ApiClient.post<RefreshResponse>('/auth/refresh', {
+        refreshToken
+      }, { skipAuth: true });
+
+      const { accessToken } = response;
+
+      // Update stored token
+      const rememberMe = localStorage.getItem(TOKEN_KEY) !== null;
+      if (rememberMe) {
+        localStorage.setItem(TOKEN_KEY, accessToken);
+      } else {
+        sessionStorage.setItem(TOKEN_KEY, accessToken);
+      }
+
+      return accessToken;
     } catch (error) {
       throw new Error('Failed to refresh token');
     }
   },
 
-  // Request password reset
-  requestPasswordReset: async (request: ResetPasswordRequest): Promise<void> => {
-    try {
-      // Call backend password reset endpoint
-      await axios.post('/api/auth/reset-password', {
-        email: request.email
-      });
-      
-      // Password reset requested
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        throw new Error(error.response?.data?.message || 'Failed to request password reset');
-      }
-      throw new Error('Failed to request password reset');
-    }
+  // Reset password request
+  resetPassword: async (request: ResetPasswordRequest): Promise<void> => {
+    await ApiClient.post('/passwordReset/reset', request, { skipAuth: true });
   },
 
   // Change password
   changePassword: async (request: ChangePasswordRequest): Promise<void> => {
-    try {
-      // Call backend change password endpoint
-      await axios.post('/api/auth/change-password', {
-        oldPassword: request.oldPassword,
-        newPassword: request.newPassword
-      });
-      
-      // Password changed successfully
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        throw new Error(error.response?.data?.message || 'Failed to change password');
-      }
-      throw new Error('Failed to change password');
-    }
+    await ApiClient.post('/auth/change-password', request);
+  },
+
+  // Get user profile
+  getUserProfile: async (): Promise<User> => {
+    return await ApiClient.get<User>('/profile');
   },
 
   // Update user profile
-  updateProfile: async (userData: Partial<User>): Promise<User> => {
-    const currentUser = authService.getCurrentUser();
-    if (!currentUser) {
-      throw new Error('No authenticated user');
-    }
-
-    try {
-      // Call backend update profile endpoint
-      const response = await axios.put('/api/profile', userData);
-      const updatedUser = response.data;
-      
-      // Update in storage
-      const storageType = localStorage.getItem(USER_KEY) ? localStorage : sessionStorage;
-      storageType.setItem(USER_KEY, JSON.stringify(updatedUser));
-      
-      return updatedUser;
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        throw new Error(error.response?.data?.message || 'Failed to update profile');
-      }
-      throw new Error('Failed to update profile');
-    }
-  },
-
-  // Get current user profile from backend
-  getProfile: async (): Promise<User> => {
-    try {
-      const response = await axios.get('/api/profile');
-      const user = response.data;
-      
-      // Update in storage
-      const storageType = localStorage.getItem(USER_KEY) ? localStorage : sessionStorage;
-      storageType.setItem(USER_KEY, JSON.stringify(user));
-      
-      return user;
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        throw new Error(error.response?.data?.message || 'Failed to get profile');
-      }
-      throw new Error('Failed to get profile');
-    }
+  updateUserProfile: async (updates: Partial<User>): Promise<User> => {
+    return await ApiClient.put<User>('/profile', updates);
   },
 
   // Upload avatar
   uploadAvatar: async (file: File): Promise<string> => {
-    try {
-      const formData = new FormData();
-      formData.append('file', file);
-      
-      const response = await axios.post('/api/profile/avatar', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      });
-      
-      return response.data;
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        throw new Error(error.response?.data?.message || 'Failed to upload avatar');
-      }
-      throw new Error('Failed to upload avatar');
-    }
+    return await ApiClient.upload<string>('/profile/avatar', file);
   },
 
   // Get user statistics
-  getUserStats: async (): Promise<any> => {
-    try {
-      const response = await axios.get('/api/profile/stats');
-      return response.data;
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        throw new Error(error.response?.data?.message || 'Failed to get user stats');
-      }
-      throw new Error('Failed to get user stats');
-    }
+  getUserStats: async (): Promise<Record<string, unknown>> => {
+    return await ApiClient.get<Record<string, unknown>>('/profile/stats');
+  },
+
+  // Legacy method aliases for backward compatibility
+  requestPasswordReset: async (request: ResetPasswordRequest): Promise<void> => {
+    return authService.resetPassword(request);
+  },
+
+  updateProfile: async (userData: Partial<User>): Promise<User> => {
+    return authService.updateUserProfile(userData);
+  },
+
+  getProfile: async (): Promise<User> => {
+    return authService.getUserProfile();
   }
 };

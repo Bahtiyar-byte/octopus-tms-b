@@ -10,7 +10,9 @@ import {
   getDocTypeLabel, 
   getDocTypeIcon, 
   getDocTypeColor,
-  DOCUMENT_TYPES 
+  DOCUMENT_TYPES,
+  CustomAction,
+  DocumentCategory
 } from '../../config/documentConfig';
 
 interface Document {
@@ -91,7 +93,6 @@ export const Documents: React.FC = () => {
     try {
       await mockActions.downloadDocument(document.id);
     } catch (error) {
-      console.error('Error downloading document:', error);
     } finally {
       setLoading(false);
     }
@@ -117,7 +118,6 @@ export const Documents: React.FC = () => {
         setSelectedDocument(null);
       }
     } catch (error) {
-      console.error('Error deleting document:', error);
     } finally {
       setLoading(false);
     }
@@ -129,7 +129,6 @@ export const Documents: React.FC = () => {
       await notify('Document uploaded successfully');
       setShowUploadModal(false);
     } catch (error) {
-      console.error('Error uploading document:', error);
     } finally {
       setLoading(false);
     }
@@ -144,7 +143,6 @@ export const Documents: React.FC = () => {
       setShowShareModal(false);
       setShareEmail('');
     } catch (error) {
-      console.error('Error sharing document:', error);
     } finally {
       setLoading(false);
     }
@@ -157,7 +155,6 @@ export const Documents: React.FC = () => {
     try {
       await notify(`Printing ${document.name}`);
     } catch (error) {
-      console.error('Error printing document:', error);
     } finally {
       setLoading(false);
     }
@@ -170,7 +167,6 @@ export const Documents: React.FC = () => {
       await notify('Viewing recently uploaded documents');
       setSelectedType('all');
     } catch (error) {
-      console.error('Error fetching recently uploaded documents:', error);
     } finally {
       setLoading(false);
     }
@@ -182,7 +178,6 @@ export const Documents: React.FC = () => {
       await notify('Viewing starred documents');
       setSelectedType('all');
     } catch (error) {
-      console.error('Error fetching starred documents:', error);
     } finally {
       setLoading(false);
     }
@@ -194,14 +189,13 @@ export const Documents: React.FC = () => {
       await notify('Viewing documents shared with you');
       setSelectedType('all');
     } catch (error) {
-      console.error('Error fetching shared documents:', error);
     } finally {
       setLoading(false);
     }
   };
 
   // Execute custom actions
-  const handleCustomAction = (action: any, document: Document) => {
+  const handleCustomAction = (action: CustomAction, document: Document) => {
     if (action.condition && !action.condition(document)) return;
     action.handler(document);
   };
@@ -277,7 +271,7 @@ export const Documents: React.FC = () => {
                   </div>
                 </div>
 
-                {config.documentCategories.map((category: any) => (
+                {config.documentCategories.map((category: DocumentCategory) => (
                   <div
                     key={category.key}
                     className={`px-3 py-2 rounded-md cursor-pointer ${selectedType === category.key ? `bg-${category.color}-50 text-${category.color}-700` : 'hover:bg-gray-50'}`}
@@ -482,7 +476,7 @@ export const Documents: React.FC = () => {
                                 </button>
                               )}
                               {/* Custom actions */}
-                              {config.customActions?.map((action: any, idx: number) => (
+                              {config.customActions?.map((action: CustomAction, idx: number) => (
                                 <button
                                   key={idx}
                                   className="p-1 rounded-full text-gray-600 hover:bg-gray-100"
@@ -678,7 +672,7 @@ export const Documents: React.FC = () => {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Document Type</label>
               <select className="block w-full border border-gray-300 rounded-md py-2 px-3">
-                {config.documentCategories.map((category: any) => (
+                {config.documentCategories.map((category: DocumentCategory) => (
                   <option key={category.key} value={category.key}>
                     {getDocTypeLabel(category.key)}
                   </option>
@@ -738,7 +732,7 @@ export const Documents: React.FC = () => {
                         name="file-upload" 
                         type="file" 
                         className="sr-only"
-                        accept={config.allowedTypes.map((t: any) => `.${t.toLowerCase()}`).join(',')}
+                        accept={config.allowedTypes.map((t: string) => `.${t.toLowerCase()}`).join(',')}
                       />
                     </label>
                     <p className="pl-1">or drag and drop</p>
@@ -962,7 +956,7 @@ export const Documents: React.FC = () => {
                       </button>
                     )}
                     {/* Custom actions */}
-                    {config.customActions?.map((action: any, idx: number) => (
+                    {config.customActions?.map((action: CustomAction, idx: number) => (
                       <button
                         key={idx}
                         className="w-full flex items-center justify-center px-3 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50"

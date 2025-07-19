@@ -43,8 +43,8 @@ const Settings: React.FC = () => {
 
   // Check if we're navigating from the notification settings link
   useEffect(() => {
-    if (location.state && (location.state as any).activeTab) {
-      setActiveTab((location.state as any).activeTab);
+    if (location.state && (location.state as { activeTab?: ExtendedTabType }).activeTab) {
+      setActiveTab((location.state as { activeTab: ExtendedTabType }).activeTab);
     }
   }, [location.state]);
 

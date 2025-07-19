@@ -4,7 +4,7 @@ import { useRoleConfig } from '../../hooks/useRoleConfig';
 import { useAuth } from '../../../../context/AuthContext';
 import { UserRole } from '../../../../types/core/user.types';
 import toast from 'react-hot-toast';
-import * as formatters from '../../utils/formatters';
+import * as formatters from '../../../../utils/format';
 
 interface Customer {
   id: string;

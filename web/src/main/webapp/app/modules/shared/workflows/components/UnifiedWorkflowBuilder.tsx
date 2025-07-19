@@ -28,7 +28,7 @@ import {
 import { toast } from 'react-hot-toast';
 
 import { useWorkflowStore } from '../store/workflowStore';
-import { NodeType } from '../types/workflow.types';
+import { NodeType, Workflow } from '../types/workflow.types';
 import { validateWorkflowStructure } from '../utils/nodeHelpers';
 import { 
   TriggerNode,
@@ -50,8 +50,8 @@ const nodeTypes: NodeTypes = {
 interface UnifiedWorkflowBuilderProps {
   templateId?: string | null;
   workflowId?: string | null;
-  onSave?: (workflow: any) => void;
-  onTest?: (workflow: any) => void;
+  onSave?: (workflow: Workflow) => void;
+  onTest?: (workflow: { nodes: Node[]; edges: Edge[] }) => void;
   onSaveSuccess?: () => void;
 }
 

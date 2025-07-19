@@ -54,7 +54,6 @@ const UserSettings: React.FC<UserSettingsProps> = ({ initialRoles }) => {
       }));
       setUsers(mappedUsers);
     } catch (error) {
-      console.error('Error fetching users:', error);
       toast.error('Failed to load users');
       // Set empty array on error
       setUsers([]);

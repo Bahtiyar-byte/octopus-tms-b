@@ -74,7 +74,6 @@ export const WarehouseDashboard: React.FC = () => {
         setSelectedWarehouse(mockWarehouses[0].id);
       }
     } catch (error) {
-      console.error('Error loading warehouses:', error);
       toast.error('Failed to load warehouses');
     }
   };
@@ -208,7 +207,6 @@ export const WarehouseDashboard: React.FC = () => {
       setShipmentReadiness(mockReadiness);
       setAlerts(mockAlerts);
     } catch (error) {
-      console.error('Error loading warehouse data:', error);
       toast.error('Failed to load warehouse data');
     } finally {
       setLoading(false);
@@ -247,7 +245,6 @@ export const WarehouseDashboard: React.FC = () => {
       );
       setShipmentReadiness(updatedReadiness);
     } catch (error) {
-      console.error('Error notifying TMS:', error);
       toast.error('Failed to notify TMS');
     }
   };
@@ -262,7 +259,6 @@ export const WarehouseDashboard: React.FC = () => {
       setAlerts(updatedAlerts);
       toast.success('Alert acknowledged');
     } catch (error) {
-      console.error('Error acknowledging alert:', error);
       toast.error('Failed to acknowledge alert');
     }
   };
@@ -411,8 +407,8 @@ export const WarehouseDashboard: React.FC = () => {
                               key={item.id}
                               item={item}
                               stockLevel={stock}
-                              onEdit={() => console.log('Edit item:', item.id)}
-                              onViewDetails={() => console.log('View details:', item.id)}
+                              onEdit={() => {}}
+                              onViewDetails={() => {}}
                             />
                           );
                         })}
@@ -426,8 +422,8 @@ export const WarehouseDashboard: React.FC = () => {
                             key={readiness.id}
                             readiness={readiness}
                             onNotifyTMS={() => handleNotifyTMS(readiness.id)}
-                            onViewDetails={() => console.log('View readiness:', readiness.id)}
-                            onCreatePickList={() => console.log('Create pick list:', readiness.id)}
+                            onViewDetails={() => {}}
+                            onCreatePickList={() => {}}
                           />
                         ))}
                       </div>
@@ -440,7 +436,7 @@ export const WarehouseDashboard: React.FC = () => {
                             key={alert.id}
                             alert={alert}
                             onAcknowledge={() => handleAcknowledgeAlert(alert.id)}
-                            onViewDetails={() => console.log('View alert:', alert.id)}
+                            onViewDetails={() => {}}
                           />
                         ))}
                       </div>

@@ -22,3 +22,15 @@ export type FieldErrors = Record<string, string>;
 
 // Error handler function type
 export type ErrorHandler = (error: unknown) => void;
+
+// API Error type for client usage
+export interface ApiError extends ServerErrorResponse {
+  isApiError: true;
+}
+
+// Generic API response type
+export interface ApiResponse<T = any> {
+  data?: T;
+  error?: ApiError;
+  success: boolean;
+}

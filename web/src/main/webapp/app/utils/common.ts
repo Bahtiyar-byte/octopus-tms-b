@@ -31,9 +31,7 @@ export function handleServerError<TFieldValues extends FieldValues = FieldValues
       });
     });
   } else if (axiosError.response?.status === 400) {
-    console.error('Bad request:', axiosError.response.data);
   } else {
-    console.error('Server error:', axiosError);
   }
 }
 

@@ -1,5 +1,5 @@
-import axios from 'axios';
 import { User, UserRole } from '../types/core/user.types';
+import { ApiClient } from './api';
 
 export interface CreateUserRequest {
   username: string;
@@ -32,88 +32,48 @@ export interface UserListResponse {
 }
 
 class UserService {
-  private baseUrl = '/api/users';
+  private baseUrl = '/users';
 
   // Get all users with pagination
   async getUsers(page = 0, size = 20): Promise<UserListResponse> {
-    try {
-      const response = await axios.get(this.baseUrl, {
-        params: { page, size }
-      });
-      return response.data;
-    } catch (error) {
-      // Error fetching users
-      throw error;
-    }
+    return await ApiClient.get<UserListResponse>(this.baseUrl, {
+      params: { page, size }
+    });
   }
 
   // Get user by ID
   async getUserById(id: string): Promise<User> {
-    try {
-      const response = await axios.get(`${this.baseUrl}/${id}`);
-      return response.data;
-    } catch (error) {
-      // Error fetching user
-      throw error;
-    }
+    return await ApiClient.get<User>(`${this.baseUrl}/${id}`);
   }
 
   // Create new user
   async createUser(userData: CreateUserRequest): Promise<User> {
-    try {
-      // Ensure role is uppercase
-      const requestData = {
-        ...userData,
-        role: userData.role.toUpperCase() as UserRole
-      };
-      const response = await axios.post(this.baseUrl, requestData);
-      return response.data;
-    } catch (error) {
-      // Error creating user
-      throw error;
-    }
+    // Ensure role is uppercase
+    const requestData = {
+      ...userData,
+      role: userData.role.toUpperCase() as UserRole
+    };
+    return await ApiClient.post<User, CreateUserRequest>(this.baseUrl, requestData);
   }
 
   // Update user
   async updateUser(id: string, userData: UpdateUserRequest): Promise<User> {
-    try {
-      const response = await axios.put(`${this.baseUrl}/${id}`, userData);
-      return response.data;
-    } catch (error) {
-      // Error updating user
-      throw error;
-    }
+    return await ApiClient.put<User, UpdateUserRequest>(`${this.baseUrl}/${id}`, userData);
   }
 
   // Delete user
   async deleteUser(id: string): Promise<void> {
-    try {
-      await axios.delete(`${this.baseUrl}/${id}`);
-    } catch (error) {
-      // Error deleting user
-      throw error;
-    }
+    await ApiClient.delete<void>(`${this.baseUrl}/${id}`);
   }
 
   // Toggle user status
   async toggleUserStatus(id: string): Promise<User> {
-    try {
-      const response = await axios.patch(`${this.baseUrl}/${id}/toggle-status`);
-      return response.data;
-    } catch (error) {
-      // Error toggling user status
-      throw error;
-    }
+    return await ApiClient.patch<User>(`${this.baseUrl}/${id}/toggle-status`);
   }
 
   // Reset user password
   async resetUserPassword(id: string, newPassword: string): Promise<void> {
-    try {
-      await axios.post(`${this.baseUrl}/${id}/reset-password`, { newPassword });
-    } catch (error) {
-      // Error resetting password
-      throw error;
-    }
+    await ApiClient.post<void>(`${this.baseUrl}/${id}/reset-password`, { newPassword });
   }
 }
 

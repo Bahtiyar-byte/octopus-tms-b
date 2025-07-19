@@ -17,7 +17,6 @@ const Workflows: React.FC = () => {
           const workflow = JSON.parse(localStorage.getItem(key) || '');
           saved.push(workflow);
         } catch (e) {
-          console.error('Failed to parse workflow:', e);
         }
       }
     }

@@ -2,13 +2,6 @@
  * Common type definitions used across the application
  */
 
-// Generic API response wrapper
-export interface ApiResponse<T> {
-  data: T;
-  message?: string;
-  timestamp?: string;
-}
-
 // Paginated response
 export interface PaginatedResponse<T> {
   content: T[];
@@ -19,15 +12,6 @@ export interface PaginatedResponse<T> {
   first: boolean;
   last: boolean;
   empty: boolean;
-}
-
-// Error types
-export interface ApiError {
-  code: string;
-  message: string;
-  details?: Record<string, unknown>;
-  timestamp?: string;
-  path?: string;
 }
 
 export class ApplicationError extends Error {

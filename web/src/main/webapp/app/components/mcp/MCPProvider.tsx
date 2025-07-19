@@ -22,7 +22,6 @@ export const MCPProvider: React.FC<MCPProviderProps> = ({ children }) => {
       // MCP connection logic here
       setIsConnected(true);
     } catch (error) {
-      console.error('Failed to connect to MCP server:', error);
     }
   };
 

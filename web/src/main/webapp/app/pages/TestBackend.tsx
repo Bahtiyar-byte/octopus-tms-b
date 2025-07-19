@@ -9,30 +9,13 @@ const TestBackend: React.FC = () => {
     setLoading(true);
     setTestResults(['Starting backend connection tests...']);
     
-    // Capture console logs
-    const originalLog = console.log;
-    const originalError = console.error;
     const logs: string[] = [];
-    
-    console.log = (...args) => {
-      logs.push('[LOG] ' + args.join(' '));
-      originalLog(...args);
-    };
-    
-    console.error = (...args) => {
-      logs.push('[ERROR] ' + args.join(' '));
-      originalError(...args);
-    };
     
     try {
       await testBackendConnection();
     } catch (error) {
       logs.push('[ERROR] Test failed: ' + error);
     }
-    
-    // Restore console
-    console.log = originalLog;
-    console.error = originalError;
     
     setTestResults(logs);
     setLoading(false);
