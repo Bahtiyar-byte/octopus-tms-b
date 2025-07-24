@@ -55,6 +55,7 @@ const Topbar: React.FC = () => {
     { path: '/broker/contracts', label: 'Contracts' },
     { path: '/broker/payments', label: 'Invoices' },
     { path: '/broker/commissions', label: 'Commissions' },
+    { path: '/broker/monetization/showcase', label: 'Monetize' },
   ];
 
   // Resources submenu items for Shipper

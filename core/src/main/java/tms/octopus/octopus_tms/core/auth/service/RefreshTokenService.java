@@ -34,7 +34,7 @@ public class RefreshTokenService {
      * Generate a refresh token for the user
      */
     public String generateRefreshToken(User user) {
-        Algorithm algorithm = Algorithm.HMAC256(refreshSecret);
+        Algorithm algorithm = Algorithm.HMAC512(refreshSecret);
         
         return JWT.create()
                 .withSubject(user.getUsername())
@@ -51,7 +51,7 @@ public class RefreshTokenService {
      */
     public User validateRefreshToken(String refreshToken) {
         try {
-            Algorithm algorithm = Algorithm.HMAC256(refreshSecret);
+            Algorithm algorithm = Algorithm.HMAC512(refreshSecret);
             JWTVerifier verifier = JWT.require(algorithm)
                     .withClaim("tokenType", "refresh")
                     .build();

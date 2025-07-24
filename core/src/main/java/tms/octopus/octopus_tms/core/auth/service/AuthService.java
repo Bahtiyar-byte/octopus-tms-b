@@ -57,13 +57,18 @@ public class AuthService {
         response.setRefreshToken(refreshToken);
         response.setTokenExpiry(java.time.LocalDateTime.now().plusSeconds(jwtExpiration));
         
-        // Create UserDTO with company information
+        // Create UserDTO with all user information
         UserDTO userDto = new UserDTO();
         userDto.setId(user.getId());
         userDto.setUsername(user.getUsername());
+        userDto.setEmail(user.getEmail());
         userDto.setRole(user.getRole());
         userDto.setFirstName(user.getFirstName());
         userDto.setLastName(user.getLastName());
+        userDto.setPhone(user.getPhone());
+        userDto.setDepartment(user.getDepartment());
+        userDto.setAvatarUrl(user.getAvatarUrl());
+        userDto.setLastLogin(user.getLastLogin());
         userDto.setCompanyType(user.getCompanyType());
         if (user.getCompany() != null) {
             userDto.setCompany(user.getCompany().getId());
@@ -112,13 +117,18 @@ public class AuthService {
         response.setRefreshToken(refreshToken); // Keep same refresh token
         response.setTokenExpiry(java.time.LocalDateTime.now().plusSeconds(jwtExpiration));
         
-        // Create UserDTO with company information
+        // Create UserDTO with all user information
         UserDTO userDto = new UserDTO();
         userDto.setId(user.getId());
         userDto.setUsername(user.getUsername());
+        userDto.setEmail(user.getEmail());
         userDto.setRole(user.getRole());
         userDto.setFirstName(user.getFirstName());
         userDto.setLastName(user.getLastName());
+        userDto.setPhone(user.getPhone());
+        userDto.setDepartment(user.getDepartment());
+        userDto.setAvatarUrl(user.getAvatarUrl());
+        userDto.setLastLogin(user.getLastLogin());
         userDto.setCompanyType(user.getCompanyType());
         if (user.getCompany() != null) {
             userDto.setCompany(user.getCompany().getId());
