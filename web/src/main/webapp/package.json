@@ -15,8 +15,6 @@
     "test:playwright:report": "playwright show-report"
   },
   "dependencies": {
-    "@copilotkit/react-core": "^0.18.0",
-    "@copilotkit/react-ui": "^0.18.0",
     "@hookform/resolvers": "^5.0.1",
     "@mapbox/search-js-core": "^1.1.0",
     "@mapbox/search-js-react": "^1.1.0",
@@ -45,8 +43,8 @@
     "zustand": "^5.0.5"
   },
   "devDependencies": {
-    "@copilotkit/react-core": "^0.18.0",
-    "@copilotkit/react-ui": "^0.18.0",
+    "@copilotkit/react-core": "^1.9.3",
+    "@copilotkit/react-ui": "^0.2.0",
     "@eslint/eslintrc": "^2.1.4",
     "@eslint/js": "^8.47.0",
     "@playwright/test": "^1.54.1",

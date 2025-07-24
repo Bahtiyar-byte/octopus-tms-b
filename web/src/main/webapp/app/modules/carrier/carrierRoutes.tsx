@@ -1,6 +1,6 @@
 import { Navigate, RouteObject } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { UserRole } from '../../types/core/user.types';
+import { UserRole, CompanyType } from '../../types/core/user.types';
 
 // Import Shared pages
 import Dashboard from '../shared/pages/Dashboard/Dashboard';
@@ -25,16 +25,18 @@ const CarrierRoute = ({ children }: { children: React.ReactNode }) => {
     return <Navigate to="/login" replace />;
   }
   
-  // Allow access to users with carrier-related roles or admin role
+  // Allow access to users from carrier companies or admins
   const allowedRoles = [
-    UserRole.CARRIER,
     UserRole.DISPATCHER,
     UserRole.DRIVER,
     UserRole.SUPERVISOR,
     UserRole.ADMIN
   ];
   
-  if (!user?.role || !allowedRoles.includes(user.role)) {
+  // Check if user has an allowed role OR is from a carrier company
+  const hasAccess = (user?.role && allowedRoles.includes(user.role)) || user?.companyType === CompanyType.CARRIER;
+  
+  if (!hasAccess) {
     return <Navigate to="/login" replace />;
   }
   

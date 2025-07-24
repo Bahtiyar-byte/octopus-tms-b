@@ -23,25 +23,36 @@ public interface UserMapper {
 
     @Mapping(target = "company", ignore = true)
     @Mapping(target = "passwordHash", ignore = true)
+    @Mapping(target = "companyType", source = "companyType")
     UserDTO toDto(User user);
 
     @AfterMapping
     default void afterToDto(User user, @MappingTarget UserDTO userDTO) {
-        userDTO.setCompany(user.getCompany() == null ? null : user.getCompany().getId());
+        if (user.getCompany() != null) {
+            userDTO.setCompany(user.getCompany().getId());
+            userDTO.setCompanyName(user.getCompany().getName());
+        }
+        // companyType is now mapped directly from user.companyType
     }
 
     @Mapping(target = "company", ignore = true)
     @Mapping(target = "passwordHash", ignore = true)
+    @Mapping(target = "companyType", source = "companyType")
     UserDTO updateUserDTO(User user, @MappingTarget UserDTO userDTO);
 
     @AfterMapping
     default void afterUpdateUserDTO(User user, @MappingTarget UserDTO userDTO) {
-        userDTO.setCompany(user.getCompany() == null ? null : user.getCompany().getId());
+        if (user.getCompany() != null) {
+            userDTO.setCompany(user.getCompany().getId());
+            userDTO.setCompanyName(user.getCompany().getName());
+        }
+        // companyType is now mapped directly from user.companyType
     }
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "company", ignore = true)
     @Mapping(target = "passwordHash", ignore = true)
+    @Mapping(target = "companyType", source = "companyType")
     User updateUser(UserDTO userDTO, @MappingTarget User user,
             @Context CompanyRepository companyRepository, @Context PasswordEncoder passwordEncoder);
 

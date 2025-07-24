@@ -15,10 +15,21 @@ const REFRESH_TOKEN_KEY = 'octopus_tms_refresh_token';
 
 // Response types
 interface LoginResponse {
-  accessToken: string;
+  token: string;
   refreshToken?: string;
-  tokenType?: string;
-  expiresIn?: number;
+  tokenExpiry?: string;
+  user: {
+    id: string;
+    username: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+    role: UserRole;
+    companyType: string;
+    company?: string;
+    companyName?: string;
+  };
+  permissions?: string[];
 }
 
 interface RefreshResponse {
@@ -30,45 +41,45 @@ export const authService = {
   login: async (credentials: LoginCredentials): Promise<AuthResponse> => {
     try {
       // Call the real backend API
-      const response = await ApiClient.post<LoginResponse>('/authenticate', {
+      const response = await ApiClient.post<LoginResponse>('/auth/login', {
         username: credentials.username,
         password: credentials.password
       }, { skipAuth: true });
 
-      const { accessToken, refreshToken } = response;
+      const { token, refreshToken, user: userDto } = response;
       
-      // Decode JWT to get user info
-      const payload = JSON.parse(atob(accessToken.split('.')[1]));
-      
-      // Create user object from JWT payload
+      // Create user object from response
       const user: User = {
-        id: payload.sub || payload.userId || credentials.username,
-        username: credentials.username,
-        email: payload.email || credentials.username,
-        firstName: payload.firstName || payload.given_name || credentials.username.split('@')[0].split('.')[0] || credentials.username,
-        lastName: payload.lastName || payload.family_name || credentials.username.split('@')[0].split('.')[1] || '',
-        role: (payload.roles?.[0] || payload.role || 'BROKER') as UserRole,
-        avatarUrl: payload.avatarUrl || payload.picture || '',
-        phone: payload.phone || payload.phoneNumber || '',
-        department: payload.department || payload.dept || '',
-        lastLogin: payload.lastLogin || new Date().toISOString()
+        id: userDto.id,
+        username: userDto.username,
+        email: userDto.email,
+        firstName: userDto.firstName,
+        lastName: userDto.lastName,
+        role: userDto.role,
+        companyId: userDto.company,
+        companyName: userDto.companyName,
+        companyType: userDto.companyType as any, // Cast to enum
+        lastLogin: new Date().toISOString()
       };
 
+      // Decode JWT to get expiration
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      
       const authResponse: AuthResponse = {
         user,
-        token: accessToken,
-        expiresAt: Date.now() + (payload.exp ? payload.exp * 1000 : 3600000) // Default 1 hour
+        token: token,
+        expiresAt: payload.exp ? payload.exp * 1000 : Date.now() + 86400000 // Default 24 hours
       };
 
       // Store token and user data based on remember me
       if (credentials.rememberMe) {
-        localStorage.setItem(TOKEN_KEY, accessToken);
+        localStorage.setItem(TOKEN_KEY, token);
         localStorage.setItem(USER_KEY, JSON.stringify(user));
         if (refreshToken) {
           localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
         }
       } else {
-        sessionStorage.setItem(TOKEN_KEY, accessToken);
+        sessionStorage.setItem(TOKEN_KEY, token);
         sessionStorage.setItem(USER_KEY, JSON.stringify(user));
         if (refreshToken) {
           sessionStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);

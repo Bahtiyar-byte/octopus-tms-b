@@ -43,11 +43,10 @@ public class AuthController {
     }
 
     @PostMapping("/refresh")
-    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.SUPERVISOR + "', '" + UserRole.Fields.DISPATCHER + "', '" + UserRole.Fields.DRIVER + "', '" + UserRole.Fields.ACCOUNTING + "')")
-    @SecurityRequirement(name = "bearer-jwt")
     public ResponseEntity<UserAuthDTO> refreshToken(
             @RequestBody @Valid final RefreshTokenRequestDTO refreshTokenRequestDTO) {
-        return ResponseEntity.ok(null);
+        UserAuthDTO response = authService.refreshAccessToken(refreshTokenRequestDTO.getRefreshToken());
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/me")

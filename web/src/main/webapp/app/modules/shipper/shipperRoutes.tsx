@@ -1,6 +1,6 @@
 import { Navigate, RouteObject } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { UserRole } from '../../types/core/user.types';
+import { UserRole, CompanyType } from '../../types/core/user.types';
 
 // Import Shared pages
 import Dashboard from '../shared/pages/Dashboard/Dashboard';
@@ -26,8 +26,8 @@ const ShipperRoute = ({ children }: { children: React.ReactNode }) => {
     return <Navigate to="/login" replace />;
   }
   
-  // Allow access to users with shipper role or admin role
-  if (user?.role !== UserRole.SHIPPER && user?.role !== UserRole.ADMIN && user?.role !== UserRole.SUPERVISOR) {
+  // Allow access to users from shipper companies or admins
+  if (user?.role !== UserRole.ADMIN && user?.role !== UserRole.SUPERVISOR && user?.companyType !== CompanyType.SHIPPER) {
     return <Navigate to="/dashboard" replace />;
   }
   

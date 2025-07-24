@@ -4,6 +4,8 @@ import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import tms.octopus.octopus_tms.core.company.domain.Company;
 import tms.octopus.octopus_tms.core.user.domain.User;
 
@@ -11,6 +13,9 @@ import tms.octopus.octopus_tms.core.user.domain.User;
 public interface UserRepository extends JpaRepository<User, UUID> {
 
     User findByUsernameIgnoreCase(String username);
+    
+    @Query("SELECT u FROM User u LEFT JOIN FETCH u.company WHERE LOWER(u.username) = LOWER(:username)")
+    User findByUsernameIgnoreCaseWithCompany(@Param("username") String username);
 
     User findByResetToken(String resetToken);
 

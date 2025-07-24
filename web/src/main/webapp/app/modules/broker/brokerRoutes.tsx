@@ -1,6 +1,6 @@
 import { Navigate, RouteObject } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { UserRole } from '../../types/core/user.types';
+import {CompanyType, UserRole} from '../../types/core/user.types';
 
 // Import Shared pages
 import Dashboard from '../shared/pages/Dashboard/Dashboard';
@@ -31,8 +31,8 @@ const BrokerRoute = ({ children }: { children: React.ReactNode }) => {
     return <Navigate to="/login" replace />;
   }
   
-  // Allow access to users with broker role or admin role
-  if (user?.role !== UserRole.BROKER && user?.role !== UserRole.ADMIN && user?.role !== UserRole.SUPERVISOR) {
+  // Allow access to users from broker companies or admins
+  if (user?.role !== UserRole.ADMIN && user?.role !== UserRole.SUPERVISOR && user?.companyType !== CompanyType.BROKER) {
     return <Navigate to="/dashboard" replace />;
   }
   

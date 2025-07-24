@@ -14,6 +14,7 @@ import {
   CustomAction,
   DocumentCategory
 } from '../../config/documentConfig';
+import { CompanyType } from '../../../../types';
 
 interface Document {
   id: string;
@@ -65,13 +66,13 @@ export const Documents: React.FC = () => {
       { id: '11', name: `${config.documentPrefix}1003_POD.pdf`, type: DOCUMENT_TYPES.POD, date: '5/21/2025', size: '190 KB', loadId: '1003' }
     ],
     // Add role-specific documents
-    ...(user?.role === 'BROKER' ? {
+    ...(user?.companyType === CompanyType.BROKER ? {
       other_documents: [
         { id: '12', name: `${config.documentPrefix}1001_Lumper.jpg`, type: DOCUMENT_TYPES.LUMPER_RECEIPT, date: '5/20/2025', size: '850 KB', isImage: true, previewUrl: getSampleImageUrl(DOCUMENT_TYPES.LUMPER_RECEIPT) },
         { id: '13', name: `${config.documentPrefix}1002_Lumper.png`, type: DOCUMENT_TYPES.LUMPER_RECEIPT, date: '5/19/2025', size: '920 KB', isImage: true, previewUrl: getSampleImageUrl(DOCUMENT_TYPES.LUMPER_RECEIPT) }
       ]
     } : {}),
-    ...(user?.role === 'SHIPPER' ? {
+    ...(user?.companyType === CompanyType.SHIPPER ? {
       warehouse_certs: [
         { id: '14', name: `${config.documentPrefix}WH001_Cert.pdf`, type: DOCUMENT_TYPES.WAREHOUSE_CERT, date: '5/15/2025', size: '245 KB', warehouse: 'Chicago DC', expiryDate: '12/31/2025' },
         { id: '15', name: `${config.documentPrefix}WH002_Cert.pdf`, type: DOCUMENT_TYPES.WAREHOUSE_CERT, date: '5/10/2025', size: '280 KB', warehouse: 'Dallas Hub', expiryDate: '12/31/2025' }
@@ -92,8 +93,7 @@ export const Documents: React.FC = () => {
     setLoading(true);
     try {
       await mockActions.downloadDocument(document.id);
-    } catch (error) {
-    } finally {
+    } catch (error) { /* empty */ } finally {
       setLoading(false);
     }
   };
@@ -117,8 +117,7 @@ export const Documents: React.FC = () => {
       if (selectedDocument?.id === document.id) {
         setSelectedDocument(null);
       }
-    } catch (error) {
-    } finally {
+    } catch (error) { /* empty */ } finally {
       setLoading(false);
     }
   };
@@ -128,8 +127,7 @@ export const Documents: React.FC = () => {
     try {
       await notify('Document uploaded successfully');
       setShowUploadModal(false);
-    } catch (error) {
-    } finally {
+    } catch (error) { /* empty */ } finally {
       setLoading(false);
     }
   };
@@ -142,8 +140,7 @@ export const Documents: React.FC = () => {
       await notify(`Document shared with ${shareEmail}`);
       setShowShareModal(false);
       setShareEmail('');
-    } catch (error) {
-    } finally {
+    } catch (error) { /* empty */ } finally {
       setLoading(false);
     }
   };
@@ -154,8 +151,7 @@ export const Documents: React.FC = () => {
     setLoading(true);
     try {
       await notify(`Printing ${document.name}`);
-    } catch (error) {
-    } finally {
+    } catch (error) { /* empty */ } finally {
       setLoading(false);
     }
   };
@@ -166,8 +162,7 @@ export const Documents: React.FC = () => {
     try {
       await notify('Viewing recently uploaded documents');
       setSelectedType('all');
-    } catch (error) {
-    } finally {
+    } catch (error) { /* empty */ } finally {
       setLoading(false);
     }
   };
@@ -177,8 +172,7 @@ export const Documents: React.FC = () => {
     try {
       await notify('Viewing starred documents');
       setSelectedType('all');
-    } catch (error) {
-    } finally {
+    } catch (error) { /* empty */ } finally {
       setLoading(false);
     }
   };
@@ -188,8 +182,7 @@ export const Documents: React.FC = () => {
     try {
       await notify('Viewing documents shared with you');
       setSelectedType('all');
-    } catch (error) {
-    } finally {
+    } catch (error) { /* empty */ } finally {
       setLoading(false);
     }
   };
@@ -376,7 +369,7 @@ export const Documents: React.FC = () => {
                       <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Size
                       </th>
-                      {user?.role === 'SHIPPER' && (
+                      {user?.companyType === CompanyType.SHIPPER && (
                         <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                           Warehouse
                         </th>
@@ -422,7 +415,7 @@ export const Documents: React.FC = () => {
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                             {doc.size}
                           </td>
-                          {user?.role === 'SHIPPER' && (
+                          {user?.companyType === CompanyType.SHIPPER && (
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                               {doc.warehouse || '-'}
                             </td>
@@ -682,11 +675,11 @@ export const Documents: React.FC = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                {user?.role === 'SHIPPER' ? 'Warehouse' : 'Related Load'}
+                {user?.companyType === CompanyType.SHIPPER ? 'Warehouse' : 'Related Load'}
               </label>
               <select className="block w-full border border-gray-300 rounded-md py-2 px-3">
                 <option value="">Select...</option>
-                {user?.role === 'SHIPPER' ? (
+                {user?.companyType === CompanyType.SHIPPER ? (
                   <>
                     <option value="chicago">Chicago DC</option>
                     <option value="dallas">Dallas Hub</option>

@@ -17,6 +17,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.UuidGenerator;
 import tms.octopus.octopus_tms.base.user.model.UserRole;
+import tms.octopus.octopus_tms.base.company.model.CompanyType;
 import tms.octopus.octopus_tms.core.company.domain.Company;
 import tms.octopus.octopus_tms.core.user_preference.domain.UserPreference;
 
@@ -89,7 +90,11 @@ public class User {
     @JoinColumn(name = "company_id")
     private Company company;
 
-    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
+    @Column(name = "company_type", length = 25)
+    @Enumerated(EnumType.STRING)
+    private CompanyType companyType;
+
+    @OneToOne(mappedBy = "user")
     private UserPreference userPreference;
 
 }

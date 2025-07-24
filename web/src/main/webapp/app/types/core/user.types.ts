@@ -12,12 +12,6 @@ export enum UserRole {
   // Operational roles
   DISPATCHER = 'DISPATCHER',
   DRIVER = 'DRIVER',
-  OPERATOR = 'OPERATOR',
-  
-  // Business roles
-  BROKER = 'BROKER',
-  CARRIER = 'CARRIER',
-  SHIPPER = 'SHIPPER',
   
   // Support roles
   ACCOUNTING = 'ACCOUNTING',
@@ -28,6 +22,13 @@ export enum UserRole {
 // User status
 export type UserStatus = 'active' | 'inactive';
 
+// Company types
+export enum CompanyType {
+  BROKER = 'BROKER',
+  CARRIER = 'CARRIER', 
+  SHIPPER = 'SHIPPER'
+}
+
 // Main User interface
 export interface User {
   id: string;
@@ -36,6 +37,11 @@ export interface User {
   firstName: string;
   lastName: string;
   role: UserRole;
+  
+  // Company information
+  companyId?: string;
+  companyName?: string;
+  companyType?: CompanyType;
   
   // Optional fields
   avatarUrl?: string;

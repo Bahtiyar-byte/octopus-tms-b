@@ -22,6 +22,8 @@ import tms.octopus.octopus_tms.core.user.model.UserStatsDTO;
 import tms.octopus.octopus_tms.core.user.repos.UserRepository;
 import tms.octopus.octopus_tms.core.user_preference.domain.UserPreference;
 import tms.octopus.octopus_tms.core.user_preference.repos.UserPreferenceRepository;
+import tms.octopus.octopus_tms.core.user.validation.UserValidator;
+import tms.octopus.octopus_tms.base.company.model.CompanyType;
 
 
 @Service
@@ -33,17 +35,20 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final UserPreferenceRepository userPreferenceRepository;
     private final NotificationRepository notificationRepository;
+    private final UserValidator userValidator;
 
     public UserServiceImpl(final UserRepository userRepository,
             final CompanyRepository companyRepository, final PasswordEncoder passwordEncoder,
             final UserMapper userMapper, final UserPreferenceRepository userPreferenceRepository,
-            final NotificationRepository notificationRepository) {
+            final NotificationRepository notificationRepository,
+            final UserValidator userValidator) {
         this.userRepository = userRepository;
         this.companyRepository = companyRepository;
         this.passwordEncoder = passwordEncoder;
         this.userMapper = userMapper;
         this.userPreferenceRepository = userPreferenceRepository;
         this.notificationRepository = notificationRepository;
+        this.userValidator = userValidator;
     }
 
     @Override
@@ -76,6 +81,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UUID create(final UserDTO userDTO) {
+        // Validate company assignment
+        if (userDTO.getCompany() == null) {
+            throw new IllegalArgumentException("User must be assigned to a company");
+        }
+        
+        // Verify company exists
+        if (!companyRepository.existsById(userDTO.getCompany())) {
+            throw new IllegalArgumentException("Invalid company ID");
+        }
+        
         final User user = new User();
         userMapper.updateUser(userDTO, user, companyRepository, passwordEncoder);
         return userRepository.save(user).getId();
@@ -202,40 +217,46 @@ public class UserServiceImpl implements UserService {
         UserStatsDTO stats = new UserStatsDTO();
         
         // These would be calculated from actual data in production
-        // For now, returning mock data based on role
-        switch (user.getRole()) {
-            case BROKER:
-                stats.setActionsToday(38);
-                stats.setLoadsDispatched(156);
-                stats.setTasksCompleted(324);
-                stats.setPerformanceScore(92);
-                stats.setDealsClosedThisMonth(12);
-                stats.setRevenueGenerated(125000.00);
-                break;
-            case SHIPPER:
-                stats.setActionsToday(24);
-                stats.setLoadsDispatched(89);
-                stats.setTasksCompleted(145);
-                stats.setPerformanceScore(88);
-                stats.setShipmentsThisMonth(89);
-                stats.setWarehouseCapacityUsed(76);
-                break;
-            case CARRIER:
-            case DISPATCHER:
-            case DRIVER:
-                stats.setActionsToday(42);
-                stats.setLoadsDispatched(178);
-                stats.setTasksCompleted(356);
-                stats.setPerformanceScore(94);
-                stats.setActiveDriversToday(28);
-                stats.setTotalDriversManaged(42);
-                break;
-            default:
-                stats.setActionsToday(15);
-                stats.setLoadsDispatched(45);
-                stats.setTasksCompleted(78);
-                stats.setPerformanceScore(85);
-                break;
+        // For now, returning mock data based on company type
+        if (user.getCompany() != null && user.getCompany().getType() != null) {
+            switch (user.getCompany().getType()) {
+                case BROKER:
+                    stats.setActionsToday(38);
+                    stats.setLoadsDispatched(156);
+                    stats.setTasksCompleted(324);
+                    stats.setPerformanceScore(92);
+                    stats.setDealsClosedThisMonth(12);
+                    stats.setRevenueGenerated(125000.00);
+                    break;
+                case SHIPPER:
+                    stats.setActionsToday(24);
+                    stats.setLoadsDispatched(89);
+                    stats.setTasksCompleted(145);
+                    stats.setPerformanceScore(88);
+                    stats.setShipmentsThisMonth(89);
+                    stats.setWarehouseCapacityUsed(76);
+                    break;
+                case CARRIER:
+                    stats.setActionsToday(42);
+                    stats.setLoadsDispatched(178);
+                    stats.setTasksCompleted(356);
+                    stats.setPerformanceScore(94);
+                    stats.setActiveDriversToday(28);
+                    stats.setTotalDriversManaged(42);
+                    break;
+                default:
+                    stats.setActionsToday(15);
+                    stats.setLoadsDispatched(45);
+                    stats.setTasksCompleted(78);
+                    stats.setPerformanceScore(85);
+                    break;
+            }
+        } else {
+            // Default stats if no company
+            stats.setActionsToday(15);
+            stats.setLoadsDispatched(45);
+            stats.setTasksCompleted(78);
+            stats.setPerformanceScore(85);
         }
         
         stats.setTotalCustomersServed(76);

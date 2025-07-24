@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { UserRole } from '../types/core/user.types';
+import {CompanyType, UserRole} from '../types/core/user.types';
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -33,12 +33,14 @@ const Login: React.FC = () => {
         rememberMe: formData.rememberMe
       });
 
-      // Redirect based on user role (comparing enum values)
-      if (response.user.role === UserRole.BROKER || response.user.role === UserRole.ADMIN) {
+      // Redirect based on company type or admin role
+      if (response.user.role === UserRole.ADMIN) {
+        navigate('/broker/dashboard'); // Admin defaults to broker dashboard
+      } else if (response.user.companyType === CompanyType.BROKER) {
         navigate('/broker/dashboard');
-      } else if (response.user.role === UserRole.SHIPPER) {
+      } else if (response.user.companyType === CompanyType.SHIPPER) {
         navigate('/shipper/dashboard');
-      } else if (response.user.role === UserRole.CARRIER) {
+      } else if (response.user.companyType === CompanyType.CARRIER) {
         navigate('/carrier/dashboard');
       } else {
         navigate('/dashboard');

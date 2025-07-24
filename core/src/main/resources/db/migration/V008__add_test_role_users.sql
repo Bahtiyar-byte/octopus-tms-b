@@ -1,5 +1,45 @@
--- Create test carrier and shipper users
+-- Create test companies and users
 -- Password for all users: "password" (hashed with BCrypt)
+
+-- Create carrier company if not exists
+INSERT INTO companies (
+    id, 
+    name, 
+    type, 
+    status, 
+    created_at, 
+    updated_at
+) 
+SELECT 
+    gen_random_uuid(),
+    'Test Carrier Company',
+    'CARRIER',
+    'ACTIVE',
+    NOW(),
+    NOW()
+WHERE NOT EXISTS (
+    SELECT 1 FROM companies WHERE name = 'Test Carrier Company' AND type = 'CARRIER'
+);
+
+-- Create shipper company if not exists
+INSERT INTO companies (
+    id, 
+    name, 
+    type, 
+    status, 
+    created_at, 
+    updated_at
+) 
+SELECT 
+    gen_random_uuid(),
+    'Test Shipper Company',
+    'SHIPPER',
+    'ACTIVE',
+    NOW(),
+    NOW()
+WHERE NOT EXISTS (
+    SELECT 1 FROM companies WHERE name = 'Test Shipper Company' AND type = 'SHIPPER'
+);
 
 -- Create carrier user if not exists
 INSERT INTO users (
@@ -18,11 +58,11 @@ SELECT
     gen_random_uuid(),
     'carrier1@octopustms.com',
     '{bcrypt}$2a$10$dXJ3SW6G7P50lGmMkkmwe.20cQQubK3.HZWzG3YB1tlRy.fqvM/BG', -- password: "password"
-    'CARRIER',
+    'DISPATCHER', -- Using position-based role instead of CARRIER
     'carrier1@octopustms.com',
     'John',
     'Carrier',
-    (SELECT company_id FROM users WHERE username = 'emily.anderson@octopus-tms.com'), -- Use Emily's company
+    (SELECT id FROM companies WHERE name = 'Test Carrier Company' AND type = 'CARRIER' LIMIT 1),
     NOW(),
     NOW()
 WHERE NOT EXISTS (
@@ -46,11 +86,11 @@ SELECT
     gen_random_uuid(),
     'shipper1@octopustms.com',
     '{bcrypt}$2a$10$dXJ3SW6G7P50lGmMkkmwe.20cQQubK3.HZWzG3YB1tlRy.fqvM/BG', -- password: "password"
-    'SHIPPER',
+    'SUPERVISOR', -- Using position-based role instead of SHIPPER
     'shipper1@octopustms.com',
     'Sarah',
     'Shipper',
-    (SELECT company_id FROM users WHERE username = 'emily.anderson@octopus-tms.com'), -- Use Emily's company
+    (SELECT id FROM companies WHERE name = 'Test Shipper Company' AND type = 'SHIPPER' LIMIT 1),
     NOW(),
     NOW()
 WHERE NOT EXISTS (

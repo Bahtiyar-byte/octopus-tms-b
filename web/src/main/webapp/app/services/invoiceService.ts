@@ -29,28 +29,28 @@ export const invoiceService = {
     }
 
     const response = await ApiClient.get<PaginatedResponse<Invoice>>(
-      `/api/invoices?${params.toString()}`
+      `/invoices?${params.toString()}`
     );
     return response;
   },
 
   async getInvoiceById(id: string): Promise<Invoice> {
-    const response = await ApiClient.get<Invoice>(`/api/invoices/${id}`);
+    const response = await ApiClient.get<Invoice>(`/invoices/${id}`);
     return response;
   },
 
   async createInvoice(invoice: CreateInvoiceRequest): Promise<Invoice> {
-    const response = await ApiClient.post<Invoice>('/api/invoices', invoice);
+    const response = await ApiClient.post<Invoice>('/invoices', invoice);
     return response;
   },
 
   async updateInvoice(id: string, invoice: UpdateInvoiceRequest): Promise<Invoice> {
-    const response = await ApiClient.put<Invoice>(`/api/invoices/${id}`, invoice);
+    const response = await ApiClient.put<Invoice>(`/invoices/${id}`, invoice);
     return response;
   },
 
   async deleteInvoice(id: string): Promise<void> {
-    await ApiClient.delete(`/api/invoices/${id}`);
+    await ApiClient.delete(`/invoices/${id}`);
   },
 
   async updateInvoiceStatus(id: string, status: InvoiceStatus): Promise<Invoice> {
@@ -74,7 +74,7 @@ export const invoiceService = {
   },
 
   async sendInvoice(id: string): Promise<void> {
-    await ApiClient.post(`/api/invoice-operations/${id}/send`);
+    await ApiClient.post(`/invoice-operations/${id}/send`);
   },
 
   async getInvoiceSummary(filter?: InvoiceFilter): Promise<InvoiceSummary> {
@@ -141,7 +141,7 @@ export const invoiceService = {
   },
 
   async downloadInvoice(id: string): Promise<Blob> {
-    const response = await ApiClient.get<Blob>(`/api/invoices/${id}/download`, {
+    const response = await ApiClient.get<Blob>(`/invoices/${id}/download`, {
       responseType: 'blob',
     });
     return response;

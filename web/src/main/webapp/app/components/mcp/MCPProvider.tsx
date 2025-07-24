@@ -27,7 +27,7 @@ export const MCPProvider: React.FC<MCPProviderProps> = ({ children }) => {
 
   return (
     <MCPContext.Provider value={{ isConnected, connectToServer }}>
-      <CopilotKit url={''} >
+      <CopilotKit>
         {children}
       </CopilotKit>
     </MCPContext.Provider>

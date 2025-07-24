@@ -50,7 +50,8 @@
       "Bash(docker exec:*)",
       "Bash(git checkout:*)",
       "Bash(npx playwright:*)",
-      "Bash(/Users/haydarovbahtiyar/Desktop/octopus-tms-b/test-aliases.sh)"
+      "Bash(/Users/haydarovbahtiyar/Desktop/octopus-tms-b/test-aliases.sh)",
+      "Bash(./test-crud-operations.sh:*)"
     ],
     "deny": []
   }
