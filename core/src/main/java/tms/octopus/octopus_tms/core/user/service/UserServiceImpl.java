@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.multipart.MultipartFile;
 import tms.octopus.octopus_tms.base.util.NotFoundException;
 import tms.octopus.octopus_tms.base.util.ReferencedWarning;
@@ -52,7 +53,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<UserDTO> findAll(final String filter, final Pageable pageable) {
+        // Get current user to filter by company type
+        String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+        User currentUser = userRepository.findByUsernameIgnoreCase(currentUsername);
+        
         Page<User> page;
         if (filter != null) {
             UUID uuidFilter = null;
@@ -61,9 +67,12 @@ public class UserServiceImpl implements UserService {
             } catch (final IllegalArgumentException illegalArgumentException) {
                 // keep null - no parseable input
             }
-            page = userRepository.findAllById(uuidFilter, pageable);
+            page = userRepository.findAllByIdWithCompany(uuidFilter, pageable);
+        } else if (currentUser != null && currentUser.getCompanyType() != null) {
+            // Filter by company type of current user
+            page = userRepository.findAllByCompanyType(currentUser.getCompanyType().toString(), pageable);
         } else {
-            page = userRepository.findAll(pageable);
+            page = userRepository.findAllWithCompany(pageable);
         }
         return new PageImpl<>(page.getContent()
                 .stream()
@@ -130,8 +139,9 @@ public class UserServiceImpl implements UserService {
     }
     
     @Override
+    @Transactional(readOnly = true)
     public UserDTO getCurrentUser(String username) {
-        User user = userRepository.findByUsernameIgnoreCase(username);
+        User user = userRepository.findByUsernameIgnoreCaseWithCompany(username);
         if (user == null) {
             throw new NotFoundException("User not found");
         }
@@ -139,8 +149,9 @@ public class UserServiceImpl implements UserService {
     }
     
     @Override
+    @Transactional
     public UserDTO updateCurrentUser(String username, UserDTO userDTO) {
-        User user = userRepository.findByUsernameIgnoreCase(username);
+        User user = userRepository.findByUsernameIgnoreCaseWithCompany(username);
         if (user == null) {
             throw new NotFoundException("User not found");
         }
@@ -171,6 +182,7 @@ public class UserServiceImpl implements UserService {
     }
     
     @Override
+    @Transactional
     public void changePassword(String username, ChangePasswordRequest request) {
         User user = userRepository.findByUsernameIgnoreCase(username);
         if (user == null) {
@@ -188,6 +200,7 @@ public class UserServiceImpl implements UserService {
     }
     
     @Override
+    @Transactional
     public String uploadAvatar(String username, MultipartFile file) throws IOException {
         User user = userRepository.findByUsernameIgnoreCase(username);
         if (user == null) {
@@ -208,8 +221,9 @@ public class UserServiceImpl implements UserService {
     }
     
     @Override
+    @Transactional(readOnly = true)
     public UserStatsDTO getUserStats(String username) {
-        User user = userRepository.findByUsernameIgnoreCase(username);
+        User user = userRepository.findByUsernameIgnoreCaseWithCompany(username);
         if (user == null) {
             throw new NotFoundException("User not found");
         }
