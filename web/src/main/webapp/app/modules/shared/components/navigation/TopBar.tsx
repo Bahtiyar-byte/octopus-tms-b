@@ -51,8 +51,6 @@ const Topbar: React.FC = () => {
   const brokerResourcesItems = [
     { path: '/broker/workflows', label: 'Workflows' },
     { path: '/broker/reports', label: 'Reports' },
-    { path: '/broker/customers', label: 'Customers' },
-    { path: '/broker/carriers', label: 'Carriers' },
     { path: '/broker/documents', label: 'Documents' },
     { path: '/broker/contracts', label: 'Contracts' },
     { path: '/broker/payments', label: 'Invoices' },
@@ -101,6 +99,10 @@ const Topbar: React.FC = () => {
     ];
   }
   // Otherwise show carrier routes
+  else if (user?.companyType === CompanyType.CARRIER) {
+    routes = [...carrierRoutes];
+  }
+  // Default fallback (should not happen with proper auth)
   else {
     routes = [...carrierRoutes];
   }

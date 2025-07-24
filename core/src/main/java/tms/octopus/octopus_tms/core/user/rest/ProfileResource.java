@@ -14,6 +14,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import tms.octopus.octopus_tms.core.user.model.ChangePasswordRequest;
 import tms.octopus.octopus_tms.core.user.model.UserDTO;
 import tms.octopus.octopus_tms.core.user.model.UserStatsDTO;
@@ -33,7 +35,9 @@ public class ProfileResource {
     @Operation(summary = "Get current user profile")
     @GetMapping
     public ResponseEntity<UserDTO> getCurrentUser(Principal principal) {
-        return ResponseEntity.ok(userService.getCurrentUser(principal.getName()));
+        String username = principal != null ? principal.getName() : 
+            SecurityContextHolder.getContext().getAuthentication().getName();
+        return ResponseEntity.ok(userService.getCurrentUser(username));
     }
 
     @Operation(summary = "Update current user profile")
@@ -41,7 +45,9 @@ public class ProfileResource {
     public ResponseEntity<UserDTO> updateCurrentUser(
             Principal principal,
             @RequestBody @Valid final UserDTO userDTO) {
-        return ResponseEntity.ok(userService.updateCurrentUser(principal.getName(), userDTO));
+        String username = principal != null ? principal.getName() : 
+            SecurityContextHolder.getContext().getAuthentication().getName();
+        return ResponseEntity.ok(userService.updateCurrentUser(username, userDTO));
     }
 
     @Operation(summary = "Change password")
@@ -50,7 +56,9 @@ public class ProfileResource {
     public ResponseEntity<Void> changePassword(
             Principal principal,
             @RequestBody @Valid final ChangePasswordRequest request) {
-        userService.changePassword(principal.getName(), request);
+        String username = principal != null ? principal.getName() : 
+            SecurityContextHolder.getContext().getAuthentication().getName();
+        userService.changePassword(username, request);
         return ResponseEntity.noContent().build();
     }
 
@@ -61,13 +69,17 @@ public class ProfileResource {
     public ResponseEntity<String> uploadAvatar(
             Principal principal,
             @RequestParam("file") MultipartFile file) throws IOException {
-        String avatarUrl = userService.uploadAvatar(principal.getName(), file);
+        String username = principal != null ? principal.getName() : 
+            SecurityContextHolder.getContext().getAuthentication().getName();
+        String avatarUrl = userService.uploadAvatar(username, file);
         return ResponseEntity.ok(avatarUrl);
     }
 
     @Operation(summary = "Get user statistics")
     @GetMapping("/stats")
     public ResponseEntity<UserStatsDTO> getUserStats(Principal principal) {
-        return ResponseEntity.ok(userService.getUserStats(principal.getName()));
+        String username = principal != null ? principal.getName() : 
+            SecurityContextHolder.getContext().getAuthentication().getName();
+        return ResponseEntity.ok(userService.getUserStats(username));
     }
 }
