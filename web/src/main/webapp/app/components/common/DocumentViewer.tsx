@@ -14,7 +14,7 @@ interface DocumentViewerProps {
     documentType?: string
 }
 
-const DocumentViewer: React.FC<DocumentViewerProps> = ({file, className = '', documentUrl, documentType}) => {
+export const DocumentViewer: React.FC<DocumentViewerProps> = ({file, className = '', documentUrl, documentType}) => {
     const [numPages, setNumPages] = useState<number | null>(null);
     const [pageNumber, setPageNumber] = useState<number>(1);
     const [scale, setScale] = useState<number>(1.0);

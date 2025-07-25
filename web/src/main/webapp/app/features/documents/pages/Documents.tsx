@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Modal } from '../../../../components';
-import DocumentViewer from '../../../../components/DocumentViewer';
-import { mockActions, notify } from '../../../../services';
-import { getSamplePdfUrlById, getSampleImageUrl } from '../../../../services/documentService';
-import { useAuth } from '../../../../context/AuthContext';
-import PageLayout from '../../layouts/PageLayout';
+import { Card, Modal } from '@components/ui';
+import DocumentViewer from '@components/common/DocumentViewer';
+import { mockActions, notify } from '@services/index';
+import { getSamplePdfUrlById, getSampleImageUrl } from '@services/documentService';
+import { useAuth } from '@context/AuthContext';
+import PageLayout from '@components/layout/PageLayout';
 import { 
   getDocumentConfig, 
   getDocTypeLabel, 
@@ -13,8 +13,8 @@ import {
   DOCUMENT_TYPES,
   CustomAction,
   DocumentCategory
-} from '../../config/documentConfig';
-import { CompanyType } from '../../../../types';
+} from '../config';
+import { CompanyType } from '../../../../app/types/core/user.types';
 
 interface Document {
   id: string;

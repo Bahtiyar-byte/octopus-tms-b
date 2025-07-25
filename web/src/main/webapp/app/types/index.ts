@@ -5,6 +5,7 @@
 
 // Re-export all core types
 export * from './core';
+export { CompanyType } from './core/user.types';
 
 // Legacy exports for backward compatibility - will be removed in future
 // export * from './user'; // Temporarily disabled to fix module resolution issue

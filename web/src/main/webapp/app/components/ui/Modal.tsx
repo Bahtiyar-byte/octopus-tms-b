@@ -16,7 +16,7 @@ export interface ModalProps {
   contentClassName?: string;
 }
 
-const Modal = ({ 
+export const Modal = ({ 
   isOpen, 
   onClose, 
   children, 

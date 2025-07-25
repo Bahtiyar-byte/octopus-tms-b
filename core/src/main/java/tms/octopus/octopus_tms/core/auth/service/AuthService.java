@@ -83,7 +83,7 @@ public class AuthService {
     }
     
     public String generateAccessToken(User user) {
-        Algorithm algorithm = Algorithm.HMAC256(jwtSecret);
+        Algorithm algorithm = Algorithm.HMAC512(jwtSecret);
         
         return JWT.create()
                 .withSubject(user.getUsername())
@@ -91,7 +91,7 @@ public class AuthService {
                 .withClaim("roles", List.of(user.getRole().name()))
                 .withClaim("companyId", user.getCompany() != null ? user.getCompany().getId().toString() : null)
                 .withClaim("companyName", user.getCompany() != null ? user.getCompany().getName() : null)
-                .withClaim("companyType", user.getCompanyType() != null ? user.getCompanyType().name() : null)
+                .withClaim("companyType", user.getCompanyType() != null ? user.getCompanyType().name() : "")
                 .withExpiresAt(Date.from(Instant.now().plus(jwtExpiration, ChronoUnit.SECONDS)))
                 .withIssuedAt(Date.from(Instant.now()))
                 .sign(algorithm);

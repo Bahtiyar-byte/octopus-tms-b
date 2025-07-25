@@ -7,7 +7,7 @@ import Dashboard from '../shared/pages/Dashboard/Dashboard';
 import Loads from '../shared/pages/Loads/Loads';
 import Tracking from '../shared/pages/Tracking/Tracking';
 import Reports from '../shared/pages/Reports/Reports';
-import Documents from '../shared/pages/Documents/Documents';
+import Documents from '../../features/documents/pages/Documents';
 import Invoices from '../shared/pages/Invoices/Invoices';
 
 // Import Shared pages

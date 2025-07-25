@@ -4,7 +4,7 @@ import { UserRole, CompanyType } from '../../types/core/user.types';
 
 // Import Shared pages
 import Dashboard from '../shared/pages/Dashboard/Dashboard';
-import Documents from '../shared/pages/Documents/Documents';
+import Documents from '../../features/documents/pages/Documents';
 import Tracking from '../shared/pages/Tracking/Tracking';
 import Invoices from '../shared/pages/Invoices/Invoices';
 import Reports from '../shared/pages/Reports/Reports';

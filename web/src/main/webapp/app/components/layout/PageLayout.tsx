@@ -8,13 +8,7 @@ interface PageLayoutProps {
   className?: string;
 }
 
-export const PageLayout: React.FC<PageLayoutProps> = ({ 
-  title, 
-  subtitle, 
-  actions, 
-  children,
-  className = ''
-}) => {
+export const PageLayout: React.FC<PageLayoutProps> = ({ title, subtitle, actions, children, className = '' }) => {
   return (
     <div className={`fade-in ${className}`}>
       <div className="flex justify-between items-center mb-6">

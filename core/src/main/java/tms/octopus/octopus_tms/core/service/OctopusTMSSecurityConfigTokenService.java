@@ -27,7 +27,7 @@ public class OctopusTMSSecurityConfigTokenService {
     private final UserRepository userRepository;
 
     public OctopusTMSSecurityConfigTokenService(
-            @Value("${octopusTMSSecurityConfig.secret}") final String secret,
+            @Value("${jwt.secret:octopus-tms-secret-key-2025}") final String secret,
             final UserRepository userRepository) {
         this.hmac512 = Algorithm.HMAC512(secret);
         this.verifier = JWT.require(this.hmac512).build();
