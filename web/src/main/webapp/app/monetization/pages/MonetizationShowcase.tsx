@@ -241,6 +241,14 @@ const MonetizationShowcase: React.FC = () => {
                 </div>
               ))}
             </div>
+            
+            {/* Monetization Metadata */}
+            <div className="mt-4 flex flex-wrap justify-between items-center text-sm text-gray-500">
+              <span className="text-green-600 font-medium">💰 Revenue Stream: TBD</span>
+              <span className="text-blue-600">⚙️ Optionality: Toggleable</span>
+              <span className="text-purple-600">📈 Value Metric: ROI Pending</span>
+              <span className="text-yellow-600">🧠 AI Enhanced: Planned</span>
+            </div>
           </div>
         </section>
 
@@ -294,6 +302,14 @@ const MonetizationShowcase: React.FC = () => {
                 </div>
               </div>
             )}
+            
+            {/* Monetization Metadata */}
+            <div className="mt-4 flex flex-wrap justify-between items-center text-sm text-gray-500">
+              <span className="text-green-600 font-medium">💰 Revenue Stream: TBD</span>
+              <span className="text-blue-600">⚙️ Optionality: Toggleable</span>
+              <span className="text-purple-600">📈 Value Metric: ROI Pending</span>
+              <span className="text-yellow-600">🧠 AI Enhanced: Planned</span>
+            </div>
           </div>
         </section>
 
@@ -422,6 +438,14 @@ const MonetizationShowcase: React.FC = () => {
                 </div>
               </div>
             )}
+            
+            {/* Monetization Metadata */}
+            <div className="mt-4 flex flex-wrap justify-between items-center text-sm text-gray-500">
+              <span className="text-green-600 font-medium">💰 Revenue Stream: TBD</span>
+              <span className="text-blue-600">⚙️ Optionality: Toggleable</span>
+              <span className="text-purple-600">📈 Value Metric: ROI Pending</span>
+              <span className="text-yellow-600">🧠 AI Enhanced: Planned</span>
+            </div>
           </div>
         </section>
 
@@ -597,6 +621,14 @@ const MonetizationShowcase: React.FC = () => {
                 </div>
               </div>
             </div>
+            
+            {/* Monetization Metadata */}
+            <div className="mt-4 flex flex-wrap justify-between items-center text-sm text-gray-500 px-6 pb-4">
+              <span className="text-green-600 font-medium">💰 Revenue Stream: TBD</span>
+              <span className="text-blue-600">⚙️ Optionality: Toggleable</span>
+              <span className="text-purple-600">📈 Value Metric: ROI Pending</span>
+              <span className="text-yellow-600">🧠 AI Enhanced: Planned</span>
+            </div>
           </div>
         </section>
 
@@ -650,6 +682,14 @@ const MonetizationShowcase: React.FC = () => {
                 </div>
               </div>
             )}
+            
+            {/* Monetization Metadata */}
+            <div className="mt-4 flex flex-wrap justify-between items-center text-sm text-gray-500">
+              <span className="text-green-600 font-medium">💰 Revenue Stream: TBD</span>
+              <span className="text-blue-600">⚙️ Optionality: Toggleable</span>
+              <span className="text-purple-600">📈 Value Metric: ROI Pending</span>
+              <span className="text-yellow-600">🧠 AI Enhanced: Planned</span>
+            </div>
           </div>
         </section>
 
@@ -775,6 +815,14 @@ const MonetizationShowcase: React.FC = () => {
                 </div>
               ))}
             </div>
+            
+            {/* Monetization Metadata */}
+            <div className="mt-4 flex flex-wrap justify-between items-center text-sm text-gray-500">
+              <span className="text-green-600 font-medium">💰 Revenue Stream: TBD</span>
+              <span className="text-blue-600">⚙️ Optionality: Toggleable</span>
+              <span className="text-purple-600">📈 Value Metric: ROI Pending</span>
+              <span className="text-yellow-600">🧠 AI Enhanced: Planned</span>
+            </div>
           </div>
         </section>
 
@@ -897,6 +945,14 @@ const MonetizationShowcase: React.FC = () => {
                 Search for Carriers
               </button>
             </div>
+            
+            {/* Monetization Metadata */}
+            <div className="mt-4 flex flex-wrap justify-between items-center text-sm text-gray-500">
+              <span className="text-green-600 font-medium">💰 Revenue Stream: TBD</span>
+              <span className="text-blue-600">⚙️ Optionality: Toggleable</span>
+              <span className="text-purple-600">📈 Value Metric: ROI Pending</span>
+              <span className="text-yellow-600">🧠 AI Enhanced: Planned</span>
+            </div>
           </div>
         </section>
 
@@ -973,6 +1029,14 @@ const MonetizationShowcase: React.FC = () => {
                 </div>
               ))}
             </div>
+            
+            {/* Monetization Metadata */}
+            <div className="mt-4 flex flex-wrap justify-between items-center text-sm text-gray-500">
+              <span className="text-green-600 font-medium">💰 Revenue Stream: TBD</span>
+              <span className="text-blue-600">⚙️ Optionality: Toggleable</span>
+              <span className="text-purple-600">📈 Value Metric: ROI Pending</span>
+              <span className="text-yellow-600">🧠 AI Enhanced: Planned</span>
+            </div>
           </div>
         </section>
 
@@ -1025,6 +1089,557 @@ const MonetizationShowcase: React.FC = () => {
                 </div>
               </div>
             ))}
+          </div>
+            
+            {/* Monetization Metadata */}
+            <div className="mt-4 flex flex-wrap justify-between items-center text-sm text-gray-500">
+              <span className="text-green-600 font-medium">💰 Revenue Stream: TBD</span>
+              <span className="text-blue-600">⚙️ Optionality: Toggleable</span>
+              <span className="text-purple-600">📈 Value Metric: ROI Pending</span>
+              <span className="text-yellow-600">🧠 AI Enhanced: Planned</span>
+            </div>
+        </section>
+
+        {/* 10. Team Settings (Broker) */}
+        <section className="mb-16">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">
+            10. Team Settings (Broker)
+          </h2>
+          <div className="bg-white rounded-lg shadow-lg p-6">
+            <div className="p-6">
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">Team Settings</h3>
+              <p className="text-sm text-gray-600 mb-6">
+                Configure how your brokerage team collaborates and manages loads
+              </p>
+              
+              <div className="space-y-6">
+                <div>
+                  <h4 className="text-lg font-medium text-gray-900 mb-4">Load Management</h4>
+                  
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <label className="text-sm font-medium text-gray-700">
+                          Require approval for high-value loads
+                        </label>
+                        <p className="text-sm text-gray-500 mt-1">
+                          Loads above threshold require supervisor approval
+                        </p>
+                      </div>
+                      <label className="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" className="sr-only peer" />
+                        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                      </label>
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Load Assignment Method
+                      </label>
+                      <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                        <option>Round Robin</option>
+                        <option>Manual Assignment</option>
+                        <option>Performance Based</option>
+                        <option>Territory Based</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className="text-lg font-medium text-gray-900 mb-4">Collaboration</h4>
+                  
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <label className="text-sm font-medium text-gray-700">
+                          Enable team chat
+                        </label>
+                        <p className="text-sm text-gray-500 mt-1">
+                          Allow brokers to communicate within the platform
+                        </p>
+                      </div>
+                      <label className="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" className="sr-only peer" defaultChecked />
+                        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                      </label>
+                    </div>
+                    
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <label className="text-sm font-medium text-gray-700">
+                          Share commissions on team deals
+                        </label>
+                        <p className="text-sm text-gray-500 mt-1">
+                          Split commissions when multiple brokers work on a load
+                        </p>
+                      </div>
+                      <label className="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" className="sr-only peer" />
+                        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="pt-4 flex justify-end">
+                  <button className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium">
+                    Save Team Settings
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            {/* Monetization Metadata */}
+            <div className="mt-4 flex flex-wrap justify-between items-center text-sm text-gray-500 px-6 pb-4">
+              <span className="text-green-600 font-medium">💰 Revenue Stream: TBD</span>
+              <span className="text-blue-600">⚙️ Optionality: Toggleable</span>
+              <span className="text-purple-600">📈 Value Metric: ROI Pending</span>
+              <span className="text-yellow-600">🧠 AI Enhanced: Planned</span>
+            </div>
+          </div>
+        </section>
+
+        {/* 11. Backup & Restore (All Roles) */}
+        <section className="mb-16">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">
+            11. Backup & Restore (All Roles)
+          </h2>
+          <div className="bg-white rounded-lg shadow-lg p-6">
+            <div className="p-6">
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">Backup & Restore</h3>
+              <p className="text-sm text-gray-600 mb-6">Manage system backups and data exports</p>
+              
+              <div className="space-y-6">
+                <div>
+                  <h4 className="text-lg font-medium text-gray-900 mb-4">Backup Settings</h4>
+                  
+                  <div className="bg-gray-50 rounded-lg p-4">
+                    <div className="flex items-center justify-between mb-4">
+                      <div>
+                        <label className="text-sm font-medium text-gray-700">
+                          Automatic Backups
+                        </label>
+                        <p className="text-sm text-gray-500">Schedule regular system backups</p>
+                      </div>
+                      <label className="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" className="sr-only peer" defaultChecked />
+                        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
+                      </label>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Backup Frequency
+                        </label>
+                        <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                          <option>Daily</option>
+                          <option>Weekly</option>
+                          <option>Monthly</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Retention Period (days)
+                        </label>
+                        <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                          <option>30 days</option>
+                          <option>60 days</option>
+                          <option>90 days</option>
+                          <option>180 days</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className="text-lg font-medium text-gray-900 mb-2">Manual Backup</h4>
+                  <p className="text-sm text-gray-600 mb-4">Create a manual backup of your system data</p>
+                  <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center gap-2">
+                    <i className="fas fa-download"></i>
+                    Create Backup Now
+                  </button>
+                </div>
+
+                <div>
+                  <h4 className="text-lg font-medium text-gray-900 mb-4">Backup History</h4>
+                  <div className="overflow-x-auto">
+                    <table className="min-w-full divide-y divide-gray-200">
+                      <thead className="bg-gray-50">
+                        <tr>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Date & Time
+                          </th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Size
+                          </th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Type
+                          </th>
+                          <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Actions
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="bg-white divide-y divide-gray-200">
+                        <tr>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            May 15, 2023 - 08:30 AM
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            42.5 MB
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                              Automatic
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <button className="text-blue-600 hover:text-blue-900 mr-3">Download</button>
+                            <button className="text-green-600 hover:text-green-900">Restore</button>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            May 14, 2023 - 08:30 AM
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            42.3 MB
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                              Automatic
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <button className="text-blue-600 hover:text-blue-900 mr-3">Download</button>
+                            <button className="text-green-600 hover:text-green-900">Restore</button>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            May 13, 2023 - 02:15 PM
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            42.1 MB
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                              Manual
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <button className="text-blue-600 hover:text-blue-900 mr-3">Download</button>
+                            <button className="text-green-600 hover:text-green-900">Restore</button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className="text-lg font-medium text-gray-900 mb-4">Data Export</h4>
+                  <p className="text-sm text-gray-600 mb-4">Export your data in different formats</p>
+                  <div className="flex gap-4">
+                    <button className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium">
+                      <i className="fas fa-file-excel"></i>
+                      Export as Excel
+                    </button>
+                    <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium">
+                      <i className="fas fa-file-csv"></i>
+                      Export as CSV
+                    </button>
+                    <button className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium">
+                      <i className="fas fa-file-pdf"></i>
+                      Export as PDF
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            {/* Monetization Metadata */}
+            <div className="mt-4 flex flex-wrap justify-between items-center text-sm text-gray-500 px-6 pb-4">
+              <span className="text-green-600 font-medium">💰 Revenue Stream: TBD</span>
+              <span className="text-blue-600">⚙️ Optionality: Toggleable</span>
+              <span className="text-purple-600">📈 Value Metric: ROI Pending</span>
+              <span className="text-yellow-600">🧠 AI Enhanced: Planned</span>
+            </div>
+          </div>
+        </section>
+
+        {/* 12. System Logs (All Roles) */}
+        <section className="mb-16">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">
+            12. System Logs (All Roles)
+          </h2>
+          <div className="bg-white rounded-lg shadow-lg p-6">
+            <div className="p-6">
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">System Logs</h3>
+              <p className="text-sm text-gray-600 mb-6">View and manage system logs and events</p>
+              
+              <div className="space-y-6">
+                <div>
+                  <h4 className="text-lg font-medium text-gray-900 mb-4">Log Filters</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Log Level
+                      </label>
+                      <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                        <option>All Levels</option>
+                        <option>Error</option>
+                        <option>Warning</option>
+                        <option>Info</option>
+                        <option>Debug</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Source
+                      </label>
+                      <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                        <option>All Sources</option>
+                        <option>PaymentService</option>
+                        <option>AuthService</option>
+                        <option>SystemMonitor</option>
+                        <option>BackupService</option>
+                        <option>DatabaseService</option>
+                        <option>LoadService</option>
+                        <option>UserService</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Date From
+                      </label>
+                      <input
+                        type="date"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Date To
+                      </label>
+                      <input
+                        type="date"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex gap-3 mt-4">
+                    <button className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors font-medium flex items-center gap-2">
+                      <i className="fas fa-sync"></i>
+                      Refresh
+                    </button>
+                    <button className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors font-medium flex items-center gap-2">
+                      <i className="fas fa-download"></i>
+                      Export
+                    </button>
+                    <button className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors font-medium">
+                      Clear Logs
+                    </button>
+                  </div>
+                </div>
+
+                <div>
+                  <div className="overflow-x-auto">
+                    <table className="min-w-full divide-y divide-gray-200">
+                      <thead className="bg-gray-50">
+                        <tr>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Timestamp
+                          </th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Level
+                          </th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Source
+                          </th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Message
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="bg-white divide-y divide-gray-200">
+                        <tr>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            May 15, 2023 - 10:23:45 AM
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                              ERROR
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            PaymentService
+                          </td>
+                          <td className="px-6 py-4 text-sm text-gray-900">
+                            Failed to connect to payment gateway
+                          </td>
+                        </tr>
+                        <tr>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            May 15, 2023 - 09:45:12 AM
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                              INFO
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            AuthService
+                          </td>
+                          <td className="px-6 py-4 text-sm text-gray-900">
+                            User john.doe@example.com logged in
+                          </td>
+                        </tr>
+                        <tr>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            May 15, 2023 - 09:30:05 AM
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                              WARNING
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            SystemMonitor
+                          </td>
+                          <td className="px-6 py-4 text-sm text-gray-900">
+                            High CPU usage detected (85%)
+                          </td>
+                        </tr>
+                        <tr>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            May 15, 2023 - 08:15:30 AM
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                              INFO
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            BackupService
+                          </td>
+                          <td className="px-6 py-4 text-sm text-gray-900">
+                            System backup completed successfully
+                          </td>
+                        </tr>
+                        <tr>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            May 14, 2023 - 11:42:18 PM
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                              ERROR
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            DatabaseService
+                          </td>
+                          <td className="px-6 py-4 text-sm text-gray-900">
+                            Database query timeout after 30 seconds
+                          </td>
+                        </tr>
+                        <tr>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            May 14, 2023 - 10:30:45 PM
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                              INFO
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            LoadService
+                          </td>
+                          <td className="px-6 py-4 text-sm text-gray-900">
+                            Load #12345 status changed to 'Delivered'
+                          </td>
+                        </tr>
+                        <tr>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            May 14, 2023 - 08:22:10 PM
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                              WARNING
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            SystemMonitor
+                          </td>
+                          <td className="px-6 py-4 text-sm text-gray-900">
+                            Low disk space warning (15% remaining)
+                          </td>
+                        </tr>
+                        <tr>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            May 14, 2023 - 05:17:42 PM
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                              INFO
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            UserService
+                          </td>
+                          <td className="px-6 py-4 text-sm text-gray-900">
+                            New user jane.smith@example.com created
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className="text-lg font-medium text-gray-900 mb-4">Log Settings</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Log Retention Period
+                      </label>
+                      <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                        <option>30 days</option>
+                        <option>60 days</option>
+                        <option>90 days</option>
+                        <option>180 days</option>
+                        <option>365 days</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Minimum Log Level
+                      </label>
+                      <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                        <option>Info</option>
+                        <option>Warning</option>
+                        <option>Error</option>
+                        <option>Debug</option>
+                      </select>
+                    </div>
+                  </div>
+                  <button className="mt-4 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium">
+                    Save Settings
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            {/* Monetization Metadata */}
+            <div className="mt-4 flex flex-wrap justify-between items-center text-sm text-gray-500 px-6 pb-4">
+              <span className="text-green-600 font-medium">💰 Revenue Stream: TBD</span>
+              <span className="text-blue-600">⚙️ Optionality: Toggleable</span>
+              <span className="text-purple-600">📈 Value Metric: ROI Pending</span>
+              <span className="text-yellow-600">🧠 AI Enhanced: Planned</span>
+            </div>
           </div>
         </section>
 
