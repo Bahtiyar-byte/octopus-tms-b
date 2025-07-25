@@ -112,3 +112,5 @@ temp/
 *.bak
 *.swp
 *~
+/profile-stats-userFields-are-broken.png
+/.env
