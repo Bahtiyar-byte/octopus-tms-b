@@ -104,20 +104,20 @@ const brokerIntegrations = [
   { id: 'dat', name: 'DAT Load Board', description: 'Access to 1M+ loads daily', category: 'Load Boards', icon: 'fa-truck', iconBg: 'bg-blue-100 text-blue-600', isConnected: true, apiKey: 'DAT-API-KEY-12345' },
   { id: 'truckstop', name: 'TruckStop', description: 'Real-time freight matching', category: 'Load Boards', icon: 'fa-shipping-fast', iconBg: 'bg-green-100 text-green-600', isConnected: true, apiKey: 'TRUCKSTOP-API-KEY-67890' },
   { id: '123loadboard', name: '123LoadBoard', description: 'Direct shipper connections', category: 'Load Boards', icon: 'fa-road', iconBg: 'bg-purple-100 text-purple-600', isConnected: false, apiKey: '' },
-  
+
   // Tracking
   { id: 'samsara', name: 'Samsara ELD', description: 'Real-time GPS tracking', category: 'Tracking', icon: 'fa-location-dot', iconBg: 'bg-orange-100 text-orange-600', isConnected: true, apiKey: 'SAMSARA-API-KEY-11111' },
   { id: 'project44', name: 'Project44', description: 'Supply chain visibility', category: 'Tracking', icon: 'fa-eye', iconBg: 'bg-indigo-100 text-indigo-600', isConnected: false, apiKey: '' },
   { id: 'fourkites', name: 'FourKites', description: 'Predictive visibility platform', category: 'Tracking', icon: 'fa-chart-line', iconBg: 'bg-teal-100 text-teal-600', isConnected: false, apiKey: '' },
-  
+
   // Accounting
   { id: 'quickbooks', name: 'QuickBooks', description: 'Automated invoicing & payments', category: 'Accounting', icon: 'fa-calculator', iconBg: 'bg-emerald-100 text-emerald-600', isConnected: true, apiKey: 'QUICKBOOKS-API-KEY-22222' },
   { id: 'triumph', name: 'Triumph Factoring', description: 'Same-day funding for invoices', category: 'Accounting', icon: 'fa-money-bill-wave', iconBg: 'bg-yellow-100 text-yellow-600', isConnected: false, apiKey: '' },
-  
+
   // Compliance
   { id: 'rmis', name: 'RMIS Insurance', description: 'Certificate tracking & verification', category: 'Compliance', icon: 'fa-shield-halved', iconBg: 'bg-red-100 text-red-600', isConnected: true, apiKey: 'RMIS-API-KEY-33333' },
   { id: 'carrierwatch', name: 'CarrierWatch', description: 'Carrier monitoring & alerts', category: 'Compliance', icon: 'fa-user-shield', iconBg: 'bg-slate-100 text-slate-600', isConnected: false, apiKey: '' },
-  
+
   // Communication
   { id: 'twilio', name: 'Twilio SMS', description: 'Automated text notifications', category: 'Communication', icon: 'fa-comment-sms', iconBg: 'bg-pink-100 text-pink-600', isConnected: true, apiKey: 'TWILIO-API-KEY-44444' }
 ];
@@ -141,6 +141,29 @@ const MonetizationShowcase: React.FC = () => {
     paymentSchedule: 'monthly',
     paymentDay: 15
   });
+
+  // Collapsible sections state - first 3 expanded by default
+  const [expandedSections, setExpandedSections] = useState<{ [key: string]: boolean }>({
+    'section-1': true,
+    'section-2': true,
+    'section-3': true,
+    'section-4': false,
+    'section-5': false,
+    'section-6': false,
+    'section-7': false,
+    'section-8': false,
+    'section-9': false,
+    'section-10': false,
+    'section-11': false,
+    'section-12': false,
+  });
+
+  const toggleSection = (sectionId: string) => {
+    setExpandedSections(prev => ({
+      ...prev,
+      [sectionId]: !prev[sectionId]
+    }));
+  };
 
   // Format currency helper
   const formatCurrency = (amount: number) => {
@@ -173,11 +196,28 @@ const MonetizationShowcase: React.FC = () => {
         </div>
 
         {/* 1. Smart Load Search - Found Match (Carrier) */}
-        <section className="mb-16">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">
-            1. Smart Load Search - Found Match (Carrier)
-          </h2>
-          <div className="bg-white rounded-lg shadow-lg p-6">
+        <section className="mb-10 border rounded-lg shadow-sm">
+          <div 
+            className="p-4 flex justify-between items-center cursor-pointer hover:bg-gray-50"
+            onClick={() => toggleSection('section-1')}
+          >
+            <div>
+              <h2 className="text-lg font-semibold">1. Smart Load Search – Found Match (Carrier)</h2>
+              <p className="text-gray-500 text-sm italic">Instantly match loads with optimized profitability & route efficiency</p>
+              <div className="mt-1 flex gap-4 text-xs text-gray-600">
+                <span>💰 Revenue: TBD</span>
+                <span>⚙️ Optionality: Toggleable</span>
+                <span>📈 Value: ROI Pending</span>
+                <span>🧠 AI: Planned</span>
+              </div>
+            </div>
+            <button className="text-blue-600 underline text-sm">
+              {expandedSections['section-1'] ? 'Collapse' : 'Expand'}
+            </button>
+          </div>
+
+          {expandedSections['section-1'] && (
+            <div className="p-4 bg-white border-t">
             <div className="space-y-4">
               {mockLoads.map((load) => (
                 <div key={load.id} className="border rounded-lg p-5 hover:shadow-md transition-shadow">
@@ -241,30 +281,40 @@ const MonetizationShowcase: React.FC = () => {
                 </div>
               ))}
             </div>
-            
-            {/* Monetization Metadata */}
-            <div className="mt-4 flex flex-wrap justify-between items-center text-sm text-gray-500">
-              <span className="text-green-600 font-medium">💰 Revenue Stream: TBD</span>
-              <span className="text-blue-600">⚙️ Optionality: Toggleable</span>
-              <span className="text-purple-600">📈 Value Metric: ROI Pending</span>
-              <span className="text-yellow-600">🧠 AI Enhanced: Planned</span>
             </div>
-          </div>
+          )}
         </section>
 
         {/* 2. Smart Load Search - Loading Animation (Carrier) */}
-        <section className="mb-16">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">
-            2. Smart Load Search - Loading Animation (Carrier)
-          </h2>
-          <div className="bg-white rounded-lg shadow-lg p-6">
+        <section className="mb-10 border rounded-lg shadow-sm">
+          <div 
+            className="p-4 flex justify-between items-center cursor-pointer hover:bg-gray-50"
+            onClick={() => toggleSection('section-2')}
+          >
+            <div>
+              <h2 className="text-lg font-semibold">2. Smart Load Search – Loading Animation (Carrier)</h2>
+              <p className="text-gray-500 text-sm italic">AI-powered search with real-time progress tracking and load analysis</p>
+              <div className="mt-1 flex gap-4 text-xs text-gray-600">
+                <span>💰 Revenue: TBD</span>
+                <span>⚙️ Optionality: Toggleable</span>
+                <span>📈 Value: ROI Pending</span>
+                <span>🧠 AI: Planned</span>
+              </div>
+            </div>
+            <button className="text-blue-600 underline text-sm">
+              {expandedSections['section-2'] ? 'Collapse' : 'Expand'}
+            </button>
+          </div>
+
+          {expandedSections['section-2'] && (
+            <div className="p-4 bg-white border-t">
             <button 
               onClick={() => setSearchingLoads(!searchingLoads)}
               className="mb-4 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
             >
               {searchingLoads ? 'Stop Demo' : 'Start Search Demo'}
             </button>
-            
+
             {searchingLoads && (
               <div className="relative bg-gray-50 rounded-lg p-8">
                 <div className="text-center space-y-6">
@@ -302,30 +352,40 @@ const MonetizationShowcase: React.FC = () => {
                 </div>
               </div>
             )}
-            
-            {/* Monetization Metadata */}
-            <div className="mt-4 flex flex-wrap justify-between items-center text-sm text-gray-500">
-              <span className="text-green-600 font-medium">💰 Revenue Stream: TBD</span>
-              <span className="text-blue-600">⚙️ Optionality: Toggleable</span>
-              <span className="text-purple-600">📈 Value Metric: ROI Pending</span>
-              <span className="text-yellow-600">🧠 AI Enhanced: Planned</span>
             </div>
-          </div>
+          )}
         </section>
 
         {/* 3. Smart Carrier Match - Call in Progress Modal (Broker) */}
-        <section className="mb-16">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">
-            3. Smart Carrier Match - Call in Progress Modal (Broker)
-          </h2>
-          <div className="bg-white rounded-lg shadow-lg p-6">
+        <section className="mb-10 border rounded-lg shadow-sm">
+          <div 
+            className="p-4 flex justify-between items-center cursor-pointer hover:bg-gray-50"
+            onClick={() => toggleSection('section-3')}
+          >
+            <div>
+              <h2 className="text-lg font-semibold">3. Smart Carrier Match – Call in Progress Modal (Broker)</h2>
+              <p className="text-gray-500 text-sm italic">Integrated calling system with real-time carrier engagement tracking</p>
+              <div className="mt-1 flex gap-4 text-xs text-gray-600">
+                <span>💰 Revenue: TBD</span>
+                <span>⚙️ Optionality: Toggleable</span>
+                <span>📈 Value: ROI Pending</span>
+                <span>🧠 AI: Planned</span>
+              </div>
+            </div>
+            <button className="text-blue-600 underline text-sm">
+              {expandedSections['section-3'] ? 'Collapse' : 'Expand'}
+            </button>
+          </div>
+
+          {expandedSections['section-3'] && (
+            <div className="p-4 bg-white border-t">
             <button 
               onClick={() => setShowCarrierCallModal(!showCarrierCallModal)}
               className="mb-4 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
             >
               {showCarrierCallModal ? 'Close Call Demo' : 'Open Call Demo'}
             </button>
-            
+
             {showCarrierCallModal && (
               <div className="space-y-6 max-w-2xl mx-auto">
                 <div className="flex items-center gap-3">
@@ -438,29 +498,39 @@ const MonetizationShowcase: React.FC = () => {
                 </div>
               </div>
             )}
-            
-            {/* Monetization Metadata */}
-            <div className="mt-4 flex flex-wrap justify-between items-center text-sm text-gray-500">
-              <span className="text-green-600 font-medium">💰 Revenue Stream: TBD</span>
-              <span className="text-blue-600">⚙️ Optionality: Toggleable</span>
-              <span className="text-purple-600">📈 Value Metric: ROI Pending</span>
-              <span className="text-yellow-600">🧠 AI Enhanced: Planned</span>
             </div>
-          </div>
+          )}
         </section>
 
         {/* 4. Commission Structure Settings (Broker) */}
-        <section className="mb-16">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">
-            4. Commission Structure Settings (Broker)
-          </h2>
-          <div className="bg-white rounded-lg shadow-lg p-6">
+        <section className="mb-10 border rounded-lg shadow-sm">
+          <div 
+            className="p-4 flex justify-between items-center cursor-pointer hover:bg-gray-50"
+            onClick={() => toggleSection('section-4')}
+          >
+            <div>
+              <h2 className="text-lg font-semibold">4. Commission Structure Settings (Broker)</h2>
+              <p className="text-gray-500 text-sm italic">Flexible tiered commission management with automated calculations</p>
+              <div className="mt-1 flex gap-4 text-xs text-gray-600">
+                <span>💰 Revenue: TBD</span>
+                <span>⚙️ Optionality: Toggleable</span>
+                <span>📈 Value: ROI Pending</span>
+                <span>🧠 AI: Planned</span>
+              </div>
+            </div>
+            <button className="text-blue-600 underline text-sm">
+              {expandedSections['section-4'] ? 'Collapse' : 'Expand'}
+            </button>
+          </div>
+
+          {expandedSections['section-4'] && (
+            <div className="p-4 bg-white border-t">
             <div className="p-6">
               <h3 className="text-xl font-semibold text-gray-900 mb-4">Commission Structure</h3>
               <p className="text-sm text-gray-600 mb-6">
                 Configure commission rates and payment schedules for your sales team
               </p>
-              
+
               <div className="space-y-6">
                 <div>
                   <h4 className="text-lg font-medium text-gray-900 mb-4">Commission Tiers</h4>
@@ -496,7 +566,7 @@ const MonetizationShowcase: React.FC = () => {
                         </div>
                       </div>
                     </div>
-                    
+
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -621,30 +691,40 @@ const MonetizationShowcase: React.FC = () => {
                 </div>
               </div>
             </div>
-            
-            {/* Monetization Metadata */}
-            <div className="mt-4 flex flex-wrap justify-between items-center text-sm text-gray-500 px-6 pb-4">
-              <span className="text-green-600 font-medium">💰 Revenue Stream: TBD</span>
-              <span className="text-blue-600">⚙️ Optionality: Toggleable</span>
-              <span className="text-purple-600">📈 Value Metric: ROI Pending</span>
-              <span className="text-yellow-600">🧠 AI Enhanced: Planned</span>
             </div>
-          </div>
+          )}
         </section>
 
         {/* 5. Smart Carrier Match - Scanning UI (Broker) */}
-        <section className="mb-16">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">
-            5. Smart Carrier Match - Scanning UI (Broker)
-          </h2>
-          <div className="bg-white rounded-lg shadow-lg p-6">
+        <section className="mb-10 border rounded-lg shadow-sm">
+          <div 
+            className="p-4 flex justify-between items-center cursor-pointer hover:bg-gray-50"
+            onClick={() => toggleSection('section-5')}
+          >
+            <div>
+              <h2 className="text-lg font-semibold">5. Smart Carrier Match – Scanning UI (Broker)</h2>
+              <p className="text-gray-500 text-sm italic">Real-time carrier search with AI-powered matching algorithms</p>
+              <div className="mt-1 flex gap-4 text-xs text-gray-600">
+                <span>💰 Revenue: TBD</span>
+                <span>⚙️ Optionality: Toggleable</span>
+                <span>📈 Value: ROI Pending</span>
+                <span>🧠 AI: Planned</span>
+              </div>
+            </div>
+            <button className="text-blue-600 underline text-sm">
+              {expandedSections['section-5'] ? 'Collapse' : 'Expand'}
+            </button>
+          </div>
+
+          {expandedSections['section-5'] && (
+            <div className="p-4 bg-white border-t">
             <button 
               onClick={() => setSearchingCarriers(!searchingCarriers)}
               className="mb-4 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
             >
               {searchingCarriers ? 'Stop Demo' : 'Start Carrier Search Demo'}
             </button>
-            
+
             {searchingCarriers && (
               <div className="relative bg-gray-50 rounded-lg p-8">
                 <div className="text-center space-y-6">
@@ -682,23 +762,33 @@ const MonetizationShowcase: React.FC = () => {
                 </div>
               </div>
             )}
-            
-            {/* Monetization Metadata */}
-            <div className="mt-4 flex flex-wrap justify-between items-center text-sm text-gray-500">
-              <span className="text-green-600 font-medium">💰 Revenue Stream: TBD</span>
-              <span className="text-blue-600">⚙️ Optionality: Toggleable</span>
-              <span className="text-purple-600">📈 Value Metric: ROI Pending</span>
-              <span className="text-yellow-600">🧠 AI Enhanced: Planned</span>
             </div>
-          </div>
+          )}
         </section>
 
         {/* 6. Smart Carrier Match - Results List UI (Broker) */}
-        <section className="mb-16">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">
-            6. Smart Carrier Match - Results List UI (Broker)
-          </h2>
-          <div className="bg-white rounded-lg shadow-lg p-6">
+        <section className="mb-10 border rounded-lg shadow-sm">
+          <div 
+            className="p-4 flex justify-between items-center cursor-pointer hover:bg-gray-50"
+            onClick={() => toggleSection('section-6')}
+          >
+            <div>
+              <h2 className="text-lg font-semibold">6. Smart Carrier Match – Results List UI (Broker)</h2>
+              <p className="text-gray-500 text-sm italic">Comprehensive carrier profiles with performance metrics and instant communication</p>
+              <div className="mt-1 flex gap-4 text-xs text-gray-600">
+                <span>💰 Revenue: TBD</span>
+                <span>⚙️ Optionality: Toggleable</span>
+                <span>📈 Value: ROI Pending</span>
+                <span>🧠 AI: Planned</span>
+              </div>
+            </div>
+            <button className="text-blue-600 underline text-sm">
+              {expandedSections['section-6'] ? 'Collapse' : 'Expand'}
+            </button>
+          </div>
+
+          {expandedSections['section-6'] && (
+            <div className="p-4 bg-white border-t">
             <div className="flex items-center gap-3 mb-4">
               <div className="p-2 bg-blue-100 rounded-lg">
                 <Truck className="w-6 h-6 text-blue-600" />
@@ -707,7 +797,7 @@ const MonetizationShowcase: React.FC = () => {
                 {mockCarriers.length} carriers matched your load requirements
               </p>
             </div>
-            
+
             <div className="space-y-4">
               {mockCarriers.map((carrier) => (
                 <div
@@ -815,23 +905,33 @@ const MonetizationShowcase: React.FC = () => {
                 </div>
               ))}
             </div>
-            
-            {/* Monetization Metadata */}
-            <div className="mt-4 flex flex-wrap justify-between items-center text-sm text-gray-500">
-              <span className="text-green-600 font-medium">💰 Revenue Stream: TBD</span>
-              <span className="text-blue-600">⚙️ Optionality: Toggleable</span>
-              <span className="text-purple-600">📈 Value Metric: ROI Pending</span>
-              <span className="text-yellow-600">🧠 AI Enhanced: Planned</span>
             </div>
-          </div>
+          )}
         </section>
 
         {/* 7. Smart Load Match Dashboard/Entry Form (Broker) */}
-        <section className="mb-16">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">
-            7. Smart Load Match Dashboard/Entry Form (Broker)
-          </h2>
-          <div className="bg-white rounded-lg shadow-lg p-6">
+        <section className="mb-10 border rounded-lg shadow-sm">
+          <div 
+            className="p-4 flex justify-between items-center cursor-pointer hover:bg-gray-50"
+            onClick={() => toggleSection('section-7')}
+          >
+            <div>
+              <h2 className="text-lg font-semibold">7. Smart Load Match Dashboard/Entry Form (Broker)</h2>
+              <p className="text-gray-500 text-sm italic">Intelligent load-to-carrier matching with multi-parameter optimization</p>
+              <div className="mt-1 flex gap-4 text-xs text-gray-600">
+                <span>💰 Revenue: TBD</span>
+                <span>⚙️ Optionality: Toggleable</span>
+                <span>📈 Value: ROI Pending</span>
+                <span>🧠 AI: Planned</span>
+              </div>
+            </div>
+            <button className="text-blue-600 underline text-sm">
+              {expandedSections['section-7'] ? 'Collapse' : 'Expand'}
+            </button>
+          </div>
+
+          {expandedSections['section-7'] && (
+            <div className="p-4 bg-white border-t">
             <div className="mb-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-1">Find the Perfect Carrier</h3>
               <p className="text-sm text-gray-500">Enter your load details to match with qualified carriers</p>
@@ -921,7 +1021,7 @@ const MonetizationShowcase: React.FC = () => {
                 <Filter className="w-4 h-4" />
                 Advanced Filters
               </button>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                 <div className="bg-blue-50 rounded-lg p-4 text-center">
                   <Sparkles className="w-8 h-8 text-blue-600 mx-auto mb-2" />
@@ -945,23 +1045,33 @@ const MonetizationShowcase: React.FC = () => {
                 Search for Carriers
               </button>
             </div>
-            
-            {/* Monetization Metadata */}
-            <div className="mt-4 flex flex-wrap justify-between items-center text-sm text-gray-500">
-              <span className="text-green-600 font-medium">💰 Revenue Stream: TBD</span>
-              <span className="text-blue-600">⚙️ Optionality: Toggleable</span>
-              <span className="text-purple-600">📈 Value Metric: ROI Pending</span>
-              <span className="text-yellow-600">🧠 AI Enhanced: Planned</span>
             </div>
-          </div>
+          )}
         </section>
 
         {/* 8. API Integrations Panel (Broker) */}
-        <section className="mb-16">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">
-            8. API Integrations Panel (Broker)
-          </h2>
-          <div className="bg-white rounded-lg shadow-lg p-6">
+        <section className="mb-10 border rounded-lg shadow-sm">
+          <div 
+            className="p-4 flex justify-between items-center cursor-pointer hover:bg-gray-50"
+            onClick={() => toggleSection('section-8')}
+          >
+            <div>
+              <h2 className="text-lg font-semibold">8. API Integrations Panel (Broker)</h2>
+              <p className="text-gray-500 text-sm italic">Seamless third-party integrations for load boards, tracking, and accounting</p>
+              <div className="mt-1 flex gap-4 text-xs text-gray-600">
+                <span>💰 Revenue: TBD</span>
+                <span>⚙️ Optionality: Toggleable</span>
+                <span>📈 Value: ROI Pending</span>
+                <span>🧠 AI: Planned</span>
+              </div>
+            </div>
+            <button className="text-blue-600 underline text-sm">
+              {expandedSections['section-8'] ? 'Collapse' : 'Expand'}
+            </button>
+          </div>
+
+          {expandedSections['section-8'] && (
+            <div className="p-4 bg-white border-t">
             <div className="border-b border-gray-200 pb-4 mb-6">
               <h3 className="text-xl font-semibold text-gray-900">API Integrations</h3>
               <p className="text-sm text-gray-600 mt-1">Connect with third-party services and APIs</p>
@@ -1014,7 +1124,7 @@ const MonetizationShowcase: React.FC = () => {
                             </button>
                           </div>
                         </div>
-                        
+
                         <div className="flex space-x-2">
                           <button className="flex-1 px-3 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors text-sm font-medium">
                             <i className="fas fa-sync-alt mr-1"></i> Sync Now
@@ -1029,25 +1139,35 @@ const MonetizationShowcase: React.FC = () => {
                 </div>
               ))}
             </div>
-            
-            {/* Monetization Metadata */}
-            <div className="mt-4 flex flex-wrap justify-between items-center text-sm text-gray-500">
-              <span className="text-green-600 font-medium">💰 Revenue Stream: TBD</span>
-              <span className="text-blue-600">⚙️ Optionality: Toggleable</span>
-              <span className="text-purple-600">📈 Value Metric: ROI Pending</span>
-              <span className="text-yellow-600">🧠 AI Enhanced: Planned</span>
             </div>
-          </div>
+          )}
         </section>
 
-        {/* 9. Individual API Integration Components */}
-        <section className="mb-16">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">
-            9. Individual API Integration Components
-          </h2>
-          <div className="bg-white rounded-lg shadow-lg p-6">
+        { /* 9. Individual API Integration Components */ }
+        <section className="mb-10 border rounded-lg shadow-sm">
+          <div 
+            className="p-4 flex justify-between items-center cursor-pointer hover:bg-gray-50"
+            onClick={() => toggleSection('section-9')}
+          >
+            <div>
+              <h2 className="text-lg font-semibold">9. Individual API Integration Components</h2>
+              <p className="text-gray-500 text-sm italic">Modular integration marketplace with pay-per-feature capabilities</p>
+              <div className="mt-1 flex gap-4 text-xs text-gray-600">
+                <span>💰 Revenue: TBD</span>
+                <span>⚙️ Optionality: Toggleable</span>
+                <span>📈 Value: ROI Pending</span>
+                <span>🧠 AI: Planned</span>
+              </div>
+            </div>
+            <button className="text-blue-600 underline text-sm">
+              {expandedSections['section-9'] ? 'Collapse' : 'Expand'}
+            </button>
+          </div>
+
+          {expandedSections['section-9'] && (
+            <div className="p-4 bg-white border-t">
             <h3 className="text-lg font-medium text-gray-900 mb-4">All Available Integrations</h3>
-            
+
             {/* Group integrations by category */}
             {Object.entries(
               brokerIntegrations.reduce((acc, integration) => {
@@ -1090,32 +1210,42 @@ const MonetizationShowcase: React.FC = () => {
               </div>
             ))}
           </div>
-            
-            {/* Monetization Metadata */}
-            <div className="mt-4 flex flex-wrap justify-between items-center text-sm text-gray-500">
-              <span className="text-green-600 font-medium">💰 Revenue Stream: TBD</span>
-              <span className="text-blue-600">⚙️ Optionality: Toggleable</span>
-              <span className="text-purple-600">📈 Value Metric: ROI Pending</span>
-              <span className="text-yellow-600">🧠 AI Enhanced: Planned</span>
-            </div>
+            )}
         </section>
 
         {/* 10. Team Settings (Broker) */}
-        <section className="mb-16">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">
-            10. Team Settings (Broker)
-          </h2>
-          <div className="bg-white rounded-lg shadow-lg p-6">
+        <section className="mb-10 border rounded-lg shadow-sm">
+          <div 
+            className="p-4 flex justify-between items-center cursor-pointer hover:bg-gray-50"
+            onClick={() => toggleSection('section-10')}
+          >
+            <div>
+              <h2 className="text-lg font-semibold">10. Team Settings (Broker)</h2>
+              <p className="text-gray-500 text-sm italic">Collaborative team management with load assignment and commission sharing</p>
+              <div className="mt-1 flex gap-4 text-xs text-gray-600">
+                <span>💰 Revenue: TBD</span>
+                <span>⚙️ Optionality: Toggleable</span>
+                <span>📈 Value: ROI Pending</span>
+                <span>🧠 AI: Planned</span>
+              </div>
+            </div>
+            <button className="text-blue-600 underline text-sm">
+              {expandedSections['section-10'] ? 'Collapse' : 'Expand'}
+            </button>
+          </div>
+
+          {expandedSections['section-10'] && (
+            <div className="p-4 bg-white border-t">
             <div className="p-6">
               <h3 className="text-xl font-semibold text-gray-900 mb-4">Team Settings</h3>
               <p className="text-sm text-gray-600 mb-6">
                 Configure how your brokerage team collaborates and manages loads
               </p>
-              
+
               <div className="space-y-6">
                 <div>
                   <h4 className="text-lg font-medium text-gray-900 mb-4">Load Management</h4>
-                  
+
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
                       <div>
@@ -1131,7 +1261,7 @@ const MonetizationShowcase: React.FC = () => {
                         <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                       </label>
                     </div>
-                    
+
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
                         Load Assignment Method
@@ -1148,7 +1278,7 @@ const MonetizationShowcase: React.FC = () => {
 
                 <div>
                   <h4 className="text-lg font-medium text-gray-900 mb-4">Collaboration</h4>
-                  
+
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
                       <div>
@@ -1164,7 +1294,7 @@ const MonetizationShowcase: React.FC = () => {
                         <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                       </label>
                     </div>
-                    
+
                     <div className="flex items-center justify-between">
                       <div>
                         <label className="text-sm font-medium text-gray-700">
@@ -1189,31 +1319,41 @@ const MonetizationShowcase: React.FC = () => {
                 </div>
               </div>
             </div>
-            
-            {/* Monetization Metadata */}
-            <div className="mt-4 flex flex-wrap justify-between items-center text-sm text-gray-500 px-6 pb-4">
-              <span className="text-green-600 font-medium">💰 Revenue Stream: TBD</span>
-              <span className="text-blue-600">⚙️ Optionality: Toggleable</span>
-              <span className="text-purple-600">📈 Value Metric: ROI Pending</span>
-              <span className="text-yellow-600">🧠 AI Enhanced: Planned</span>
             </div>
-          </div>
+          )}
         </section>
 
         {/* 11. Backup & Restore (All Roles) */}
-        <section className="mb-16">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">
-            11. Backup & Restore (All Roles)
-          </h2>
-          <div className="bg-white rounded-lg shadow-lg p-6">
+        <section className="mb-10 border rounded-lg shadow-sm">
+          <div 
+            className="p-4 flex justify-between items-center cursor-pointer hover:bg-gray-50"
+            onClick={() => toggleSection('section-11')}
+          >
+            <div>
+              <h2 className="text-lg font-semibold">11. Backup & Restore (All Roles)</h2>
+              <p className="text-gray-500 text-sm italic">Enterprise-grade data protection with automated backups and instant recovery</p>
+              <div className="mt-1 flex gap-4 text-xs text-gray-600">
+                <span>💰 Revenue: TBD</span>
+                <span>⚙️ Optionality: Toggleable</span>
+                <span>📈 Value: ROI Pending</span>
+                <span>🧠 AI: Planned</span>
+              </div>
+            </div>
+            <button className="text-blue-600 underline text-sm">
+              {expandedSections['section-11'] ? 'Collapse' : 'Expand'}
+            </button>
+          </div>
+
+          {expandedSections['section-11'] && (
+            <div className="p-4 bg-white border-t">
             <div className="p-6">
               <h3 className="text-xl font-semibold text-gray-900 mb-2">Backup & Restore</h3>
               <p className="text-sm text-gray-600 mb-6">Manage system backups and data exports</p>
-              
+
               <div className="space-y-6">
                 <div>
                   <h4 className="text-lg font-medium text-gray-900 mb-4">Backup Settings</h4>
-                  
+
                   <div className="bg-gray-50 rounded-lg p-4">
                     <div className="flex items-center justify-between mb-4">
                       <div>
@@ -1227,7 +1367,7 @@ const MonetizationShowcase: React.FC = () => {
                         <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
                       </label>
                     </div>
-                    
+
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -1360,27 +1500,37 @@ const MonetizationShowcase: React.FC = () => {
                 </div>
               </div>
             </div>
-            
-            {/* Monetization Metadata */}
-            <div className="mt-4 flex flex-wrap justify-between items-center text-sm text-gray-500 px-6 pb-4">
-              <span className="text-green-600 font-medium">💰 Revenue Stream: TBD</span>
-              <span className="text-blue-600">⚙️ Optionality: Toggleable</span>
-              <span className="text-purple-600">📈 Value Metric: ROI Pending</span>
-              <span className="text-yellow-600">🧠 AI Enhanced: Planned</span>
             </div>
-          </div>
+          )}
         </section>
 
         {/* 12. System Logs (All Roles) */}
-        <section className="mb-16">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">
-            12. System Logs (All Roles)
-          </h2>
-          <div className="bg-white rounded-lg shadow-lg p-6">
+        <section className="mb-10 border rounded-lg shadow-sm">
+          <div 
+            className="p-4 flex justify-between items-center cursor-pointer hover:bg-gray-50"
+            onClick={() => toggleSection('section-12')}
+          >
+            <div>
+              <h2 className="text-lg font-semibold">12. System Logs (All Roles)</h2>
+              <p className="text-gray-500 text-sm italic">Advanced system monitoring with real-time alerts and comprehensive audit trails</p>
+              <div className="mt-1 flex gap-4 text-xs text-gray-600">
+                <span>💰 Revenue: TBD</span>
+                <span>⚙️ Optionality: Toggleable</span>
+                <span>📈 Value: ROI Pending</span>
+                <span>🧠 AI: Planned</span>
+              </div>
+            </div>
+            <button className="text-blue-600 underline text-sm">
+              {expandedSections['section-12'] ? 'Collapse' : 'Expand'}
+            </button>
+          </div>
+
+          {expandedSections['section-12'] && (
+            <div className="p-4 bg-white border-t">
             <div className="p-6">
               <h3 className="text-xl font-semibold text-gray-900 mb-2">System Logs</h3>
               <p className="text-sm text-gray-600 mb-6">View and manage system logs and events</p>
-              
+
               <div className="space-y-6">
                 <div>
                   <h4 className="text-lg font-medium text-gray-900 mb-4">Log Filters</h4>
@@ -1632,15 +1782,8 @@ const MonetizationShowcase: React.FC = () => {
                 </div>
               </div>
             </div>
-            
-            {/* Monetization Metadata */}
-            <div className="mt-4 flex flex-wrap justify-between items-center text-sm text-gray-500 px-6 pb-4">
-              <span className="text-green-600 font-medium">💰 Revenue Stream: TBD</span>
-              <span className="text-blue-600">⚙️ Optionality: Toggleable</span>
-              <span className="text-purple-600">📈 Value Metric: ROI Pending</span>
-              <span className="text-yellow-600">🧠 AI Enhanced: Planned</span>
             </div>
-          </div>
+          )}
         </section>
 
         {/* Footer */}
