@@ -39,10 +39,10 @@ public class UserServiceImpl implements UserService {
     private final UserValidator userValidator;
 
     public UserServiceImpl(final UserRepository userRepository,
-            final CompanyRepository companyRepository, final PasswordEncoder passwordEncoder,
-            final UserMapper userMapper, final UserPreferenceRepository userPreferenceRepository,
-            final NotificationRepository notificationRepository,
-            final UserValidator userValidator) {
+                           final CompanyRepository companyRepository, final PasswordEncoder passwordEncoder,
+                           final UserMapper userMapper, final UserPreferenceRepository userPreferenceRepository,
+                           final NotificationRepository notificationRepository,
+                           final UserValidator userValidator) {
         this.userRepository = userRepository;
         this.companyRepository = companyRepository;
         this.passwordEncoder = passwordEncoder;
@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
         // Get current user to filter by company type
         String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
         User currentUser = userRepository.findByUsernameIgnoreCase(currentUsername);
-        
+
         Page<User> page;
         if (filter != null) {
             UUID uuidFilter = null;
@@ -69,8 +69,8 @@ public class UserServiceImpl implements UserService {
             }
             page = userRepository.findAllByIdWithCompany(uuidFilter, pageable);
         } else if (currentUser != null && currentUser.getCompanyType() != null) {
-            // Filter by company type of current user
-            page = userRepository.findAllByCompanyType(currentUser.getCompanyType().toString(), pageable);
+            // Filter by company type of current user - pass the enum directly, not as string
+            page = userRepository.findAllByCompanyType(currentUser.getCompanyType(), pageable);
         } else {
             page = userRepository.findAllWithCompany(pageable);
         }
@@ -94,12 +94,12 @@ public class UserServiceImpl implements UserService {
         if (userDTO.getCompany() == null) {
             throw new IllegalArgumentException("User must be assigned to a company");
         }
-        
+
         // Verify company exists
         if (!companyRepository.existsById(userDTO.getCompany())) {
             throw new IllegalArgumentException("Invalid company ID");
         }
-        
+
         final User user = new User();
         userMapper.updateUser(userDTO, user, companyRepository, passwordEncoder);
         return userRepository.save(user).getId();
@@ -137,7 +137,7 @@ public class UserServiceImpl implements UserService {
         }
         return null;
     }
-    
+
     @Override
     @Transactional(readOnly = true)
     public UserDTO getCurrentUser(String username) {
@@ -147,7 +147,7 @@ public class UserServiceImpl implements UserService {
         }
         return userMapper.toDto(user);
     }
-    
+
     @Override
     @Transactional
     public UserDTO updateCurrentUser(String username, UserDTO userDTO) {
@@ -155,7 +155,7 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             throw new NotFoundException("User not found");
         }
-        
+
         // Only allow updating certain fields
         if (userDTO.getFirstName() != null) {
             user.setFirstName(userDTO.getFirstName());
@@ -176,11 +176,11 @@ public class UserServiceImpl implements UserService {
             }
             user.setEmail(userDTO.getEmail());
         }
-        
+
         userRepository.save(user);
         return userMapper.toDto(user);
     }
-    
+
     @Override
     @Transactional
     public void changePassword(String username, ChangePasswordRequest request) {
@@ -188,17 +188,17 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             throw new NotFoundException("User not found");
         }
-        
+
         // Verify old password
         if (!passwordEncoder.matches(request.getOldPassword(), user.getPasswordHash())) {
             throw new IllegalArgumentException("Current password is incorrect");
         }
-        
+
         // Set new password
         user.setPasswordHash(passwordEncoder.encode(request.getNewPassword()));
         userRepository.save(user);
     }
-    
+
     @Override
     @Transactional
     public String uploadAvatar(String username, MultipartFile file) throws IOException {
@@ -206,20 +206,20 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             throw new NotFoundException("User not found");
         }
-        
+
         // For now, we'll store the base64 encoded image
         // In production, you would upload to S3 or similar service
         String contentType = file.getContentType();
         byte[] bytes = file.getBytes();
         String base64 = java.util.Base64.getEncoder().encodeToString(bytes);
         String dataUri = "data:" + contentType + ";base64," + base64;
-        
+
         user.setAvatarUrl(dataUri);
         userRepository.save(user);
-        
+
         return dataUri;
     }
-    
+
     @Override
     @Transactional(readOnly = true)
     public UserStatsDTO getUserStats(String username) {
@@ -227,9 +227,9 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             throw new NotFoundException("User not found");
         }
-        
+
         UserStatsDTO stats = new UserStatsDTO();
-        
+
         // These would be calculated from actual data in production
         // For now, returning mock data based on company type
         if (user.getCompany() != null && user.getCompany().getType() != null) {
@@ -272,26 +272,26 @@ public class UserServiceImpl implements UserService {
             stats.setTasksCompleted(78);
             stats.setPerformanceScore(85);
         }
-        
+
         stats.setTotalCustomersServed(76);
         stats.setAvgResponseTime("2.4 min");
-        
+
         return stats;
     }
-    
+
     @Override
     @Transactional
     public UserDTO toggleStatus(UUID id) {
         final User user = userRepository.findById(id)
                 .orElseThrow(NotFoundException::new);
-        
+
         // Toggle status between ACTIVE and INACTIVE
         if ("ACTIVE".equals(user.getStatus())) {
             user.setStatus("INACTIVE");
         } else {
             user.setStatus("ACTIVE");
         }
-        
+
         user.setUpdatedAt(OffsetDateTime.now());
         final User savedUser = userRepository.save(user);
         return userMapper.toDto(savedUser);
