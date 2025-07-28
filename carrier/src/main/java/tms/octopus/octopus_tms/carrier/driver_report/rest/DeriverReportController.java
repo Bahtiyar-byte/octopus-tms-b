@@ -1,4 +1,4 @@
-package tms.octopus.octopus_tms.carrier.deriver_report.rest;
+package tms.octopus.octopus_tms.carrier.driver_report.rest;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.MediaType;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import tms.octopus.octopus_tms.base.user.model.UserRole;
-import tms.octopus.octopus_tms.carrier.deriver_report.model.DriverStatusDTO;
+import tms.octopus.octopus_tms.carrier.driver_report.model.DriverStatusDTO;
 
 
 @RestController

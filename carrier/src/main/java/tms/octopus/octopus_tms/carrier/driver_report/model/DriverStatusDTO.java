@@ -1,4 +1,4 @@
-package tms.octopus.octopus_tms.carrier.deriver_report.model;
+package tms.octopus.octopus_tms.carrier.driver_report.model;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
