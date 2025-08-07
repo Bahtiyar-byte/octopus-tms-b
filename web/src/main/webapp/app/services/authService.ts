@@ -7,9 +7,9 @@ import {
   UserRole 
 } from '../types/core/user.types';
 import { ApiClient } from './api';
+import { TOKEN_KEY } from '../security/authentication-provider';
 
 // Local storage keys
-const TOKEN_KEY = 'octopus_tms_token';
 const USER_KEY = 'octopus_tms_user';
 const REFRESH_TOKEN_KEY = 'octopus_tms_refresh_token';
 
@@ -73,17 +73,27 @@ export const authService = {
 
       // Store token and user data based on remember me
       if (credentials.rememberMe) {
+        // For persistent login, store in localStorage
         localStorage.setItem(TOKEN_KEY, token);
         localStorage.setItem(USER_KEY, JSON.stringify(user));
         if (refreshToken) {
           localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
         }
+        // Clear any session storage to avoid conflicts
+        sessionStorage.removeItem(TOKEN_KEY);
+        sessionStorage.removeItem(USER_KEY);
+        sessionStorage.removeItem(REFRESH_TOKEN_KEY);
       } else {
+        // For session-only login, store in sessionStorage
         sessionStorage.setItem(TOKEN_KEY, token);
         sessionStorage.setItem(USER_KEY, JSON.stringify(user));
         if (refreshToken) {
           sessionStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
         }
+        // Clear any local storage to avoid conflicts
+        localStorage.removeItem(TOKEN_KEY);
+        localStorage.removeItem(USER_KEY);
+        localStorage.removeItem(REFRESH_TOKEN_KEY);
       }
 
       return authResponse;
@@ -104,7 +114,7 @@ export const authService = {
       // Ignore logout errors
       console.warn('Logout endpoint error:', error);
     } finally {
-      // Clear local storage
+      // Clear all storage locations to ensure complete logout
       localStorage.removeItem(TOKEN_KEY);
       localStorage.removeItem(USER_KEY);
       localStorage.removeItem(REFRESH_TOKEN_KEY);
@@ -116,11 +126,13 @@ export const authService = {
 
   // Get current user
   getCurrentUser: (): User | null => {
+    // Check both storage locations for user data
     const userStr = localStorage.getItem(USER_KEY) || sessionStorage.getItem(USER_KEY);
     if (userStr) {
       try {
         return JSON.parse(userStr);
-      } catch {
+      } catch (error) {
+        console.error('Error parsing user data:', error);
         return null;
       }
     }
@@ -129,20 +141,59 @@ export const authService = {
 
   // Check if user is authenticated
   isAuthenticated: (): boolean => {
-    const token = localStorage.getItem(TOKEN_KEY) || sessionStorage.getItem(TOKEN_KEY);
+    console.log('[AUTH SERVICE] Checking if user is authenticated');
+    
+    // Check both storage locations for token
+    const localToken = localStorage.getItem(TOKEN_KEY);
+    const sessionToken = sessionStorage.getItem(TOKEN_KEY);
+    const token = localToken || sessionToken;
+    
+    console.log('[AUTH SERVICE] Token found in:', {
+      localStorage: !!localToken,
+      sessionStorage: !!sessionToken
+    });
+    
     if (token) {
       try {
+        // Decode token and check expiration
         const payload = JSON.parse(atob(token.split('.')[1]));
-        return payload.exp * 1000 > Date.now();
-      } catch {
+        const expTime = payload.exp * 1000;
+        const currentTime = Date.now();
+        const timeLeft = expTime - currentTime;
+        const isValid = timeLeft > 0;
+        
+        console.log('[AUTH SERVICE] Token validation:', {
+          isValid,
+          expiresAt: new Date(expTime).toISOString(),
+          currentTime: new Date(currentTime).toISOString(),
+          timeLeftMs: timeLeft,
+          timeLeftMin: Math.round(timeLeft / 60000)
+        });
+        
+        // If token is expired, clean up storage
+        if (!isValid) {
+          console.log('[AUTH SERVICE] Token expired, cleaning up storage');
+          localStorage.removeItem(TOKEN_KEY);
+          sessionStorage.removeItem(TOKEN_KEY);
+        }
+        
+        return isValid;
+      } catch (error) {
+        console.error('[AUTH SERVICE] Error validating token:', error);
+        // Clean up invalid token
+        localStorage.removeItem(TOKEN_KEY);
+        sessionStorage.removeItem(TOKEN_KEY);
         return false;
       }
     }
+    
+    console.log('[AUTH SERVICE] No token found, user is not authenticated');
     return false;
   },
 
   // Refresh token
   refreshToken: async (): Promise<string> => {
+    // Check both storage locations for refresh token
     const refreshToken = localStorage.getItem(REFRESH_TOKEN_KEY) || sessionStorage.getItem(REFRESH_TOKEN_KEY);
     
     if (!refreshToken) {
@@ -156,12 +207,17 @@ export const authService = {
 
       const { accessToken } = response;
 
-      // Update stored token
-      const rememberMe = localStorage.getItem(TOKEN_KEY) !== null;
-      if (rememberMe) {
+      // Update stored token in the same storage location as the original token
+      const isPersistent = localStorage.getItem(TOKEN_KEY) !== null;
+      
+      if (isPersistent) {
+        // Update in localStorage and clear sessionStorage
         localStorage.setItem(TOKEN_KEY, accessToken);
+        sessionStorage.removeItem(TOKEN_KEY);
       } else {
+        // Update in sessionStorage and clear localStorage
         sessionStorage.setItem(TOKEN_KEY, accessToken);
+        localStorage.removeItem(TOKEN_KEY);
       }
 
       return accessToken;

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Trash2, Key, CheckCircle, XCircle, AlertCircle, RefreshCw } from 'lucide-react';
+import { authService } from '../../services';
 
 interface AIProvider {
   provider: 'ANTHROPIC' | 'OPENAI' | 'GOOGLE';
@@ -45,6 +46,19 @@ export const AIIntegrationSettings: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [testingConnection, setTestingConnection] = useState<string | null>(null);
   const DEFAULT_GEMINI_TOKEN = 'AIzaSyDdDZPX0c_pWLZHgiWdzimDFcYhDrF7XD4';
+  
+  // Helper function to get the auth token
+  const getAuthToken = (): string => {
+    // Check if user is authenticated
+    if (!authService.isAuthenticated()) {
+      console.warn('User is not authenticated');
+      return '';
+    }
+    
+    // Get token from storage using consistent approach
+    const token = authService.getToken();
+    return token ? `Bearer ${token}` : '';
+  };
 
   const getDefaultModel = (provider: string): string => {
     switch (provider) {
@@ -67,7 +81,7 @@ export const AIIntegrationSettings: React.FC = () => {
     try {
       const response = await fetch('/api/integrations/ai/configurations', {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('octopus_tms_token') || sessionStorage.getItem('octopus_tms_token')}`
+          'Authorization': getAuthToken()
         }
       });
       if (response.ok) {
@@ -75,7 +89,7 @@ export const AIIntegrationSettings: React.FC = () => {
         setConfigurations(data);
       }
     } catch (error) {
-      // Failed to fetch configurations
+      console.error('Failed to fetch configurations:', error);
     }
   };
 
@@ -91,7 +105,7 @@ export const AIIntegrationSettings: React.FC = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('octopus_tms_token') || sessionStorage.getItem('octopus_tms_token')}`
+          'Authorization': getAuthToken()
         },
         body: JSON.stringify({
           provider: selectedProvider,
@@ -108,6 +122,7 @@ export const AIIntegrationSettings: React.FC = () => {
         alert('Failed to save configuration');
       }
     } catch (error) {
+      console.error('Failed to save configuration:', error);
       alert('Failed to save configuration');
     } finally {
       setLoading(false);
@@ -121,7 +136,7 @@ export const AIIntegrationSettings: React.FC = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('octopus_tms_token') || sessionStorage.getItem('octopus_tms_token')}`
+          'Authorization': getAuthToken()
         },
         body: JSON.stringify({
           provider: provider
@@ -138,6 +153,7 @@ export const AIIntegrationSettings: React.FC = () => {
         await fetchConfigurations();
       }
     } catch (error) {
+      console.error('Failed to test connection:', error);
       alert('Failed to test connection');
     } finally {
       setTestingConnection(null);
@@ -150,7 +166,7 @@ export const AIIntegrationSettings: React.FC = () => {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('octopus_tms_token') || sessionStorage.getItem('octopus_tms_token')}`
+          'Authorization': getAuthToken()
         }
       });
 
@@ -158,7 +174,7 @@ export const AIIntegrationSettings: React.FC = () => {
         await fetchConfigurations();
       }
     } catch (error) {
-      // Failed to toggle configuration
+      console.error('Failed to toggle configuration:', error);
     }
   };
 
@@ -171,7 +187,7 @@ export const AIIntegrationSettings: React.FC = () => {
       const response = await fetch(`/api/integrations/ai/configurations/${configId}`, {
         method: 'DELETE',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('octopus_tms_token') || sessionStorage.getItem('octopus_tms_token')}`
+          'Authorization': getAuthToken()
         }
       });
 
@@ -179,7 +195,7 @@ export const AIIntegrationSettings: React.FC = () => {
         await fetchConfigurations();
       }
     } catch (error) {
-      // Failed to delete configuration
+      console.error('Failed to delete configuration:', error);
     }
   };
 

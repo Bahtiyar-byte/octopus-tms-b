@@ -1,6 +1,7 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { MainLayout } from '../layouts';
 import { AuthProvider, useAuth } from '../context/AuthContext';
+import { authService } from '../services';
 import brokerRoutes from '../modules/broker/brokerRoutes';
 import carrierRoutes from '../modules/carrier/carrierRoutes';
 import shipperRoutes from '../modules/shipper/shipperRoutes';
@@ -19,14 +20,41 @@ import WorkflowBuilder from '../pages/WorkflowBuilder';
 
 // Auth guard component to protect routes
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  // In a real app, this would check if the user is authenticated
-  const isAuthenticated = localStorage.getItem('octopus_tms_token') || 
-                          sessionStorage.getItem('octopus_tms_token');
+  // Use the AuthContext to get authentication state and loading status
+  const { isAuthenticated, isLoading, user } = useAuth();
+  
+  // Also check token validity directly as a fallback
+  const hasValidToken = authService.isAuthenticated();
+  
+  // Get current path for debugging
+  const location = window.location.pathname;
 
-  if (!isAuthenticated) {
+  console.log('[ROUTE DEBUG] ProtectedRoute check at path:', location, {
+    contextAuthenticated: isAuthenticated,
+    tokenValid: hasValidToken,
+    isLoading,
+    hasUser: !!user,
+    username: user?.username || 'none'
+  });
+
+  // If still loading, show nothing yet to prevent premature redirect
+  if (isLoading) {
+    console.log('[ROUTE DEBUG] Still loading auth state, showing spinner');
+    return <div className="flex items-center justify-center h-screen">
+      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+    </div>;
+  }
+
+  // Only redirect if both checks fail - this prevents race conditions
+  if (!isAuthenticated && !hasValidToken) {
+    console.log('[ROUTE DEBUG] Authentication failed, redirecting to login', {
+      contextAuthenticated: isAuthenticated,
+      tokenValid: hasValidToken
+    });
     return <Navigate to="/login" replace />;
   }
 
+  console.log('[ROUTE DEBUG] Authentication successful, rendering protected content');
   return <>{children}</>;
 };
 

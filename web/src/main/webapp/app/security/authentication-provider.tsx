@@ -16,6 +16,9 @@ export const BROKER = 'BROKER';
 export const CARRIER = 'CARRIER';
 export const SHIPPER = 'SHIPPER';
 
+// Consistent token key used across the application
+export const TOKEN_KEY = 'octopus_tms_token';
+
 export const AuthenticationContext = createContext<{
   isLoggedIn: () => boolean;
   getToken: () => string|null;
@@ -36,7 +39,7 @@ export const AuthenticationContext = createContext<{
 export const AuthenticationProvider = ({ children }: AuthenticationProviderParams) => {
   const { t } = useTranslation();
   const [initCompleted, setInitCompleted] = useState(false);
-  const [token, setToken] = useState(localStorage.getItem('access_token'));
+  const [token, setToken] = useState(localStorage.getItem(TOKEN_KEY) || sessionStorage.getItem(TOKEN_KEY));
   const [, setLoginSuccessUrl] = useState('/');
   const navigate = useNavigate();
   const matches = useMatches();
@@ -45,28 +48,43 @@ export const AuthenticationProvider = ({ children }: AuthenticationProviderParam
   }, []);
 
   const getToken = () => {
-    // synchronize with potential other tabs
-    if (localStorage.getItem('access_token') !== token) {
-      setToken(localStorage.getItem('access_token'));
+    // Check both localStorage and sessionStorage for the token
+    const localToken = localStorage.getItem(TOKEN_KEY);
+    const sessionToken = sessionStorage.getItem(TOKEN_KEY);
+    const currentToken = localToken || sessionToken;
+    
+    // Update state if token has changed
+    if (currentToken !== token) {
+      setToken(currentToken);
     }
-    return token;
+    
+    return currentToken;
   };
 
   const isLoggedIn = () => {
     // check token available
-    if (getToken() === null) {
+    const currentToken = getToken();
+    if (currentToken === null) {
       return false;
     }
-    // check token not expired
-    return getCurrentSeconds() < getTokenData().exp;
+    
+    try {
+      // check token not expired
+      return getCurrentSeconds() < getTokenData(currentToken).exp;
+    } catch (error) {
+      console.error('Error validating token:', error);
+      return false;
+    }
   };
 
   const login = (authenticationResponse: AuthenticationResponse) => {
     // Handle the response format from backend
     const token = authenticationResponse.token || authenticationResponse.accessToken;
-    localStorage.setItem('access_token', token!);
-    // Also store with the key expected by the frontend routes
-    localStorage.setItem('octopus_tms_token', token!);
+    
+    // Store token consistently in localStorage
+    localStorage.setItem(TOKEN_KEY, token!);
+    
+    // Update state
     setToken(token!);
     
     // Get user role from response or token
@@ -102,7 +120,9 @@ export const AuthenticationProvider = ({ children }: AuthenticationProviderParam
     if (isLoggedIn()) {
       setLoginSuccessUrl('/');
     }
-    localStorage.removeItem('access_token');
+    // Remove token from both storage locations
+    localStorage.removeItem(TOKEN_KEY);
+    sessionStorage.removeItem(TOKEN_KEY);
     setToken(null);
     navigate('/login', {
           state: {
@@ -112,12 +132,21 @@ export const AuthenticationProvider = ({ children }: AuthenticationProviderParam
   };
 
   const hasAnyRole = () => {
-    const tokenData = getTokenData();
-    return roles.some((requiredRole) => tokenData.roles.includes(requiredRole));
+    const currentToken = getToken();
+    if (!currentToken) return false;
+    
+    try {
+      const tokenData = getTokenData(currentToken);
+      return roles.some((requiredRole) => tokenData.roles.includes(requiredRole));
+    } catch (error) {
+      console.error('Error checking roles:', error);
+      return false;
+    }
   };
 
-  const getTokenData = () => {
-    return JSON.parse(atob(getToken()!.split('.')[1]!));
+  const getTokenData = (tokenValue = getToken()) => {
+    if (!tokenValue) throw new Error('No token available');
+    return JSON.parse(atob(tokenValue.split('.')[1]!));
   };
 
   const getCurrentSeconds = () => {
@@ -125,11 +154,18 @@ export const AuthenticationProvider = ({ children }: AuthenticationProviderParam
   };
 
   useEffect(() => {
-    // include token in outgoing requests
+    // Check for token on initial load
+    const initialToken = localStorage.getItem(TOKEN_KEY) || sessionStorage.getItem(TOKEN_KEY);
+    if (initialToken) {
+      setToken(initialToken);
+    }
+    
+    // Include token in outgoing requests
     const interceptor = axios.interceptors.request.use(
         (config) => {
-          if (localStorage.getItem('access_token')) {
-            config.headers['Authorization'] = 'Bearer ' + localStorage.getItem('access_token');
+          const currentToken = localStorage.getItem(TOKEN_KEY) || sessionStorage.getItem(TOKEN_KEY);
+          if (currentToken) {
+            config.headers['Authorization'] = 'Bearer ' + currentToken;
           }
           return config;
         },
@@ -151,8 +187,11 @@ export const AuthenticationProvider = ({ children }: AuthenticationProviderParam
   };
 
   useEffect(() => {
+    // Only run this effect after initialization is complete
+    if (!initCompleted) return;
+    
     const accessError = checkAccessAllowed();
-    if (!isLoggedIn() && ['/login', '/error'].indexOf(location.pathname) === -1) {
+    if (!isLoggedIn() && ['/login', '/error', '/forgot-password'].indexOf(location.pathname) === -1) {
       setLoginSuccessUrl(location.pathname);
     }
     if (accessError === 'login-required') {
@@ -170,7 +209,7 @@ export const AuthenticationProvider = ({ children }: AuthenticationProviderParam
             }
           });
     }
-  }, [matches]);
+  }, [matches, initCompleted]);
 
   if (checkAccessAllowed() !== null) {
     // don't render current route

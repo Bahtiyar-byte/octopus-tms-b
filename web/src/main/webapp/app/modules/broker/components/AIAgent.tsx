@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Card } from '../../../components';
+import { authService } from '../../../services';
 
 interface AIAgentProps {
   className?: string;
@@ -59,6 +60,19 @@ export const AIAgent: React.FC<AIAgentProps> = ({ className = '' }) => {
   const [response, setResponse] = useState<AIResponse | null>(null);
   const [showResponse, setShowResponse] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  
+  // Helper function to get the auth token
+  const getAuthToken = (): string => {
+    // Check if user is authenticated
+    if (!authService.isAuthenticated()) {
+      console.warn('User is not authenticated');
+      return '';
+    }
+    
+    // Get token from storage using consistent approach
+    const token = authService.getToken();
+    return token ? `Bearer ${token}` : '';
+  };
 
   // Format data for display
   const formatDataDisplay = (data: AIResponseData): React.ReactNode => {
@@ -256,13 +270,11 @@ export const AIAgent: React.FC<AIAgentProps> = ({ className = '' }) => {
     setShowResponse(false);
 
     try {
-      const token = localStorage.getItem('octopus_tms_token') || sessionStorage.getItem('octopus_tms_token');
-      
       const res = await fetch('/api/ai/agent/query', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': token ? `Bearer ${token}` : ''
+          'Authorization': getAuthToken()
         },
         body: JSON.stringify({
           query: input,

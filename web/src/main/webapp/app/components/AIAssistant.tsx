@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { MessageSquare, Send, Loader2, X } from 'lucide-react';
 import { toast } from 'react-hot-toast';
+import { authService } from '../services';
 
 interface Message {
   id: string;
@@ -14,6 +15,19 @@ export const AIAssistant: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  
+  // Helper function to get the auth token
+  const getAuthToken = (): string => {
+    // Check if user is authenticated
+    if (!authService.isAuthenticated()) {
+      console.warn('User is not authenticated');
+      return '';
+    }
+    
+    // Get token from storage using consistent approach
+    const token = authService.getToken();
+    return token ? `Bearer ${token}` : '';
+  };
 
   const sendMessage = async () => {
     if (!input.trim() || isLoading) return;
@@ -34,7 +48,7 @@ export const AIAssistant: React.FC = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('octopus_tms_token') || sessionStorage.getItem('octopus_tms_token')}`
+          'Authorization': getAuthToken()
         },
         body: JSON.stringify({
           query: input,
