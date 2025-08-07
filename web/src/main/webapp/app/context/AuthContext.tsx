@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { User, LoginCredentials, AuthResponse } from '../types/core/user.types';
 import { authService } from '../services';
+import { useUserStore } from '../store/userStore';
 
 interface AuthContextType {
   user: User | null;
@@ -18,6 +19,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const { setUserData, clearUserData } = useUserStore();
 
   // Check for existing authentication on mount
   useEffect(() => {
@@ -25,6 +27,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       try {
         const currentUser = authService.getCurrentUser();
         setUser(currentUser);
+        
+        // If user exists, save role and companyType to Zustand store
+        if (currentUser) {
+          setUserData(currentUser.role, currentUser.companyType || null);
+        }
       } catch (error) {
       } finally {
         setIsLoading(false);
@@ -32,7 +39,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     };
 
     void checkAuth();
-  }, []);
+  }, [setUserData]);
 
   // Login handler
   const login = async (credentials: LoginCredentials): Promise<AuthResponse> => {
@@ -40,6 +47,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     try {
       const response = await authService.login(credentials);
       setUser(response.user);
+      
+      // Save user role and companyType to Zustand store
+      setUserData(response.user.role, response.user.companyType || null);
+      
       return response;
     } finally {
       setIsLoading(false);
@@ -52,6 +63,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     try {
       await authService.logout();
       setUser(null);
+      
+      // Clear user data from Zustand store
+      clearUserData();
     } finally {
       setIsLoading(false);
     }

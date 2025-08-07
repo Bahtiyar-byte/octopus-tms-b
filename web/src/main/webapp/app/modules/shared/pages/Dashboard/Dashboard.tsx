@@ -4,6 +4,7 @@ import { DashboardWidget } from '../../components/dashboard/DashboardWidget';
 import { DashboardHeader } from '../../components/dashboard/DashboardHeader';
 import { QuickActions } from '../../components/dashboard/QuickActions';
 
+import { useUserStore } from '../../../../store/userStore';
 
 // import React from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -14,6 +15,9 @@ import {AIAgent} from "../../../broker/components/AIAgent";
 
 const Dashboard: React.FC = () => {
     const navigate = useNavigate();
+    
+    // Access user data from Zustand store
+    const { role, companyType } = useUserStore();
 
     // Mock data for charts
     const revenuePerCustomer = [
@@ -110,15 +114,28 @@ const Dashboard: React.FC = () => {
                 </div>
             </section>
 
-            {/* Quick Actions */}
+            {/* Quick Actions - Conditionally rendered based on user role and company type */}
             <section className="mb-8">
                 <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
                     <Activity className="w-5 h-5 text-blue-600" />
-                    Quick Actions
+                    Quick Actions {role && `for ${role}`}
                 </h2>
+                
+                {/* Display a message if user is not logged in */}
+                {!role && (
+                    <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg mb-4">
+                        <p className="text-yellow-700">Please log in to see actions specific to your role.</p>
+                    </div>
+                )}
+                
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    {/* Create Load button - visible to all users but with different paths based on company type */}
                     <button
-                        onClick={() => navigate('/broker/create-load')}
+                        onClick={() => navigate(companyType === 'BROKER' 
+                            ? '/broker/create-load' 
+                            : companyType === 'SHIPPER' 
+                                ? '/shipper/create-load' 
+                                : '/create-load')}
                         className="p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-all border border-gray-200 text-center group"
                     >
                         <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:bg-blue-200 transition-colors">
@@ -127,28 +144,41 @@ const Dashboard: React.FC = () => {
                         <span className="text-sm font-medium text-gray-700">Create Load</span>
                     </button>
 
-                    <button
-                        onClick={() => navigate('/broker/smart-load-match')}
-                        className="p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-all border border-gray-200 text-center group"
-                    >
-                        <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:bg-green-200 transition-colors">
-                            <Edit className="w-6 h-6 text-green-600" />
-                        </div>
-                        <span className="text-sm font-medium text-gray-700">Smart Match</span>
-                    </button>
+                    {/* Smart Match - only visible to brokers */}
+                    {companyType === 'BROKER' && (
+                        <button
+                            onClick={() => navigate('/broker/smart-load-match')}
+                            className="p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-all border border-gray-200 text-center group"
+                        >
+                            <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:bg-green-200 transition-colors">
+                                <Edit className="w-6 h-6 text-green-600" />
+                            </div>
+                            <span className="text-sm font-medium text-gray-700">Smart Match</span>
+                        </button>
+                    )}
 
-                    <button
-                        onClick={() => navigate('/broker/carrier-match')}
-                        className="p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-all border border-gray-200 text-center group"
-                    >
-                        <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:bg-purple-200 transition-colors">
-                            <Users className="w-6 h-6 text-purple-600" />
-                        </div>
-                        <span className="text-sm font-medium text-gray-700">Carrier Match</span>
-                    </button>
+                    {/* Carrier Match - only visible to brokers */}
+                    {companyType === 'BROKER' && (
+                        <button
+                            onClick={() => navigate('/broker/carrier-match')}
+                            className="p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-all border border-gray-200 text-center group"
+                        >
+                            <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:bg-purple-200 transition-colors">
+                                <Users className="w-6 h-6 text-purple-600" />
+                            </div>
+                            <span className="text-sm font-medium text-gray-700">Carrier Match</span>
+                        </button>
+                    )}
 
+                    {/* Reports - visible to all but with different paths */}
                     <button
-                        onClick={() => navigate('/broker/reports')}
+                        onClick={() => navigate(companyType === 'BROKER' 
+                            ? '/broker/reports' 
+                            : companyType === 'SHIPPER' 
+                                ? '/shipper/reports' 
+                                : companyType === 'CARRIER'
+                                    ? '/carrier/reports'
+                                    : '/reports')}
                         className="p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-all border border-gray-200 text-center group"
                     >
                         <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:bg-orange-200 transition-colors">
@@ -156,6 +186,19 @@ const Dashboard: React.FC = () => {
                         </div>
                         <span className="text-sm font-medium text-gray-700">Reports</span>
                     </button>
+                    
+                    {/* Admin-only button */}
+                    {role === 'ADMIN' && (
+                        <button
+                            onClick={() => navigate('/admin/settings')}
+                            className="p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-all border border-gray-200 text-center group"
+                        >
+                            <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:bg-red-200 transition-colors">
+                                <Activity className="w-6 h-6 text-red-600" />
+                            </div>
+                            <span className="text-sm font-medium text-gray-700">Admin Settings</span>
+                        </button>
+                    )}
                 </div>
             </section>
 

@@ -12,6 +12,7 @@ export interface BrokerMetrics {
 
 export interface Load {
   id: string;
+  loadNumber?: string;
   origin: string;
   destination: string;
   distance: number;
@@ -20,6 +21,9 @@ export interface Load {
   rate: number;
   status: 'draft' | 'posted' | 'assigned' | 'en_route' | 'delivered' | 'awaiting_docs' | 'paid';
   notes?: string;
+  equipmentType?: string;
+  pickupDate?: string;
+  deliveryDate?: string;
   carrier?: {
     id: string;
     name: string;

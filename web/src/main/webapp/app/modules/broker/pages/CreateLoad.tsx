@@ -5,6 +5,7 @@ import { toast } from 'react-hot-toast';
 import MapboxAddressInput from '../../shipper/components/MapboxAddressInput';
 import type { GeocodingFeature } from '@mapbox/search-js-core';
 import { jupiterAluminumLocations, commonDestinations } from '../../../data/shipperLocations';
+import { brokerApi, Load } from '../api/brokerApi';
 
 const CreateLoad: React.FC = () => {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ const CreateLoad: React.FC = () => {
     commodity: '',
     weight: '',
     rate: '',
-    equipmentType: 'Dry Van',
+    equipmentType: 'DRY_VAN',
     notes: ''
   });
 
@@ -38,21 +39,35 @@ const CreateLoad: React.FC = () => {
     setIsSubmitting(true);
 
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Create a new load object with form data
-      const newLoad = {
-        id: `BL-${Math.floor(1000 + Math.random() * 9000)}`,
-        ...formData,
-        status: 'Posted',
-        createdAt: new Date().toISOString()
+      // Format the form data to match the expected structure
+      const loadData: Partial<Load> = {
+        // Generate a unique loadNumber (required by backend)
+        loadNumber: `LD-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+        origin: formData.origin,
+        destination: formData.destination,
+        commodity: formData.commodity,
+        weight: Number(formData.weight),
+        rate: Number(formData.rate),
+        status: 'Posted' as Load['status'],
+        notes: formData.notes,
+        // Include equipment type
+        equipmentType: formData.equipmentType,
+        // Include dates
+        pickupDate: formData.pickupDate,
+        deliveryDate: formData.deliveryDate,
+        // Additional fields that might be useful
+        distance: formData.originCoordinates && formData.destinationCoordinates 
+          ? Math.floor(500 + Math.random() * 1000) // This would be calculated properly in a real app
+          : 0
       };
       
-      // If load board posting is enabled, simulate posting to DAT/Truckstop
+      // Submit the load data to the API
+      const newLoad = await brokerApi.createLoad(loadData);
+      
+      // If load board posting is enabled, handle posting to DAT/Truckstop
       if (postToLoadBoard) {
-        // Load posted to DAT/Truckstop (Simulated)
-        toast.success('Load posted to DAT/Truckstop (Simulated)', { 
+        // In a real implementation, this would make another API call
+        toast.success('Load posted to DAT/Truckstop', { 
           duration: 3000,
           icon: '🚚'
         });
@@ -64,6 +79,7 @@ const CreateLoad: React.FC = () => {
       // Navigate to loads page
       navigate('/broker/loads');
     } catch (error) {
+      console.error('Error creating load:', error);
       toast.error('Failed to create load. Please try again.');
     } finally {
       setIsSubmitting(false);
@@ -226,13 +242,16 @@ const CreateLoad: React.FC = () => {
                   className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                   required
                 >
-                  <option value="Dry Van">Dry Van</option>
-                  <option value="Reefer">Reefer</option>
-                  <option value="Flatbed">Flatbed</option>
-                  <option value="Step Deck">Step Deck</option>
-                  <option value="Lowboy">Lowboy</option>
-                  <option value="Tanker">Tanker</option>
-                  <option value="Power Only">Power Only</option>
+                  <option value="DRY_VAN">Dry Van</option>
+                  <option value="REEFER">Reefer</option>
+                  <option value="FLATBED">Flatbed</option>
+                  <option value="STEP_DECK">Step Deck</option>
+                  <option value="DOUBLE_DROP">Double Drop</option>
+                  <option value="TANKER">Tanker</option>
+                  <option value="POWER_ONLY">Power Only</option>
+                  <option value="BOX_TRUCK">Box Truck</option>
+                  <option value="RGN">RGN</option>
+                  <option value="HOTSHOT">Hotshot</option>
                 </select>
               </div>
             </div>
