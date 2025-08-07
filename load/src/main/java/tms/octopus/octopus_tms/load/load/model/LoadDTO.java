@@ -23,7 +23,6 @@ public class LoadDTO {
 
     private UUID id;
 
-    @NotNull
     @Size(max = 50)
     private String loadNumber;
 

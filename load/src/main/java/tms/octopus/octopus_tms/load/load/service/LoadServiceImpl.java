@@ -94,8 +94,39 @@ public class LoadServiceImpl implements LoadService {
     @Override
     public UUID create(final LoadDTO loadDTO) {
         final Load load = new Load();
+        
+        // Generate load number in format LD-XXXXX if not provided
+        if (loadDTO.getLoadNumber() == null || loadDTO.getLoadNumber().isEmpty() || 
+            !loadDTO.getLoadNumber().startsWith("LD-")) {
+            loadDTO.setLoadNumber(generateNextLoadNumber());
+        }
+        
         loadMapper.updateLoad(loadDTO, load);
         return loadRepository.save(load).getId();
+    }
+    
+    /**
+     * Generates the next load number in the sequence LD-XXXXX
+     * @return the next load number
+     */
+    private String generateNextLoadNumber() {
+        // Find the highest existing load number
+        String highestLoadNumber = loadRepository.findTopByOrderByLoadNumberDesc()
+                .map(Load::getLoadNumber)
+                .orElse("LD-10000"); // Start from LD-10000 if no loads exist
+        
+        try {
+            // Extract the numeric part
+            String prefix = "LD-";
+            int currentNumber = Integer.parseInt(highestLoadNumber.substring(prefix.length()));
+            
+            // Increment and format
+            int nextNumber = currentNumber + 1;
+            return String.format("%s%d", prefix, nextNumber);
+        } catch (Exception e) {
+            // In case of any parsing error, start from LD-10001
+            return "LD-10001";
+        }
     }
 
     @Override

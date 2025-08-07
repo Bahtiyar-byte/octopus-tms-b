@@ -19,7 +19,7 @@ export const LoadsTable: React.FC<LoadsTableProps> = ({ loads, columns, onAction
   const renderCell = (load: Load, column: ColumnConfig) => {
     switch (column.key) {
       case 'loadId':
-        return formatLoadId(load.id);
+        return load.loadNumber;
       case 'origin':
         return load.origin;
       case 'destination':

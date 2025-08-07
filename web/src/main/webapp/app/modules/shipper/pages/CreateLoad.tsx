@@ -19,9 +19,11 @@ interface ShipmentFormData {
   originCoordinates: Coordinates | null;
   destinationCoordinates: Coordinates | null;
   pickupDate: string;
-  pickupTime: string;
+  pickupTimeStart: string;
+  pickupTimeEnd: string;
   deliveryDate: string;
-  deliveryTime: string;
+  deliveryTimeStart: string;
+  deliveryTimeEnd: string;
   commodity: string;
   weight: string;
   pallets: string;
@@ -38,29 +40,66 @@ interface ShipmentFormData {
 
 interface ShipmentPayload {
   id?: string;
-  loadNumber: string;
+  loadNumber?: string;
+  
+  // Origin details
   originAddress: string;
+  originCity?: string;
+  originState?: string;
+  originZip?: string;
+  originLat?: number;
+  originLng?: number;
+  
+  // Destination details
   destinationAddress: string;
-  originCoordinates?: Coordinates;
-  destinationCoordinates?: Coordinates;
+  destinationCity?: string;
+  destinationState?: string;
+  destinationZip?: string;
+  destinationLat?: number;
+  destinationLng?: number;
+  
+  // Route details
+  distance?: number;
+  routingType?: string;
+  
+  // Schedule details
   pickupDate: string;
-  pickupTime?: string;
+  pickupTimeStart?: string;
+  pickupTimeEnd?: string;
   deliveryDate: string;
-  deliveryTime?: string;
+  deliveryTimeStart?: string;
+  deliveryTimeEnd?: string;
+  
+  // Cargo details
   commodity: string;
   weight: number;
   pallets?: number;
+  
+  // Business details
   rate?: number;
   equipmentType: string;
   broker: string;
-  reference?: string;
+  brokerId?: string;
+  shipperId?: string;
+  referenceNumber?: string;
+  notes?: string;
   specialInstructions?: string;
+  
+  // Special requirements
   hazmat: boolean;
   stackable: boolean;
   temperatureControlled: boolean;
   temperature?: string;
+  
+  // Status and metadata
   status: string;
+  createdBy?: string;
   createdAt: string;
+  
+  // Legacy fields for backward compatibility
+  originCoordinates?: Coordinates;
+  destinationCoordinates?: Coordinates;
+  reference?: string;
 }
 
 const CreateLoad: React.FC = () => {
@@ -112,9 +151,11 @@ const CreateLoad: React.FC = () => {
     originCoordinates: null as { lat: number; lon: number } | null,
     destinationCoordinates: null as { lat: number; lon: number } | null,
     pickupDate: '',
-    pickupTime: '',
+    pickupTimeStart: '',
+    pickupTimeEnd: '',
     deliveryDate: '',
-    deliveryTime: '',
+    deliveryTimeStart: '',
+    deliveryTimeEnd: '',
     commodity: '',
     weight: '',
     pallets: '',
@@ -196,6 +237,32 @@ const CreateLoad: React.FC = () => {
       return false;
     }
     
+    // Validate time ranges
+    if ((formData.pickupTimeStart && !formData.pickupTimeEnd) || (!formData.pickupTimeStart && formData.pickupTimeEnd)) {
+      toast.error('Both pickup start and end times must be provided');
+      return false;
+    }
+    
+    if ((formData.deliveryTimeStart && !formData.deliveryTimeEnd) || (!formData.deliveryTimeStart && formData.deliveryTimeEnd)) {
+      toast.error('Both delivery start and end times must be provided');
+      return false;
+    }
+    
+    // Check that start time is before end time if both are provided
+    if (formData.pickupTimeStart && formData.pickupTimeEnd) {
+      if (formData.pickupTimeStart >= formData.pickupTimeEnd) {
+        toast.error('Pickup start time must be before pickup end time');
+        return false;
+      }
+    }
+    
+    if (formData.deliveryTimeStart && formData.deliveryTimeEnd) {
+      if (formData.deliveryTimeStart >= formData.deliveryTimeEnd) {
+        toast.error('Delivery start time must be before delivery end time');
+        return false;
+      }
+    }
+    
     // Validate numeric fields
     if (isNaN(parseFloat(formData.weight)) || parseFloat(formData.weight) <= 0) {
       toast.error('Weight must be a positive number');
@@ -232,40 +299,118 @@ const CreateLoad: React.FC = () => {
     setIsSubmitting(true);
 
     try {
-      // Generate a unique load number
-      const timestamp = new Date().getTime();
-      const loadNumber = `LOAD-${timestamp}`;
+      // Extract city, state, zip from addresses
+      // This is a simplified approach - in a real implementation, you might use a geocoding service
+      const extractAddressComponents = (address: string) => {
+        const parts = address.split(',').map(part => part.trim());
+        let city = '';
+        let state = '';
+        let zip = '';
+        
+        // Very basic extraction - assumes format like "City, State ZIP"
+        if (parts.length >= 2) {
+          city = parts[0];
+          const stateZip = parts[parts.length - 1].split(' ');
+          if (stateZip.length >= 2) {
+            state = stateZip[0];
+            zip = stateZip[stateZip.length - 1];
+          }
+        }
+        
+        return { city, state, zip };
+      };
+      
+      const originComponents = extractAddressComponents(formData.originAddress);
+      const destinationComponents = extractAddressComponents(formData.destinationAddress);
+      
+      // Time fields are now directly input as HH:mm format using HTML5 time inputs
+      
+      // Calculate distance (simplified - in a real implementation, you might use a mapping service)
+      let distance = undefined;
+      if (formData.originCoordinates && formData.destinationCoordinates) {
+        // Simple Haversine formula for distance calculation
+        const R = 3958.8; // Earth radius in miles
+        const lat1 = formData.originCoordinates.lat * Math.PI / 180;
+        const lat2 = formData.destinationCoordinates.lat * Math.PI / 180;
+        const deltaLat = (formData.destinationCoordinates.lat - formData.originCoordinates.lat) * Math.PI / 180;
+        const deltaLon = (formData.destinationCoordinates.lon - formData.originCoordinates.lon) * Math.PI / 180;
+        
+        const a = Math.sin(deltaLat/2) * Math.sin(deltaLat/2) +
+                Math.cos(lat1) * Math.cos(lat2) *
+                Math.sin(deltaLon/2) * Math.sin(deltaLon/2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        distance = Math.round(R * c); // Distance in miles, rounded to nearest integer
+      }
       
       // Convert form data to payload format
       const shipmentPayload: ShipmentPayload = {
-        loadNumber: loadNumber,
+        // Let the backend generate the load number
         originAddress: formData.originAddress,
+        originCity: originComponents.city,
+        originState: originComponents.state,
+        originZip: originComponents.zip,
+        originLat: formData.originCoordinates ? formData.originCoordinates.lat : undefined,
+        originLng: formData.originCoordinates ? formData.originCoordinates.lon : undefined,
+        
         destinationAddress: formData.destinationAddress,
-        originCoordinates: formData.originCoordinates || undefined,
-        destinationCoordinates: formData.destinationCoordinates || undefined,
+        destinationCity: destinationComponents.city,
+        destinationState: destinationComponents.state,
+        destinationZip: destinationComponents.zip,
+        destinationLat: formData.destinationCoordinates ? formData.destinationCoordinates.lat : undefined,
+        destinationLng: formData.destinationCoordinates ? formData.destinationCoordinates.lon : undefined,
+        
+        distance: distance,
+        
         pickupDate: formData.pickupDate,
-        pickupTime: formData.pickupTime || undefined,
+        pickupTimeStart: formData.pickupTimeStart || undefined,
+        pickupTimeEnd: formData.pickupTimeEnd || undefined,
+        
         deliveryDate: formData.deliveryDate,
-        deliveryTime: formData.deliveryTime || undefined,
+        deliveryTimeStart: formData.deliveryTimeStart || undefined,
+        deliveryTimeEnd: formData.deliveryTimeEnd || undefined,
+        
         commodity: formData.commodity,
         weight: parseFloat(formData.weight),
         pallets: formData.pallets ? parseInt(formData.pallets, 10) : undefined,
         rate: formData.rate ? parseFloat(formData.rate) : undefined,
+        
         // Convert display-friendly equipment type to backend enum format
         equipmentType: equipmentTypeMap[formData.equipmentType] || formData.equipmentType,
+        
+        // Set routing type to STANDARD by default
+        routingType: 'STANDARD',
+        
+        // Use broker name for now - in a real implementation, you would look up the broker ID
+        brokerId: undefined,
         broker: formData.broker,
-        reference: formData.reference || undefined,
+        
+        // Set shipper ID - in a real implementation, you would get this from the authenticated user
+        shipperId: undefined,
+        
+        referenceNumber: formData.reference || undefined,
+        notes: formData.specialInstructions || undefined,
         specialInstructions: formData.specialInstructions || undefined,
+        
         hazmat: formData.hazmat,
         stackable: formData.stackable,
         temperatureControlled: formData.temperatureControlled,
         temperature: formData.temperatureControlled ? formData.temperature : undefined,
+        
         status: loadStatusMap['Draft'] || 'DRAFT',
+        
+        // Set created_by - in a real implementation, you would get this from the authenticated user
+        createdBy: undefined,
         createdAt: new Date().toISOString()
       };
       
+      // Log the payload for debugging
+      console.log('Submitting shipment payload:', JSON.stringify(shipmentPayload, null, 2));
+      
       // Submit shipment to API
       const response = await ApiClient.post<{ id: string }>('/loads', shipmentPayload);
+      
+      // Log the response for debugging
+      console.log('API response:', response);
       
       // Show success message
       toast.success(`Shipment ${response.id} created successfully!`);
@@ -357,18 +502,37 @@ const CreateLoad: React.FC = () => {
                 </div>
                 
                 <div>
-                  <label htmlFor="pickupTime" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
                     Pickup Time Window
                   </label>
-                  <input
-                    type="text"
-                    id="pickupTime"
-                    name="pickupTime"
-                    value={formData.pickupTime}
-                    onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="e.g. 8:00 AM - 5:00 PM"
-                  />
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <label htmlFor="pickupTimeStart" className="block text-xs text-gray-500 mb-1">
+                        Start Time
+                      </label>
+                      <input
+                        type="time"
+                        id="pickupTimeStart"
+                        name="pickupTimeStart"
+                        value={formData.pickupTimeStart}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="pickupTimeEnd" className="block text-xs text-gray-500 mb-1">
+                        End Time
+                      </label>
+                      <input
+                        type="time"
+                        id="pickupTimeEnd"
+                        name="pickupTimeEnd"
+                        value={formData.pickupTimeEnd}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
               
@@ -412,18 +576,37 @@ const CreateLoad: React.FC = () => {
                 </div>
                 
                 <div>
-                  <label htmlFor="deliveryTime" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
                     Delivery Time Window
                   </label>
-                  <input
-                    type="text"
-                    id="deliveryTime"
-                    name="deliveryTime"
-                    value={formData.deliveryTime}
-                    onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="e.g. 8:00 AM - 5:00 PM"
-                  />
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <label htmlFor="deliveryTimeStart" className="block text-xs text-gray-500 mb-1">
+                        Start Time
+                      </label>
+                      <input
+                        type="time"
+                        id="deliveryTimeStart"
+                        name="deliveryTimeStart"
+                        value={formData.deliveryTimeStart}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="deliveryTimeEnd" className="block text-xs text-gray-500 mb-1">
+                        End Time
+                      </label>
+                      <input
+                        type="time"
+                        id="deliveryTimeEnd"
+                        name="deliveryTimeEnd"
+                        value={formData.deliveryTimeEnd}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

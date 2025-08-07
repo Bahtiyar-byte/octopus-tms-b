@@ -32,6 +32,7 @@ export interface Load {
   deliveryDate?: string;
   distance?: number;
   driver?: string;
+  loadNumber?: string;
 }
 
 const Loads: React.FC = () => {
@@ -57,6 +58,7 @@ const Loads: React.FC = () => {
         // If no loads were returned and we're not filtering, it might be an error
         setError('No loads found. There might be an issue with the data source.');
       } else {
+        console.log('fetchedLoads ', fetchedLoads)
         setLoads(fetchedLoads);
         setError(null);
       }

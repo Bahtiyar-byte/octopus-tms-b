@@ -58,6 +58,7 @@ export const loadsApi = {
         pickupDate: loadDTO.pickupDate,
         deliveryDate: loadDTO.deliveryDate,
         distance: loadDTO.distance,
+        loadNumber: loadDTO.loadNumber,
         carrier: loadDTO.carrierId ? {
           id: loadDTO.carrierId,
           name: loadDTO.carrierName || 'Unknown Carrier'

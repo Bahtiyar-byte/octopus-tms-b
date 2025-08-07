@@ -22,7 +22,7 @@ export const LoadCard: React.FC<LoadCardProps> = ({ load, onAction, role }) => {
     <Card className="bg-white shadow-md hover:shadow-lg transition-shadow">
       <div className="p-4">
         <div className="flex justify-between items-start mb-3">
-          <h3 className="text-lg font-semibold">{formatLoadId(load.id)}</h3>
+          <h3 className="text-lg font-semibold">{load.loadNumber}</h3>
           <div className="flex items-center gap-2">
             {load.status === 'draft' && (
               <span className="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs font-medium animate-pulse">
