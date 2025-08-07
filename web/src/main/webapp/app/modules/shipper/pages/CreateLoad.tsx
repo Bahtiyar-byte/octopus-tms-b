@@ -5,6 +5,63 @@ import { toast } from 'react-hot-toast';
 import MapboxAddressInput from '../components/MapboxAddressInput';
 import type { GeocodingFeature } from '@mapbox/search-js-core';
 import { jupiterAluminumLocations, commonDestinations } from '../../../data/shipperLocations';
+import { ApiClient } from '../../../services/api';
+
+// Define interfaces for type safety
+interface Coordinates {
+  lat: number;
+  lon: number;
+}
+
+interface ShipmentFormData {
+  originAddress: string;
+  destinationAddress: string;
+  originCoordinates: Coordinates | null;
+  destinationCoordinates: Coordinates | null;
+  pickupDate: string;
+  pickupTime: string;
+  deliveryDate: string;
+  deliveryTime: string;
+  commodity: string;
+  weight: string;
+  pallets: string;
+  rate: string;
+  equipmentType: string;
+  broker: string;
+  reference: string;
+  specialInstructions: string;
+  hazmat: boolean;
+  stackable: boolean;
+  temperatureControlled: boolean;
+  temperature: string;
+}
+
+interface ShipmentPayload {
+  id?: string;
+  loadNumber: string;
+  originAddress: string;
+  destinationAddress: string;
+  originCoordinates?: Coordinates;
+  destinationCoordinates?: Coordinates;
+  pickupDate: string;
+  pickupTime?: string;
+  deliveryDate: string;
+  deliveryTime?: string;
+  commodity: string;
+  weight: number;
+  pallets?: number;
+  rate?: number;
+  equipmentType: string;
+  broker: string;
+  reference?: string;
+  specialInstructions?: string;
+  hazmat: boolean;
+  stackable: boolean;
+  temperatureControlled: boolean;
+  temperature?: string;
+  status: string;
+  createdAt: string;
+}
 
 const CreateLoad: React.FC = () => {
   const navigate = useNavigate();
@@ -20,6 +77,34 @@ const CreateLoad: React.FC = () => {
     'Regional Transport Services',
     'Northeast Logistics'
   ];
+  
+  // Map display-friendly equipment types to backend enum values
+  const equipmentTypeMap: Record<string, string> = {
+    'Dry Van': 'DRY_VAN',
+    'Flatbed': 'FLATBED',
+    'Reefer': 'REEFER',
+    'Step Deck': 'STEP_DECK',
+    'RGN': 'RGN',
+    'Tanker': 'TANKER',
+    'Conestoga': 'BOX_TRUCK', // Mapping Conestoga to closest available enum
+    'Power Only': 'POWER_ONLY',
+    'Hotshot': 'HOTSHOT',
+    'Box Truck': 'BOX_TRUCK',
+    'Double Drop': 'DOUBLE_DROP'
+  };
+  
+  // Map display-friendly load status to backend enum values
+  const loadStatusMap: Record<string, string> = {
+    'Draft': 'DRAFT',
+    'New': 'NEW',
+    'Active': 'ACTIVE',
+    'Assigned': 'ASSIGNED',
+    'En Route': 'EN_ROUTE',
+    'In Transit': 'IN_TRANSIT',
+    'Delivered': 'DELIVERED',
+    'Closed': 'CLOSED',
+    'Cancelled': 'CANCELLED'
+  };
   
   const [formData, setFormData] = useState({
     originAddress: '',
@@ -61,29 +146,134 @@ const CreateLoad: React.FC = () => {
     }
   };
 
+  const validateForm = (): boolean => {
+    // Required fields validation
+    if (!formData.originAddress) {
+      toast.error('Origin address is required');
+      return false;
+    }
+    if (!formData.destinationAddress) {
+      toast.error('Destination address is required');
+      return false;
+    }
+    if (!formData.pickupDate) {
+      toast.error('Pickup date is required');
+      return false;
+    }
+    if (!formData.deliveryDate) {
+      toast.error('Delivery date is required');
+      return false;
+    }
+    if (!formData.commodity) {
+      toast.error('Commodity is required');
+      return false;
+    }
+    if (!formData.weight) {
+      toast.error('Weight is required');
+      return false;
+    }
+    if (!formData.equipmentType) {
+      toast.error('Equipment type is required');
+      return false;
+    }
+    
+    // Validate dates
+    const pickup = new Date(formData.pickupDate);
+    const delivery = new Date(formData.deliveryDate);
+    
+    if (isNaN(pickup.getTime())) {
+      toast.error('Invalid pickup date');
+      return false;
+    }
+    
+    if (isNaN(delivery.getTime())) {
+      toast.error('Invalid delivery date');
+      return false;
+    }
+    
+    if (pickup > delivery) {
+      toast.error('Pickup date cannot be after delivery date');
+      return false;
+    }
+    
+    // Validate numeric fields
+    if (isNaN(parseFloat(formData.weight)) || parseFloat(formData.weight) <= 0) {
+      toast.error('Weight must be a positive number');
+      return false;
+    }
+    
+    if (formData.pallets && (isNaN(parseFloat(formData.pallets)) || parseFloat(formData.pallets) < 0)) {
+      toast.error('Pallets must be a non-negative number');
+      return false;
+    }
+    
+    if (formData.rate && (isNaN(parseFloat(formData.rate)) || parseFloat(formData.rate) < 0)) {
+      toast.error('Rate must be a non-negative number');
+      return false;
+    }
+    
+    // Temperature validation for temperature-controlled shipments
+    if (formData.temperatureControlled && !formData.temperature) {
+      toast.error('Temperature range is required for temperature-controlled shipments');
+      return false;
+    }
+    
+    return true;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validate form before submission
+    if (!validateForm()) {
+      return;
+    }
+    
     setIsSubmitting(true);
 
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Generate a unique load number
+      const timestamp = new Date().getTime();
+      const loadNumber = `LOAD-${timestamp}`;
       
-      // Create a new shipment object with form data
-      const newShipment = {
-        id: `SH-${Math.floor(2000 + Math.random() * 9000)}`,
-        ...formData,
-        status: 'Draft',
+      // Convert form data to payload format
+      const shipmentPayload: ShipmentPayload = {
+        loadNumber: loadNumber,
+        originAddress: formData.originAddress,
+        destinationAddress: formData.destinationAddress,
+        originCoordinates: formData.originCoordinates || undefined,
+        destinationCoordinates: formData.destinationCoordinates || undefined,
+        pickupDate: formData.pickupDate,
+        pickupTime: formData.pickupTime || undefined,
+        deliveryDate: formData.deliveryDate,
+        deliveryTime: formData.deliveryTime || undefined,
+        commodity: formData.commodity,
+        weight: parseFloat(formData.weight),
+        pallets: formData.pallets ? parseInt(formData.pallets, 10) : undefined,
+        rate: formData.rate ? parseFloat(formData.rate) : undefined,
+        // Convert display-friendly equipment type to backend enum format
+        equipmentType: equipmentTypeMap[formData.equipmentType] || formData.equipmentType,
+        broker: formData.broker,
+        reference: formData.reference || undefined,
+        specialInstructions: formData.specialInstructions || undefined,
+        hazmat: formData.hazmat,
+        stackable: formData.stackable,
+        temperatureControlled: formData.temperatureControlled,
+        temperature: formData.temperatureControlled ? formData.temperature : undefined,
+        status: loadStatusMap['Draft'] || 'DRAFT',
         createdAt: new Date().toISOString()
       };
       
+      // Submit shipment to API
+      const response = await ApiClient.post<{ id: string }>('/loads', shipmentPayload);
+      
       // Show success message
-      toast.success(`Shipment ${newShipment.id} created successfully!`);
+      toast.success(`Shipment ${response.id} created successfully!`);
       
       // Navigate to loads page
       navigate('/shipper/loads');
     } catch (error) {
-      toast.error('Failed to create shipment. Please try again.');
+      console.error('Error creating shipment:', error);
     } finally {
       setIsSubmitting(false);
     }
