@@ -37,6 +37,14 @@ interface RefreshResponse {
 }
 
 export const authService = {
+  // Get token from storage
+  getToken: (): string | null => {
+    // Check both storage locations for token
+    const localToken = localStorage.getItem(TOKEN_KEY);
+    const sessionToken = sessionStorage.getItem(TOKEN_KEY);
+    return localToken || sessionToken;
+  },
+
   // Login function
   login: async (credentials: LoginCredentials): Promise<AuthResponse> => {
     try {
@@ -148,10 +156,7 @@ export const authService = {
     const sessionToken = sessionStorage.getItem(TOKEN_KEY);
     const token = localToken || sessionToken;
     
-    console.log('[AUTH SERVICE] Token found in:', {
-      localStorage: !!localToken,
-      sessionStorage: !!sessionToken
-    });
+    console.log('[AUTH SERVICE] Token found:', token ? 'Yes' : 'No');
     
     if (token) {
       try {
