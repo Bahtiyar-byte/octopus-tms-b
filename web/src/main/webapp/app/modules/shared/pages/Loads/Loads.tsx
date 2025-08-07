@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card } from '../../../../components';
 import { useRoleConfig } from '../../hooks/useRoleConfig';
@@ -7,6 +7,7 @@ import { LoadCard } from '../../components/cards/LoadCard';
 import { LoadsTable } from '../../components/tables/LoadsTable';
 import { LoadsFilters } from '../../components/filters/LoadsFilters';
 import { formatLoadId, getLoadStatusColor } from '../../../../utils/load/loadUtils';
+import { loadsApi } from '../../api/loadsApi';
 
 export interface Load {
   id: string;
@@ -46,70 +47,31 @@ const Loads: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    // In real app, fetch loads based on role
-    fetchLoads();
-  }, []);
-
-  const fetchLoads = async () => {
+  const fetchLoads = useCallback(async () => {
     try {
       setLoading(true);
-      // Mock data - in real app, would call API based on role
-      const mockLoads: Load[] = [
-        {
-          id: 'LD-000124',
-          origin: 'Chicago, IL',
-          destination: 'Atlanta, GA',
-          status: 'available',
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-          commodity: 'General Freight',
-          rate: 2450,
-          weight: 42000,
-          equipment: 'Dry Van',
-          pickupDate: new Date(Date.now() + 86400000).toISOString(),
-          distance: 715
-        },
-        {
-          id: 'LD-000125',
-          origin: 'Dallas, TX',
-          destination: 'Phoenix, AZ',
-          status: 'assigned',
-          createdAt: new Date(Date.now() - 86400000).toISOString(),
-          updatedAt: new Date().toISOString(),
-          commodity: 'Electronics',
-          rate: 1890,
-          carrier: { id: '1', name: 'Swift Transport' },
-          weight: 35000,
-          equipment: 'Reefer',
-          pickupDate: new Date(Date.now() + 172800000).toISOString(),
-          distance: 1065
-        },
-        {
-          id: 'LD-000126',
-          origin: 'Miami, FL',
-          destination: 'Charlotte, NC',
-          status: 'in_transit',
-          createdAt: new Date(Date.now() - 172800000).toISOString(),
-          updatedAt: new Date().toISOString(),
-          commodity: 'Produce',
-          rate: 2150,
-          carrier: { id: '2', name: 'East Coast Logistics' },
-          driver: 'John Smith',
-          weight: 38000,
-          equipment: 'Reefer',
-          distance: 756
-        }
-      ];
+      // Fetch real data from API
+      const fetchedLoads = await loadsApi.getLoads(activeFilter !== 'all' ? activeFilter : undefined);
       
-      setLoads(mockLoads);
-      setError(null);
+      if (fetchedLoads.length === 0 && activeFilter === 'all') {
+        // If no loads were returned and we're not filtering, it might be an error
+        setError('No loads found. There might be an issue with the data source.');
+      } else {
+        setLoads(fetchedLoads);
+        setError(null);
+      }
     } catch (err) {
+      console.error('Error fetching loads:', err);
       setError('Failed to load data. Please try again later.');
     } finally {
       setLoading(false);
     }
-  };
+  }, [activeFilter]);
+
+  useEffect(() => {
+    // Fetch loads when component mounts or when fetchLoads changes
+    fetchLoads();
+  }, [fetchLoads]);
 
   const handleAction = (action: string, load?: Load) => {
     switch (action) {
@@ -137,14 +99,19 @@ const Loads: React.FC = () => {
 
   // Filter loads based on active filter and search term
   const filteredLoads = loads.filter(load => {
+    const searchTermLower = searchTerm.toLowerCase();
+    
+    // Check if load matches the active filter
     const matchesFilter = activeFilter === 'all' || load.status === activeFilter;
+    
+    // Check if load matches the search term
     const matchesSearch = searchTerm === '' || 
-      load.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      load.origin.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      load.destination.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      load.commodity?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      load.carrier?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      load.customer?.name.toLowerCase().includes(searchTerm.toLowerCase());
+      load.id.toLowerCase().includes(searchTermLower) ||
+      load.origin.toLowerCase().includes(searchTermLower) ||
+      load.destination.toLowerCase().includes(searchTermLower) ||
+      load.commodity.toLowerCase().includes(searchTermLower) ||
+      (load.carrier?.name && load.carrier.name.toLowerCase().includes(searchTermLower)) ||
+      (load.customer?.name && load.customer.name.toLowerCase().includes(searchTermLower));
 
     return matchesFilter && matchesSearch;
   });
