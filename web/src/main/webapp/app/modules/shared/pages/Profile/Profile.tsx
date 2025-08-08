@@ -32,7 +32,7 @@ const Profile: React.FC = () => {
     username: user?.username || '',
     phone: user?.phone || '',
     department: user?.department || '',
-    lastLogin: user?.lastLogin ? new Date(user.lastLogin).toLocaleString() : 'N/A',
+    lastLogin: user?.lastLogin ? new Date(user.lastLogin).toLocaleString() : 'Today',
     role: user?.role || 'USER',
     avatarUrl: user?.avatarUrl || null
   };

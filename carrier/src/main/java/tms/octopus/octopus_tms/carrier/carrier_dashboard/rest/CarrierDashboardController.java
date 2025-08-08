@@ -13,7 +13,7 @@ import tms.octopus.octopus_tms.base.user.model.UserRole;
 
 @RestController
 @RequestMapping(value = "/dashboard", produces = MediaType.APPLICATION_JSON_VALUE)
-@PreAuthorize("hasAnyAuthority('" + UserRole.Fields.SUPERVISOR + "', '" + UserRole.Fields.SALES + "')")
+@PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SALES_REP + "')")
 @SecurityRequirement(name = "bearer-jwt")
 public class CarrierDashboardController {
 

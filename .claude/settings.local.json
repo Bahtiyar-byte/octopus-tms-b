@@ -52,7 +52,16 @@
       "Bash(npx playwright:*)",
       "Bash(/Users/haydarovbahtiyar/Desktop/octopus-tms-b/test-aliases.sh)",
       "Bash(./test-crud-operations.sh:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(alias claude)",
+      "Bash(claude-select kimi --help)",
+      "Bash(source:*)",
+      "Bash(openai:*)",
+      "Bash(npm uninstall:*)",
+      "Bash(kimi:*)",
+      "Bash(/Users/haydarovbahtiyar/.local/bin/kimi \"Hello, are you Kimi K2?\")",
+      "WebFetch(domain:platform.moonshot.cn)",
+      "WebFetch(domain:openrouter.ai)"
     ],
     "deny": []
   }

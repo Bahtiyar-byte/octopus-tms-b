@@ -36,19 +36,19 @@ public class LoadStopResource {
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SUPERVISOR + "', '" + UserRole.Fields.DISPATCHER + "', '" + UserRole.Fields.SUPPORT + "')")
+    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SALES_REP + "')")
     public ResponseEntity<List<LoadStopDTO>> getAllLoadStops() {
         return ResponseEntity.ok(loadStopService.findAll());
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SUPERVISOR + "', '" + UserRole.Fields.DISPATCHER + "')")
+    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SALES_REP + "')")
     public ResponseEntity<LoadStopDTO> getLoadStop(@PathVariable(name = "id") final UUID id) {
         return ResponseEntity.ok(loadStopService.get(id));
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SUPERVISOR + "', '" + UserRole.Fields.DISPATCHER + "')")
+    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "',  '" + UserRole.Fields.SALES_REP + "')")
     @ApiResponse(responseCode = "201")
     public ResponseEntity<UUID> createLoadStop(@RequestBody @Valid final LoadStopDTO loadStopDTO) {
         final UUID createdId = loadStopService.create(loadStopDTO);
@@ -56,7 +56,7 @@ public class LoadStopResource {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SUPERVISOR + "', '" + UserRole.Fields.DISPATCHER + "')")
+    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "',  '" + UserRole.Fields.SALES_REP + "')")
     public ResponseEntity<UUID> updateLoadStop(@PathVariable(name = "id") final UUID id,
             @RequestBody @Valid final LoadStopDTO loadStopDTO) {
         loadStopService.update(id, loadStopDTO);
@@ -64,7 +64,7 @@ public class LoadStopResource {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SUPERVISOR + "', '" + UserRole.Fields.DISPATCHER + "')")
+    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SALES_REP + "')")
     @ApiResponse(responseCode = "204")
     public ResponseEntity<Void> deleteLoadStop(@PathVariable(name = "id") final UUID id) {
         final ReferencedWarning referencedWarning = loadStopService.getReferencedWarning(id);

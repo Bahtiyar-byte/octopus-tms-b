@@ -15,7 +15,7 @@ import tms.octopus.octopus_tms.carrier.driver_report.model.DriverStatusDTO;
 
 @RestController
 @RequestMapping(value = "/reports", produces = MediaType.APPLICATION_JSON_VALUE)
-@PreAuthorize("hasAuthority('" + UserRole.Fields.SUPERVISOR + "')")
+@PreAuthorize("hasAuthority('" + UserRole.Fields.ADMIN + "')")
 @SecurityRequirement(name = "bearer-jwt")
 public class DeriverReportController {
 

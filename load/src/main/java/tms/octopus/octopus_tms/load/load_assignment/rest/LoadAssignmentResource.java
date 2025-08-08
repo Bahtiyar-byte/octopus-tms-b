@@ -24,7 +24,7 @@ import tms.octopus.octopus_tms.load.load_assignment.service.LoadAssignmentServic
 
 @RestController
 @RequestMapping(value = "/api/loadAssignments", produces = MediaType.APPLICATION_JSON_VALUE)
-@PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.DISPATCHER + "')")
+@PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SALES_REP + "')")
 @SecurityRequirement(name = "bearer-jwt")
 public class LoadAssignmentResource {
 

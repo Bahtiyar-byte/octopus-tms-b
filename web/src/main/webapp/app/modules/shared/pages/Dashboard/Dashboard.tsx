@@ -3,7 +3,8 @@ import { useRoleConfig } from '../../hooks/useRoleConfig';
 import { DashboardWidget } from '../../components/dashboard/DashboardWidget';
 import { DashboardHeader } from '../../components/dashboard/DashboardHeader';
 import { QuickActions } from '../../components/dashboard/QuickActions';
-
+import { WeatherWidget } from '../../components/dashboard/widgets/WeatherWidget';
+import WeatherAlerts from '../../components/dashboard/widgets/WeatherAlerts';
 
 // import React from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -296,6 +297,14 @@ const Dashboard: React.FC = () => {
                     </table>
                 </div>
             </div>
+            {/* Weather Widget */}
+            <WeatherWidget id={'1'} title={'W'} />
+
+            {/* WeatherAlerts */}
+            <WeatherAlerts/>
+
+
+
         </div>
     );
 };

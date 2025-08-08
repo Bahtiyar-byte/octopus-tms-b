@@ -24,7 +24,7 @@ import tms.octopus.octopus_tms.core.user_preference.service.UserPreferenceServic
 
 @RestController
 @RequestMapping(value = "/api/userPreferences", produces = MediaType.APPLICATION_JSON_VALUE)
-@PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SUPPORT + "')")
+@PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "')")
 @SecurityRequirement(name = "bearer-jwt")
 public class UserPreferenceResource {
 
