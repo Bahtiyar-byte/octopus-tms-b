@@ -54,14 +54,30 @@ public class LoadServiceImpl implements LoadService {
     }
 
     @Override
-    public Page<LoadDTO> findAll(final String filter, final Pageable pageable) {
+    public Page<LoadDTO> findAll(final String filter, final String search, final Pageable pageable) {
         Page<Load> page;
-        if (filter != null) {
+        
+        // If both filter and search are provided
+        if (filter != null && search != null && !search.trim().isEmpty()) {
+            page = loadRepository.findByStatusAndSearchTerm(filter, search.trim(), pageable);
+        }
+        // If only search is provided
+        else if (search != null && !search.trim().isEmpty()) {
+            page = loadRepository.findBySearchTerm(search.trim(), pageable);
+        }
+        // If only filter is provided (existing logic)
+        else if (filter != null) {
             UUID uuidFilter = null;
             try {
                 uuidFilter = UUID.fromString(filter);
             } catch (final IllegalArgumentException illegalArgumentException) {
-                // keep null - no parseable input
+                // If not a UUID, try to use it as a status filter
+                page = loadRepository.findByStatus(filter, pageable);
+                return new PageImpl<>(page.getContent()
+                        .stream()
+                        .map(load -> loadMapper.updateLoadDTO(load, new LoadDTO()))
+                        .toList(),
+                        pageable, page.getTotalElements());
             }
             page = loadRepository.findAllById(uuidFilter, pageable);
         } else {

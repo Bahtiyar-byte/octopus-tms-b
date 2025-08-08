@@ -66,8 +66,9 @@ public class LoadResource {
     @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SUPERVISOR + "', '" + UserRole.Fields.DISPATCHER + "', '" + UserRole.Fields.SALES + "', '" + UserRole.Fields.SUPPORT + "')")
     public ResponseEntity<Page<LoadDTO>> getAllLoads(
             @RequestParam(name = "filter", required = false) final String filter,
+            @RequestParam(name = "search", required = false) final String search,
             @Parameter(hidden = true) @SortDefault(sort = "id") @PageableDefault(size = 20) final Pageable pageable) {
-        return ResponseEntity.ok(loadService.findAll(filter, pageable));
+        return ResponseEntity.ok(loadService.findAll(filter, search, pageable));
     }
 
     @Operation(

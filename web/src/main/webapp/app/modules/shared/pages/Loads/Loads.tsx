@@ -51,11 +51,14 @@ const Loads: React.FC = () => {
   const fetchLoads = useCallback(async () => {
     try {
       setLoading(true);
-      // Fetch real data from API
-      const fetchedLoads = await loadsApi.getLoads(activeFilter !== 'all' ? activeFilter : undefined);
+      // Fetch real data from API with both filter and search parameters
+      const fetchedLoads = await loadsApi.getLoads(
+        activeFilter !== 'all' ? activeFilter : undefined,
+        searchTerm || undefined
+      );
       
-      if (fetchedLoads.length === 0 && activeFilter === 'all') {
-        // If no loads were returned and we're not filtering, it might be an error
+      if (fetchedLoads.length === 0 && activeFilter === 'all' && !searchTerm) {
+        // If no loads were returned and we're not filtering or searching, it might be an error
         setError('No loads found. There might be an issue with the data source.');
       } else {
         console.log('fetchedLoads ', fetchedLoads)
@@ -68,11 +71,15 @@ const Loads: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, [activeFilter]);
+  }, [activeFilter, searchTerm]);
 
   useEffect(() => {
-    // Fetch loads when component mounts or when fetchLoads changes
-    fetchLoads();
+    // Debounce search to avoid too many API calls
+    const timeoutId = setTimeout(() => {
+      fetchLoads();
+    }, searchTerm ? 300 : 0); // Add delay only for search
+    
+    return () => clearTimeout(timeoutId);
   }, [fetchLoads]);
 
   const handleAction = (action: string, load?: Load) => {
@@ -99,24 +106,7 @@ const Loads: React.FC = () => {
     }
   };
 
-  // Filter loads based on active filter and search term
-  const filteredLoads = loads.filter(load => {
-    const searchTermLower = searchTerm.toLowerCase();
-    
-    // Check if load matches the active filter
-    const matchesFilter = activeFilter === 'all' || load.status === activeFilter;
-    
-    // Check if load matches the search term
-    const matchesSearch = searchTerm === '' || 
-      load.id.toLowerCase().includes(searchTermLower) ||
-      load.origin.toLowerCase().includes(searchTermLower) ||
-      load.destination.toLowerCase().includes(searchTermLower) ||
-      load.commodity.toLowerCase().includes(searchTermLower) ||
-      (load.carrier?.name && load.carrier.name.toLowerCase().includes(searchTermLower)) ||
-      (load.customer?.name && load.customer.name.toLowerCase().includes(searchTermLower));
-
-    return matchesFilter && matchesSearch;
-  });
+  // No need for local filtering anymore - backend handles it
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -177,7 +167,7 @@ const Loads: React.FC = () => {
             <p>{error}</p>
           </div>
         </Card>
-      ) : filteredLoads.length === 0 ? (
+      ) : loads.length === 0 ? (
         <Card className="bg-white shadow-md p-8 text-center">
           <div className="text-gray-500">
             <svg className="w-12 h-12 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -189,7 +179,7 @@ const Loads: React.FC = () => {
         </Card>
       ) : viewMode === 'grid' ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredLoads.map((load) => (
+          {loads.map((load) => (
             <LoadCard 
               key={load.id} 
               load={load} 
@@ -200,7 +190,7 @@ const Loads: React.FC = () => {
         </div>
       ) : (
         <LoadsTable 
-          loads={filteredLoads} 
+          loads={loads} 
           columns={config.columns || []}
           onAction={handleAction}
           role={role || 'broker'}

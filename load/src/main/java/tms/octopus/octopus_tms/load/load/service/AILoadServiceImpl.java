@@ -23,8 +23,8 @@ public class AILoadServiceImpl implements AILoadService {
 
     @Override
     public List<Map<String, Object>> getLoadsForAI(String filter, int limit) {
-        // Fetch loads from the database
-        Page<LoadDTO> loadsPage = loadService.findAll(filter, PageRequest.of(0, limit));
+        // Fetch loads from the database - pass null for search parameter since this is for AI
+        Page<LoadDTO> loadsPage = loadService.findAll(filter, null, PageRequest.of(0, limit));
         List<LoadDTO> loads = loadsPage.getContent();
 
         // Convert LoadDTO objects to the format expected by AI Assistant

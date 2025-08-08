@@ -35,13 +35,26 @@ interface LoadListResponse {
 // API functions
 export const loadsApi = {
   /**
-   * Get all loads
+   * Get all loads with optional filters
    * @param status Optional status filter
+   * @param search Optional search term
    * @returns Array of loads
    */
-  getLoads: async (status?: string): Promise<Load[]> => {
+  getLoads: async (status?: string, search?: string): Promise<Load[]> => {
     try {
-      const response = await ApiClient.get<LoadListResponse>('/loads');
+      // Build query parameters
+      const params = new URLSearchParams();
+      if (status && status !== 'all') {
+        params.append('filter', status);
+      }
+      if (search && search.trim()) {
+        params.append('search', search.trim());
+      }
+      
+      const queryString = params.toString();
+      const url = queryString ? `/loads?${queryString}` : '/loads';
+      
+      const response = await ApiClient.get<LoadListResponse>(url);
       
       // Map backend DTO to frontend Load type
       const loads = response.content.map((loadDTO: LoadDTO) => ({
@@ -70,10 +83,7 @@ export const loadsApi = {
         driver: loadDTO.driverName
       }));
 
-      if (status) {
-        return loads.filter((load: Load) => load.status === status);
-      }
-      
+      // No need to filter on frontend anymore since backend handles it
       return loads;
     } catch (error) {
       console.error('Error fetching loads:', error);

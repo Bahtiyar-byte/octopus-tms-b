@@ -9,7 +9,7 @@ import tms.octopus.octopus_tms.load.load.model.LoadDTO;
 
 public interface LoadService {
 
-    Page<LoadDTO> findAll(String filter, Pageable pageable);
+    Page<LoadDTO> findAll(String filter, String search, Pageable pageable);
 
     Page<LoadDTO> findAllByBrokerId(UUID brokerId, Pageable pageable);
 
