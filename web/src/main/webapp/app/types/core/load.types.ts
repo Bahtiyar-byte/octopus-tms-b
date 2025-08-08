@@ -203,3 +203,56 @@ export interface LoadAction {
   variant?: 'primary' | 'secondary' | 'danger';
   condition?: (load: Load) => boolean;
 }
+
+// Detailed load view type (used by LoadDetails page)
+export interface LoadDetailsData {
+  id: string;
+  loadNumber: string;
+  brokerId: string | null;
+  shipperId: string | null;
+  carrierId: string | null;
+  status: string;
+  originAddress: string;
+  originCity: string;
+  originState: string;
+  originZip: string;
+  originLat: string;
+  originLng: string;
+  destinationAddress: string;
+  destinationCity: string;
+  destinationState: string;
+  destinationZip: string;
+  destinationLat: string;
+  destinationLng: string;
+  distance: number;
+  eta: Date;
+  commodity: string;
+  weight: number;
+  equipmentType: string;
+  routingType: string;
+  rate: string;
+  carrierRate: string | null;
+  pickupDate: string;
+  pickupTimeStart: string;
+  pickupTimeEnd: string;
+  deliveryDate: string;
+  deliveryTimeStart: string;
+  deliveryTimeEnd: string;
+  notes: string;
+  specialInstructions: string;
+  referenceNumber: string;
+  postedToLoadboards: boolean | null;
+  createdBy: string | null;
+  assignedDispatcher: string | null;
+  assignedDriverId: string | null;
+  createdAt: string;
+  updatedAt: string | null;
+  
+  // Computed properties
+  origin?: string;
+  destination?: string;
+  ratePerMile?: number;
+  customer?: { id: string; name: string };
+  carrier?: { id: string; name: string };
+  driver?: { id: string; name: string };
+}

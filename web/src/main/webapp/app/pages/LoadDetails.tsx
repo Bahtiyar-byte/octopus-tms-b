@@ -3,61 +3,8 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { Card } from '../components';
 import { notify } from '../services';
 import { ApiClient } from '../services/api/client';
-import { Load, LoadDocument, LoadStatus, EquipmentType } from '../types/core/load.types';
+import { Load, LoadDocument, LoadStatus, EquipmentType, LoadDetailsData } from '../types/core/load.types';
 import { ApiError } from '../types/core/error.types';
-
-// Enhanced load details interface matching the actual API response
-interface LoadDetailsData {
-  id: string;
-  loadNumber: string;
-  brokerId: string | null;
-  shipperId: string | null;
-  carrierId: string | null;
-  status: string;
-  originAddress: string;
-  originCity: string;
-  originState: string;
-  originZip: string;
-  originLat: string;
-  originLng: string;
-  destinationAddress: string;
-  destinationCity: string;
-  destinationState: string;
-  destinationZip: string;
-  destinationLat: string;
-  destinationLng: string;
-  distance: number;
-  eta: Date;
-  commodity: string;
-  weight: number;
-  equipmentType: string;
-  routingType: string;
-  rate: string;
-  carrierRate: string | null;
-  pickupDate: string;
-  pickupTimeStart: string;
-  pickupTimeEnd: string;
-  deliveryDate: string;
-  deliveryTimeStart: string;
-  deliveryTimeEnd: string;
-  notes: string;
-  specialInstructions: string;
-  referenceNumber: string;
-  postedToLoadboards: boolean | null;
-  createdBy: string | null;
-  assignedDispatcher: string | null;
-  assignedDriverId: string | null;
-  createdAt: string;
-  updatedAt: string | null;
-  
-  // Computed properties
-  origin?: string;
-  destination?: string;
-  ratePerMile?: number;
-  customer?: { id: string; name: string };
-  carrier?: { id: string; name: string };
-  driver?: { id: string; name: string };
-}
 
 // Document interface for LoadDetails
 interface LoadDetailsDocument extends LoadDocument {
