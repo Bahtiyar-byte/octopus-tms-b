@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { pdf, Document as PdfDoc, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { Card } from '../components';
 import { notify } from '../services';
@@ -32,6 +33,161 @@ const LoadDetails: React.FC = () => {
   const [error, setError] = useState<LoadDetailsErrorState>({ hasError: false });
   const [exportingPdf, setExportingPdf] = useState<boolean>(false);
   const [retryCount, setRetryCount] = useState<number>(0);
+
+  // PDF styles
+  const pdfStyles = StyleSheet.create({
+    page: { padding: 24, fontSize: 11, color: '#111827' },
+    header: { fontSize: 16, fontWeight: 700, marginBottom: 6 },
+    subHeader: { fontSize: 12, color: '#6B7280', marginBottom: 12 },
+    section: { marginBottom: 14 },
+    row: { display: 'flex', flexDirection: 'row', marginBottom: 6 },
+    col: { flex: 1 },
+    label: { fontSize: 9, color: '#6B7280' },
+    value: { fontSize: 11, fontWeight: 600 },
+    chip: {
+      fontSize: 10,
+      color: '#111827',
+      backgroundColor: '#F3F4F6',
+      paddingVertical: 4,
+      paddingHorizontal: 8,
+      borderRadius: 4,
+      alignSelf: 'flex-start'
+    },
+    hr: { height: 1, backgroundColor: '#E5E7EB', marginVertical: 10 },
+    small: { fontSize: 9, color: '#374151' }
+  });
+
+  const formatCurrency = (v?: string | number): string => {
+    if (v === undefined || v === null) return 'N/A';
+    const num = typeof v === 'string' ? Number(v) : v;
+    if (Number.isNaN(num)) return 'N/A';
+    return new Intl.NumberFormat(undefined, { style: 'currency', currency: 'USD' }).format(num);
+  };
+
+  const formatDate = (d?: string): string => (d ? new Date(d).toLocaleDateString() : 'N/A');
+
+  const formatDateTime = (d?: string): string => (d ? new Date(d).toLocaleString() : 'N/A');
+
+  const LoadDetailsPDF: React.FC<{ load: LoadDetailsData; documents: LoadDetailsDocument[] }> = ({ load, documents }) => (
+    <PdfDoc>
+      <Page size="A4" style={pdfStyles.page}>
+        <Text style={pdfStyles.header}>Load Details: {load.loadNumber}</Text>
+        <Text style={pdfStyles.subHeader}>
+          {load.origin} → {load.destination}
+        </Text>
+        <View style={pdfStyles.section}>
+          <Text style={pdfStyles.chip}>{(load.status || '').toString().replace('_', ' ').toUpperCase()}</Text>
+        </View>
+
+        <View style={pdfStyles.section}>
+          <Text style={{ ...pdfStyles.value, marginBottom: 6 }}>Shipment Details</Text>
+          <View style={pdfStyles.row}>
+            <View style={pdfStyles.col}>
+              <Text style={pdfStyles.label}>Customer</Text>
+              <Text style={pdfStyles.value}>{load.customer?.name || 'N/A'}</Text>
+            </View>
+            <View style={pdfStyles.col}>
+              <Text style={pdfStyles.label}>Commodity</Text>
+              <Text style={pdfStyles.value}>{load.commodity}</Text>
+            </View>
+          </View>
+          <View style={pdfStyles.row}>
+            <View style={pdfStyles.col}>
+              <Text style={pdfStyles.label}>Equipment</Text>
+              <Text style={pdfStyles.value}>{String(load.equipmentType)}</Text>
+            </View>
+            <View style={pdfStyles.col}>
+              <Text style={pdfStyles.label}>Weight</Text>
+              <Text style={pdfStyles.value}>{(load.weight || 0).toLocaleString()} lbs</Text>
+            </View>
+          </View>
+          {load.referenceNumber && (
+            <View style={pdfStyles.row}>
+              <View style={pdfStyles.col}>
+                <Text style={pdfStyles.label}>Reference Number</Text>
+                <Text style={pdfStyles.value}>{load.referenceNumber}</Text>
+              </View>
+            </View>
+          )}
+        </View>
+
+        <View style={pdfStyles.section}>
+          <Text style={{ ...pdfStyles.value, marginBottom: 6 }}>Route Information</Text>
+          <View style={pdfStyles.row}>
+            <View style={pdfStyles.col}>
+              <Text style={pdfStyles.label}>Origin</Text>
+              <Text style={pdfStyles.value}>{load.originAddress || load.origin}</Text>
+            </View>
+            <View style={pdfStyles.col}>
+              <Text style={pdfStyles.label}>Destination</Text>
+              <Text style={pdfStyles.value}>{load.destinationAddress || load.destination}</Text>
+            </View>
+          </View>
+          <View style={pdfStyles.row}>
+            <View style={pdfStyles.col}>
+              <Text style={pdfStyles.label}>Distance</Text>
+              <Text style={pdfStyles.value}>{load.distance ? `${load.distance.toLocaleString()} mi` : 'N/A'}</Text>
+            </View>
+            <View style={pdfStyles.col}>
+              <Text style={pdfStyles.label}>Pickup / Delivery</Text>
+              <Text style={pdfStyles.value}>{`${formatDate(load.pickupDate)} → ${formatDate(load.deliveryDate)}`}</Text>
+            </View>
+          </View>
+          {load.eta && (
+            <View style={pdfStyles.row}>
+              <View style={pdfStyles.col}>
+                <Text style={pdfStyles.label}>ETA</Text>
+                <Text style={pdfStyles.value}>{formatDateTime(load.eta)}</Text>
+              </View>
+            </View>
+          )}
+        </View>
+
+        <View style={pdfStyles.section}>
+          <Text style={{ ...pdfStyles.value, marginBottom: 6 }}>Financial Details</Text>
+          <View style={pdfStyles.row}>
+            <View style={pdfStyles.col}>
+              <Text style={pdfStyles.label}>Total Rate</Text>
+              <Text style={pdfStyles.value}>{formatCurrency(load.rate)}</Text>
+            </View>
+            <View style={pdfStyles.col}>
+              <Text style={pdfStyles.label}>Rate / Mile</Text>
+              <Text style={pdfStyles.value}>{load.ratePerMile !== undefined ? formatCurrency(load.ratePerMile) : 'N/A'}</Text>
+            </View>
+            <View style={pdfStyles.col}>
+              <Text style={pdfStyles.label}>Payment Status</Text>
+              <Text style={pdfStyles.value}>
+                {load.status === LoadStatus.PAID ? 'Paid' : load.status === LoadStatus.DELIVERED ? 'Ready for Invoice' : 'Pending Delivery'}
+              </Text>
+            </View>
+          </View>
+        </View>
+
+        {load.notes && (
+          <View style={pdfStyles.section}>
+            <Text style={{ ...pdfStyles.value, marginBottom: 6 }}>Notes</Text>
+            <Text style={pdfStyles.small}>{load.notes}</Text>
+          </View>
+        )}
+
+        {documents && documents.length > 0 && (
+          <View style={pdfStyles.section}>
+            <Text style={{ ...pdfStyles.value, marginBottom: 6 }}>Documents</Text>
+            {documents.map((d) => (
+              <View key={d.id} style={{ marginBottom: 4 }}>
+                <Text style={pdfStyles.small}>
+                  • {d.name} ({d.type}) {d.uploadedAt ? `— ${new Date(d.uploadedAt).toLocaleDateString()}` : ''}
+                </Text>
+              </View>
+            ))}
+          </View>
+        )}
+
+        <View style={pdfStyles.hr} />
+        <Text style={pdfStyles.small}>Generated by Octopus TMS • {new Date().toLocaleString()}</Text>
+      </Page>
+    </PdfDoc>
+  );
 
   // Type-safe API calls
   const fetchLoadDetails = useCallback(async (loadId: string): Promise<void> => {
@@ -214,12 +370,19 @@ const LoadDetails: React.FC = () => {
   const exportToPdf = async (): Promise<void> => {
     if (!load) return;
     setExportingPdf(true);
-    
     try {
-      // In a real implementation, this would call the API
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      notify('PDF export functionality would be implemented here', 'success');
-    } catch (error) {
+      const blob = await pdf(<LoadDetailsPDF load={load} documents={documents} />).toBlob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `load-${load.loadNumber}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      notify('PDF exported successfully', 'success');
+    } catch (err) {
+      console.error('Error exporting PDF:', err);
       notify('Error exporting PDF', 'error');
     } finally {
       setExportingPdf(false);
