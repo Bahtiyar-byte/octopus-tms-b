@@ -15,7 +15,7 @@ export const LoadCard: React.FC<LoadCardProps> = ({ load, onAction, role }) => {
   const navigate = useNavigate();
 
   const handleViewDetails = () => {
-    navigate(`/${role}/load-details/${load.id}`, { state: { load } });
+    navigate(`/load-details/${load.id}`, { state: { load } });
   };
 
   return (
