@@ -1,6 +1,7 @@
 package tms.octopus.octopus_tms.load.load.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotNull;
@@ -134,5 +135,12 @@ public class LoadDTO {
     private OffsetDateTime createdAt;
 
     private OffsetDateTime updatedAt;
+
+    // Provide snake_case aliases without breaking existing camelCase consumers
+    @JsonProperty("created_at")
+    public OffsetDateTime getCreated_at() { return createdAt; }
+
+    @JsonProperty("updated_at")
+    public OffsetDateTime getUpdated_at() { return updatedAt; }
 
 }

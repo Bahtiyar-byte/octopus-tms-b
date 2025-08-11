@@ -8,6 +8,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -152,10 +154,10 @@ public class Load {
     @Column
     private UUID assignedDriverId;
 
-    @Column
+    @Column(name = "created_at")
     private OffsetDateTime createdAt;
 
-    @Column
+    @Column(name = "updated_at")
     private OffsetDateTime updatedAt;
 
     @OneToMany(mappedBy = "load")
@@ -169,5 +171,19 @@ public class Load {
 
     @OneToMany(mappedBy = "load")
     private Set<LoadOffer> offers;
+
+    @PrePersist
+    public void prePersist() {
+        final OffsetDateTime now = OffsetDateTime.now();
+        if (this.createdAt == null) {
+            this.createdAt = now;
+        }
+        this.updatedAt = now;
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        this.updatedAt = OffsetDateTime.now();
+    }
 
 }

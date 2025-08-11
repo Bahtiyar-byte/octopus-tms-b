@@ -18,6 +18,8 @@ public interface LoadMapper {
     LoadDTO updateLoadDTO(Load load, @MappingTarget LoadDTO loadDTO);
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
     Load updateLoad(LoadDTO loadDTO, @MappingTarget Load load);
 
 }

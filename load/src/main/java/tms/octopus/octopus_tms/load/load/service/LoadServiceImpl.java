@@ -1,5 +1,6 @@
 package tms.octopus.octopus_tms.load.load.service;
 
+import java.time.OffsetDateTime;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -118,7 +119,11 @@ public class LoadServiceImpl implements LoadService {
         }
         
         loadMapper.updateLoad(loadDTO, load);
-        return loadRepository.save(load).getId();
+        // Persist; timestamps will be set by @PrePersist
+        final Load saved = loadRepository.save(load);
+        // Populate timestamps and any defaults back into DTO so callers have them
+        loadMapper.updateLoadDTO(saved, loadDTO);
+        return saved.getId();
     }
     
     /**
@@ -150,6 +155,8 @@ public class LoadServiceImpl implements LoadService {
         final Load load = loadRepository.findById(id)
                 .orElseThrow(NotFoundException::new);
         loadMapper.updateLoad(loadDTO, load);
+        // Update timestamp on modification
+        load.setUpdatedAt(OffsetDateTime.now());
         loadRepository.save(load);
     }
 
