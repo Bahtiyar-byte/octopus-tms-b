@@ -71,24 +71,24 @@ const Login: React.FC = () => {
         { role: 'Carrier', username: 'carrier1', password: 'password' }
       ]
     },
-    broker: {
-      name: 'Broker Group',
-      color: 'blue',
-      users: [
-        { role: 'Broker 1', username: 'broker1', password: 'password', description: 'Emily Anderson' },
-        { role: 'Broker 2', username: 'broker2', password: 'password', description: 'David Martinez' },
-        { role: 'Broker 3', username: 'broker3', password: 'password', description: 'Jessica Williams' }
-      ]
-    },
-    shipper: {
-      name: 'Shipper Group',
-      color: 'green',
-      users: [
-        { role: 'Shipper 1', username: 'shipper1', password: 'password', description: 'Tom Shanahan' },
-        { role: 'Shipper 2', username: 'shipper2', password: 'password', description: 'Lisa Chen' },
-        { role: 'Shipper 3', username: 'shipper3', password: 'password', description: 'Mark Thompson' }
-      ]
-    }
+    // broker: {
+    //   name: 'Broker Group',
+    //   color: 'blue',
+    //   users: [
+    //     { role: 'Broker 1', username: 'broker1', password: 'password', description: 'Emily Anderson' },
+    //     { role: 'Broker 2', username: 'broker2', password: 'password', description: 'David Martinez' },
+    //     { role: 'Broker 3', username: 'broker3', password: 'password', description: 'Jessica Williams' }
+    //   ]
+    // },
+    // shipper: {
+    //   name: 'Shipper Group',
+    //   color: 'green',
+    //   users: [
+    //     { role: 'Shipper 1', username: 'shipper1', password: 'password', description: 'Tom Shanahan' },
+    //     { role: 'Shipper 2', username: 'shipper2', password: 'password', description: 'Lisa Chen' },
+    //     { role: 'Shipper 3', username: 'shipper3', password: 'password', description: 'Mark Thompson' }
+    //   ]
+    // }
   };
 
   const handleFillCredentials = (username: string) => {
