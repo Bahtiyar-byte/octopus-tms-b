@@ -17,6 +17,15 @@ const CreateLoad: React.FC = () => {
     destination: '',
     originCoordinates: null as { lat: number; lon: number } | null,
     destinationCoordinates: null as { lat: number; lon: number } | null,
+    // exact parsed fields from geocoder
+    originCity: '',
+    originState: '',
+    originZip: '',
+    originMapboxId: '',
+    destinationCity: '',
+    destinationState: '',
+    destinationZip: '',
+    destinationMapboxId: '',
     pickupDate: '',
     deliveryDate: '',
     commodity: '',
@@ -25,6 +34,31 @@ const CreateLoad: React.FC = () => {
     equipmentType: 'DRY_VAN',
     notes: ''
   });
+
+  // Helper: map a Mapbox feature to form fields exactly
+  const applyFeatureToForm = (which: 'origin' | 'destination', feature: GeocodingFeature) => {
+    const coords = feature?.geometry?.coordinates as [number, number] | undefined;
+    const prop = feature?.properties as any;
+    const ctx = (feature as any)?.context || {};
+
+    const fullAddress: string = prop?.full_address || prop?.place_formatted || '';
+    const city: string = ctx?.place?.name || '';
+    const state: string = ctx?.region?.region_code || ctx?.region?.name || '';
+    const zip: string = ctx?.postcode?.name || '';
+    const mapboxId: string = prop?.mapbox_id || (feature as any)?.mapbox_id || feature?.id || '';
+
+    setFormData(prev => ({
+      ...prev,
+      [`${which}`]: fullAddress,
+      [`${which}Coordinates`]: coords ? { lat: coords[1], lon: coords[0] } : null,
+      [`${which}City`]: city,
+      [`${which}State`]: state,
+      [`${which}Zip`]: zip,
+      [`${which}MapboxId`]: mapboxId
+    }) as any);
+  };
+
+  // No UI changes: features are taken from MapboxAddressInput on selection
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -62,7 +96,24 @@ const CreateLoad: React.FC = () => {
       };
       
       // Submit the load data to the API
-      const newLoad = await brokerApi.createLoad(loadData);
+      // Include exact parsed location fields alongside the basic load data
+      const payload: any = {
+        ...loadData,
+        originCity: formData.originCity,
+        originState: formData.originState,
+        originZip: formData.originZip,
+        originLat: formData.originCoordinates?.lat,
+        originLng: formData.originCoordinates?.lon,
+        originMapboxId: formData.originMapboxId,
+        destinationCity: formData.destinationCity,
+        destinationState: formData.destinationState,
+        destinationZip: formData.destinationZip,
+        destinationLat: formData.destinationCoordinates?.lat,
+        destinationLng: formData.destinationCoordinates?.lon,
+        destinationMapboxId: formData.destinationMapboxId
+      };
+
+      const newLoad = await brokerApi.createLoad(payload);
       
       // If load board posting is enabled, handle posting to DAT/Truckstop
       if (postToLoadBoard) {
@@ -108,22 +159,12 @@ const CreateLoad: React.FC = () => {
                   label="Origin Address"
                   value={formData.origin}
                   onChange={(value) => setFormData({ ...formData, origin: value })}
-                  onFeatureSelect={(feature: GeocodingFeature) => {
-                    if (feature?.geometry?.coordinates) {
-                      setFormData({
-                        ...formData,
-                        origin: feature.properties.full_address || formData.origin,
-                        originCoordinates: {
-                          lat: feature.geometry.coordinates[1],
-                          lon: feature.geometry.coordinates[0]
-                        }
-                      });
-                    }
-                  }}
+                  onFeatureSelect={(feature: GeocodingFeature) => applyFeatureToForm('origin', feature)}
                   savedLocations={jupiterAluminumLocations}
                   placeholder="Search for pickup address"
                   required
                 />
+                
               </div>
               
               <div>
@@ -131,22 +172,12 @@ const CreateLoad: React.FC = () => {
                   label="Destination Address"
                   value={formData.destination}
                   onChange={(value) => setFormData({ ...formData, destination: value })}
-                  onFeatureSelect={(feature: GeocodingFeature) => {
-                    if (feature?.geometry?.coordinates) {
-                      setFormData({
-                        ...formData,
-                        destination: feature.properties.full_address || formData.destination,
-                        destinationCoordinates: {
-                          lat: feature.geometry.coordinates[1],
-                          lon: feature.geometry.coordinates[0]
-                        }
-                      });
-                    }
-                  }}
+                  onFeatureSelect={(feature: GeocodingFeature) => applyFeatureToForm('destination', feature)}
                   savedLocations={[...jupiterAluminumLocations, ...commonDestinations]}
                   placeholder="Search for delivery address"
                   required
                 />
+                
               </div>
               
               {/* Pickup and Delivery Dates */}
