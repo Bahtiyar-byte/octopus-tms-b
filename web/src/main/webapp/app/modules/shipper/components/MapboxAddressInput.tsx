@@ -30,12 +30,37 @@ const MapboxAddressInput: React.FC<MapboxAddressInputProps> = ({
   const [inputFocused, setInputFocused] = React.useState(false);
   const [searchValue, setSearchValue] = React.useState(value);
 
+  const parseCityStateZip = (address: string) => {
+    const parts = address.split(',').map(p => p.trim()).filter(Boolean);
+    let city = '';
+    let state = '';
+    let zip = '';
+    if (parts.length >= 3) {
+      // Expect patterns like: City, ST 12345 OR City, ST, 12345
+      const last = parts[parts.length - 1];
+      const prev = parts[parts.length - 2];
+      const stateZipMatch = last.match(/^([A-Z]{2})\s+(\d{5}(?:-\d{4})?)$/);
+      if (stateZipMatch) {
+        city = prev;
+        state = stateZipMatch[1];
+        zip = stateZipMatch[2];
+      } else if (/^\d{5}(?:-\d{4})?$/.test(last)) {
+        // Zip only in last part, state in prev
+        zip = last;
+        state = prev.replace(/[^A-Z]/g, '').slice(0, 2) || prev;
+        city = parts[parts.length - 3] || '';
+      }
+    }
+    return { city, state, zip };
+  };
+
   const handleSelect = (location: SavedLocation) => {
     onChange(location.address);
     setShowSaved(false);
     
     // Create a feature object similar to what Mapbox returns
     if (onFeatureSelect && location.coordinates) {
+      const { city, state, zip } = parseCityStateZip(location.address);
       onFeatureSelect({
         type: 'Feature',
         id: 'custom_' + Math.random().toString(36).substring(2, 11),
@@ -53,8 +78,22 @@ const MapboxAddressInput: React.FC<MapboxAddressInputProps> = ({
           coordinates: {
             longitude: location.coordinates.lon,
             latitude: location.coordinates.lat
+          },
+          // also mirror context under properties for compatibility
+          context: {
+            place: { name: city },
+            region: { name: state, region_code: state },
+            postcode: { name: zip }
           }
         } as any
+        // and at top-level for consumers that read feature.context
+        // @ts-expect-error non-standard augmentation for convenience
+        ,
+        context: {
+          place: { name: city },
+          region: { name: state, region_code: state },
+          postcode: { name: zip }
+        }
       });
     }
   };

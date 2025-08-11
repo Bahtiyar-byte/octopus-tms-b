@@ -39,7 +39,7 @@ const CreateLoad: React.FC = () => {
   const applyFeatureToForm = (which: 'origin' | 'destination', feature: GeocodingFeature) => {
     const coords = feature?.geometry?.coordinates as [number, number] | undefined;
     const prop = feature?.properties as any;
-    const ctx = (feature as any)?.context || {};
+    const ctx = (feature as any)?.context || (prop?.context ?? {});
 
     const fullAddress: string = prop?.full_address || prop?.place_formatted || '';
     const city: string = ctx?.place?.name || '';
