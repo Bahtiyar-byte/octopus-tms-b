@@ -78,7 +78,7 @@ const Dashboard: React.FC = () => {
                         </div>
                         <h3 className="text-white/80 text-sm font-medium mb-1">Unassigned Shipments</h3>
                         <p className="text-3xl font-bold mb-2">{companyType === 'CARRIER' ? (unassignedShipments ?? '—') : 24}</p>
-                        <p className="text-xs text-white/70">5 awaiting carrier assignment</p>
+                        <p className="text-xs text-white/70">{companyType === 'CARRIER' ? `${unassignedShipments ?? 0} awaiting carrier assignment` : '5 awaiting carrier assignment'}</p>
                         <div className="mt-4 bg-white/20 rounded-full h-2">
                             <div className="bg-white h-2 rounded-full w-3/4"></div>
                         </div>
@@ -123,7 +123,7 @@ const Dashboard: React.FC = () => {
                         </div>
                         <h3 className="text-white/80 text-sm font-medium mb-1">En Route Shipments</h3>
                         <p className="text-3xl font-bold mb-2">{companyType === 'CARRIER' ? (enRouteShipments ?? '—') : 45}</p>
-                        <p className="text-xs text-white/70">12 preferred partners</p>
+                        <p className="text-xs text-white/70">{companyType === 'CARRIER' ? `${enRouteShipments ?? 0} En Route Shipments` : '12 En Route Shipments'}</p>
                         <div className="mt-4 bg-white/20 rounded-full h-2">
                             <div className="bg-white h-2 rounded-full w-11/12"></div>
                         </div>
