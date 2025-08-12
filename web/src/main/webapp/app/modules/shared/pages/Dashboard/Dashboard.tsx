@@ -1,17 +1,9 @@
 import React from 'react';
-import { useRoleConfig } from '../../hooks/useRoleConfig';
-import { DashboardWidget } from '../../components/dashboard/DashboardWidget';
-import { DashboardHeader } from '../../components/dashboard/DashboardHeader';
-import { QuickActions } from '../../components/dashboard/QuickActions';
-
 import { useUserStore } from '../../../../store/userStore';
-
-// import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Plus, Edit, Truck, Package, DollarSign, Users, TrendingUp, Activity } from 'lucide-react';
-import {AIAgent} from "../../../broker/components/AIAgent";
-// import { AIAgent } from '../components/AIAgent';
+import { AIAgent } from "../../../broker/components/AIAgent";
 
 const Dashboard: React.FC = () => {
     const navigate = useNavigate();
@@ -118,15 +110,8 @@ const Dashboard: React.FC = () => {
             <section className="mb-8">
                 <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
                     <Activity className="w-5 h-5 text-blue-600" />
-                    Quick Actions {role && `for ${role}`}
+                    Quick Actions
                 </h2>
-                
-                {/* Display a message if user is not logged in */}
-                {!role && (
-                    <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg mb-4">
-                        <p className="text-yellow-700">Please log in to see actions specific to your role.</p>
-                    </div>
-                )}
                 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {/* Create Load button - visible to all users but with different paths based on company type */}
@@ -145,7 +130,6 @@ const Dashboard: React.FC = () => {
                     </button>
 
                     {/* Smart Match - only visible to brokers */}
-                    {companyType === 'BROKER' && (
                         <button
                             onClick={() => navigate('/broker/smart-load-match')}
                             className="p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-all border border-gray-200 text-center group"
@@ -155,10 +139,8 @@ const Dashboard: React.FC = () => {
                             </div>
                             <span className="text-sm font-medium text-gray-700">Smart Match</span>
                         </button>
-                    )}
 
                     {/* Carrier Match - only visible to brokers */}
-                    {companyType === 'BROKER' && (
                         <button
                             onClick={() => navigate('/broker/carrier-match')}
                             className="p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-all border border-gray-200 text-center group"
@@ -168,7 +150,6 @@ const Dashboard: React.FC = () => {
                             </div>
                             <span className="text-sm font-medium text-gray-700">Carrier Match</span>
                         </button>
-                    )}
 
                     {/* Reports - visible to all but with different paths */}
                     <button
@@ -188,7 +169,6 @@ const Dashboard: React.FC = () => {
                     </button>
                     
                     {/* Admin-only button */}
-                    {role === 'ADMIN' && (
                         <button
                             onClick={() => navigate('/admin/settings')}
                             className="p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-all border border-gray-200 text-center group"
@@ -198,7 +178,6 @@ const Dashboard: React.FC = () => {
                             </div>
                             <span className="text-sm font-medium text-gray-700">Admin Settings</span>
                         </button>
-                    )}
                 </div>
             </section>
 
