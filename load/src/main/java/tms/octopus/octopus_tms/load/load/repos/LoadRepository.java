@@ -22,6 +22,11 @@ public interface LoadRepository extends JpaRepository<Load, UUID> {
     long countByCarrierIdAndAssignedDriverIdIsNull(UUID carrierId);
     
     /**
+     * Count loads for a carrier that have not yet been assigned to a driver, filtered by assigned dispatcher
+     */
+    long countByCarrierIdAndAssignedDriverIdIsNullAndAssignedDispatcher(UUID carrierId, UUID assignedDispatcher);
+    
+    /**
      * Find the load with the highest load number
      * @return the load with the highest load number
      */

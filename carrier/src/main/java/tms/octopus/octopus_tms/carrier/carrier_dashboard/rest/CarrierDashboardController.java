@@ -40,7 +40,12 @@ public class CarrierDashboardController {
 
         long unassigned = 0L;
         if (companyId != null) {
-            unassigned = loadRepository.countByCarrierIdAndAssignedDriverIdIsNull(companyId);
+            if (user.getRole() == UserRole.DISPATCHER) {
+                UUID dispatcherId = user.getId();
+                unassigned = loadRepository.countByCarrierIdAndAssignedDriverIdIsNullAndAssignedDispatcher(companyId, dispatcherId);
+            } else {
+                unassigned = loadRepository.countByCarrierIdAndAssignedDriverIdIsNull(companyId);
+            }
         }
 
         CarrierDashboardDTO dto = new CarrierDashboardDTO();
