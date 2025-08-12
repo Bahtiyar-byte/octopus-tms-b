@@ -51,7 +51,7 @@ const Dashboard: React.FC = () => {
                                 <Package className="w-6 h-6 text-white" />
                             </div>
                         </div>
-                        <h3 className="text-white/80 text-sm font-medium mb-1">Open Loads</h3>
+                        <h3 className="text-white/80 text-sm font-medium mb-1">Unassigned Shipments</h3>
                         <p className="text-3xl font-bold mb-2">24</p>
                         <p className="text-xs text-white/70">5 awaiting carrier assignment</p>
                         <div className="mt-4 bg-white/20 rounded-full h-2">
@@ -96,7 +96,7 @@ const Dashboard: React.FC = () => {
                                 <Users className="w-6 h-6 text-white" />
                             </div>
                         </div>
-                        <h3 className="text-white/80 text-sm font-medium mb-1">Active Carriers</h3>
+                        <h3 className="text-white/80 text-sm font-medium mb-1">En Route Shipments</h3>
                         <p className="text-3xl font-bold mb-2">45</p>
                         <p className="text-xs text-white/70">12 preferred partners</p>
                         <div className="mt-4 bg-white/20 rounded-full h-2">
