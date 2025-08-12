@@ -54,6 +54,15 @@ const Dashboard: React.FC = () => {
         { day: 'Sun', loads: 10 },
     ];
 
+    // Derived progress values for carrier metrics
+    const totalCarrierActive = (unassignedShipments ?? 0) + (enRouteShipments ?? 0);
+    const unassignedPct = totalCarrierActive > 0
+        ? Math.min(100, Math.max(0, Math.round(((unassignedShipments ?? 0) / totalCarrierActive) * 100)))
+        : 0;
+    const enRoutePct = totalCarrierActive > 0
+        ? Math.min(100, Math.max(0, Math.round(((enRouteShipments ?? 0) / totalCarrierActive) * 100)))
+        : 0;
+
     return (
         <div className="p-6 space-y-6">
             {/* Header */}
@@ -80,7 +89,10 @@ const Dashboard: React.FC = () => {
                         <p className="text-3xl font-bold mb-2">{companyType === 'CARRIER' ? (unassignedShipments ?? '—') : 24}</p>
                         <p className="text-xs text-white/70">{companyType === 'CARRIER' ? `${unassignedShipments ?? 0} awaiting carrier assignment` : '5 awaiting carrier assignment'}</p>
                         <div className="mt-4 bg-white/20 rounded-full h-2">
-                            <div className="bg-white h-2 rounded-full w-3/4"></div>
+                            <div
+                                className="bg-white h-2 rounded-full"
+                                style={{ width: companyType === 'CARRIER' ? `${unassignedPct}%` : '75%' }}
+                            ></div>
                         </div>
                     </div>
 
@@ -125,7 +137,10 @@ const Dashboard: React.FC = () => {
                         <p className="text-3xl font-bold mb-2">{companyType === 'CARRIER' ? (enRouteShipments ?? '—') : 45}</p>
                         <p className="text-xs text-white/70">{companyType === 'CARRIER' ? `${enRouteShipments ?? 0} En Route Shipments` : '12 En Route Shipments'}</p>
                         <div className="mt-4 bg-white/20 rounded-full h-2">
-                            <div className="bg-white h-2 rounded-full w-11/12"></div>
+                            <div
+                                className="bg-white h-2 rounded-full"
+                                style={{ width: companyType === 'CARRIER' ? `${enRoutePct}%` : '91.6667%' }}
+                            ></div>
                         </div>
                     </div>
                 </div>
