@@ -17,8 +17,8 @@ import tms.octopus.octopus_tms.carrier.carrier_dashboard.model.CarrierDashboardD
 import java.util.UUID;
 
 @RestController
-@RequestMapping(value = "/api/dashboard", produces = MediaType.APPLICATION_JSON_VALUE)
-@PreAuthorize("hasAnyAuthority('" + UserRole.Fields.SUPERVISOR + "', '" + UserRole.Fields.SALES + "')")
+@RequestMapping(value = "/dashboard", produces = MediaType.APPLICATION_JSON_VALUE)
+@PreAuthorize("hasAnyAuthority('" + UserRole.Fields.SUPERVISOR + "', '" + UserRole.Fields.SALES + "', '" + UserRole.Fields.DISPATCHER + "')")
 @SecurityRequirement(name = "bearer-jwt")
 public class CarrierDashboardController {
 
