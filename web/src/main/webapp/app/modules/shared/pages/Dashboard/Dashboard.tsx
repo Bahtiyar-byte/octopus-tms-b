@@ -1,15 +1,33 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useUserStore } from '../../../../store/userStore';
 import { useNavigate } from 'react-router-dom';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Plus, Edit, Truck, Package, DollarSign, Users, TrendingUp, Activity } from 'lucide-react';
 import { AIAgent } from "../../../broker/components/AIAgent";
+import { ApiClient } from '../../../../services/api';
 
 const Dashboard: React.FC = () => {
     const navigate = useNavigate();
     
     // Access user data from Zustand store
     const { role, companyType } = useUserStore();
+
+    // Carrier dashboard metrics
+    const [unassignedShipments, setUnassignedShipments] = useState<number | null>(null);
+
+    useEffect(() => {
+        let isMounted = true;
+        if (companyType === 'CARRIER') {
+            ApiClient.get<{ unassignedShipments: number }>("/dashboard/carrier")
+                .then((data) => {
+                    if (isMounted) setUnassignedShipments(typeof data?.unassignedShipments === 'number' ? data.unassignedShipments : 0);
+                })
+                .catch(() => {
+                    if (isMounted) setUnassignedShipments(0);
+                });
+        }
+        return () => { isMounted = false; };
+    }, [companyType]);
 
     // Mock data for charts
     const revenuePerCustomer = [
@@ -52,7 +70,7 @@ const Dashboard: React.FC = () => {
                             </div>
                         </div>
                         <h3 className="text-white/80 text-sm font-medium mb-1">Unassigned Shipments</h3>
-                        <p className="text-3xl font-bold mb-2">24</p>
+                        <p className="text-3xl font-bold mb-2">{companyType === 'CARRIER' ? (unassignedShipments ?? '—') : 24}</p>
                         <p className="text-xs text-white/70">5 awaiting carrier assignment</p>
                         <div className="mt-4 bg-white/20 rounded-full h-2">
                             <div className="bg-white h-2 rounded-full w-3/4"></div>

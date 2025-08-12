@@ -143,6 +143,7 @@ project(':financial') {
 project(':carrier') {
     dependencies {
         api project(':load')
+        api project(':core')
 
         testImplementation project(path: ':base', configuration: 'testArtifacts')
         testImplementation project(path: ':core', configuration: 'testArtifacts')

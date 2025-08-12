@@ -17,6 +17,11 @@ public interface LoadRepository extends JpaRepository<Load, UUID> {
     Page<Load> findAllByBrokerId(UUID brokerId, Pageable pageable);
     
     /**
+     * Count loads for a carrier that have not yet been assigned to a driver
+     */
+    long countByCarrierIdAndAssignedDriverIdIsNull(UUID carrierId);
+    
+    /**
      * Find the load with the highest load number
      * @return the load with the highest load number
      */

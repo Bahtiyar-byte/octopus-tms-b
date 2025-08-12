@@ -17,7 +17,7 @@ public class CarrierDashboardControllerTest extends BaseIT {
                     .header(HttpHeaders.AUTHORIZATION, supervisorOctopusTMSSecurityConfigToken())
                     .accept(ContentType.JSON)
                 .when()
-                    .get("/dashboard/carrier")
+                    .get("/api/dashboard/carrier")
                 .then()
                     .statusCode(HttpStatus.OK.value());
     }
