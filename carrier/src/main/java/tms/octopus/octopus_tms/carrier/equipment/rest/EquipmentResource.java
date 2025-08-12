@@ -2,6 +2,7 @@ package tms.octopus.octopus_tms.carrier.equipment.rest;
 
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
@@ -26,6 +27,7 @@ import tms.octopus.octopus_tms.carrier.equipment.service.EquipmentService;
 @RequestMapping(value = "/api/equipments", produces = MediaType.APPLICATION_JSON_VALUE)
 @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SUPERVISOR + "', '" + UserRole.Fields.DISPATCHER + "')")
 @SecurityRequirement(name = "bearer-jwt")
+@Tag(name = "Carrier - Equipment")
 public class EquipmentResource {
 
     private final EquipmentService equipmentService;

@@ -61,7 +61,7 @@ const MapboxAddressInput: React.FC<MapboxAddressInputProps> = ({
     // Create a feature object similar to what Mapbox returns
     if (onFeatureSelect && location.coordinates) {
       const { city, state, zip } = parseCityStateZip(location.address);
-      onFeatureSelect({
+      const baseFeature: GeocodingFeature = {
         type: 'Feature',
         id: 'custom_' + Math.random().toString(36).substring(2, 11),
         geometry: {
@@ -79,22 +79,25 @@ const MapboxAddressInput: React.FC<MapboxAddressInputProps> = ({
             longitude: location.coordinates.lon,
             latitude: location.coordinates.lat
           },
-          // also mirror context under properties for compatibility
+          // keep context inside properties for compatibility
+          // @ts-ignore Mapbox types may not include 'context' on properties in this version
           context: {
             place: { name: city },
             region: { name: state, region_code: state },
             postcode: { name: zip }
           }
         } as any
-        // and at top-level for consumers that read feature.context
-        // @ts-expect-error non-standard augmentation for convenience
-        ,
+      };
+      // Optionally attach top-level context for consumers expecting feature.context without affecting types
+      const featureWithContext: any = {
+        ...baseFeature,
         context: {
           place: { name: city },
           region: { name: state, region_code: state },
           postcode: { name: zip }
         }
-      });
+      };
+      onFeatureSelect(featureWithContext as GeocodingFeature);
     }
   };
 

@@ -57,16 +57,20 @@ const LoadDetails: React.FC = () => {
     small: { fontSize: 9, color: '#374151' }
   });
 
-  const formatCurrency = (v?: string | number): string => {
+  const formatCurrency = (v?: string | number | null): string => {
     if (v === undefined || v === null) return 'N/A';
     const num = typeof v === 'string' ? Number(v) : v;
     if (Number.isNaN(num)) return 'N/A';
     return new Intl.NumberFormat(undefined, { style: 'currency', currency: 'USD' }).format(num);
   };
 
-  const formatDate = (d?: string): string => (d ? new Date(d).toLocaleDateString() : 'N/A');
+  const formatDate = (d?: string | null): string => (d ? new Date(d).toLocaleDateString() : 'N/A');
 
-  const formatDateTime = (d?: string): string => (d ? new Date(d).toLocaleString() : 'N/A');
+  const formatDateTime = (d?: string | Date | null): string => {
+    if (!d) return 'N/A';
+    const dateObj = d instanceof Date ? d : new Date(d);
+    return dateObj.toLocaleString();
+  };
 
   const LoadDetailsPDF: React.FC<{ load: LoadDetailsData; documents: LoadDetailsDocument[] }> = ({ load, documents }) => (
     <PdfDoc>
@@ -130,7 +134,7 @@ const LoadDetails: React.FC = () => {
             </View>
             <View style={pdfStyles.col}>
               <Text style={pdfStyles.label}>Pickup / Delivery</Text>
-              <Text style={pdfStyles.value}>{`${formatDate(load.pickupDate)} → ${formatDate(load.deliveryDate)}`}</Text>
+              <Text style={pdfStyles.value}>{`${formatDate(load.pickupDate || undefined)} → ${formatDate(load.deliveryDate || undefined)}`}</Text>
             </View>
           </View>
           {load.eta && (
@@ -498,8 +502,8 @@ const LoadDetails: React.FC = () => {
             <div className="p-6">
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-xl font-semibold">Load Information</h2>
-                <span className={`px-3 py-1 text-sm rounded-full ${getStatusColor(load.status)}`}>
-                  {load.status.replace('_', ' ').toUpperCase()}
+                <span className={`px-3 py-1 text-sm rounded-full ${getStatusColor(load.status || '')}`}>
+                  {(load.status || '').replace('_', ' ').toUpperCase()}
                 </span>
               </div>
 
@@ -525,7 +529,7 @@ const LoadDetails: React.FC = () => {
                     </div>
                     <div>
                       <span className="text-sm text-gray-500 block">Weight</span>
-                      <span className="font-medium">{load.weight.toLocaleString()} lbs</span>
+                      <span className="font-medium">{(load.weight ?? 0).toLocaleString()} lbs</span>
                     </div>
                     {load.referenceNumber && (
                       <div>
@@ -553,16 +557,16 @@ const LoadDetails: React.FC = () => {
                     </div>
                     <div>
                       <span className="text-sm text-gray-500 block">Pickup Date</span>
-                      <span className="font-medium">{new Date(load.pickupDate).toLocaleDateString()}</span>
+                      <span className="font-medium">{formatDate(load.pickupDate)}</span>
                     </div>
                     <div>
                       <span className="text-sm text-gray-500 block">Delivery Date</span>
-                      <span className="font-medium">{new Date(load.deliveryDate).toLocaleDateString()}</span>
+                      <span className="font-medium">{formatDate(load.deliveryDate)}</span>
                     </div>
                     {load.eta && (
                       <div>
                         <span className="text-sm text-gray-500 block">ETA</span>
-                        <span className="font-medium">{new Date(load.eta).toLocaleString()}</span>
+                        <span className="font-medium">{formatDateTime(load.eta)}</span>
                       </div>
                     )}
                   </div>
@@ -576,7 +580,7 @@ const LoadDetails: React.FC = () => {
                   <div className="bg-gray-50 p-4 rounded-lg">
                     <span className="text-sm text-gray-500 block">Total Rate</span>
                     <span className="text-xl font-semibold text-green-600">
-                      ${load.rate.toLocaleString()}
+                      ${typeof load.rate === 'number' ? load.rate.toLocaleString() : Number(load.rate ?? 0).toLocaleString()}
                     </span>
                   </div>
                   <div className="bg-gray-50 p-4 rounded-lg">
@@ -625,7 +629,7 @@ const LoadDetails: React.FC = () => {
                     <div>
                       <h3 className="text-base font-medium">Booked</h3>
                       <p className="text-sm text-gray-500">
-                        {new Date(load.createdAt || load.pickupDate).toLocaleDateString()}
+                        {(load.createdAt || load.pickupDate) ? new Date((load.createdAt || load.pickupDate || '')).toLocaleDateString() : 'N/A'}
                       </p>
                     </div>
                   </div>
@@ -672,7 +676,7 @@ const LoadDetails: React.FC = () => {
                       <h3 className="text-base font-medium">Delivered</h3>
                       <p className="text-sm text-gray-500">
                         {[LoadStatus.DELIVERED, LoadStatus.AWAITING_DOCS, LoadStatus.PAID].includes(load.status as LoadStatus) ? 
-                         new Date(load.deliveryDate).toLocaleDateString() : 'Pending'}
+                         formatDate(load.deliveryDate) : 'Pending'}
                       </p>
                     </div>
                   </div>

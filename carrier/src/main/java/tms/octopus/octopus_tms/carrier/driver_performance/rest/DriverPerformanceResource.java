@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
@@ -33,6 +34,7 @@ import tms.octopus.octopus_tms.carrier.driver_performance.service.DriverPerforma
 @RequestMapping(value = "/api/driverPerformances", produces = MediaType.APPLICATION_JSON_VALUE)
 @PreAuthorize("hasAuthority('" + UserRole.Fields.ADMIN + "')")
 @SecurityRequirement(name = "bearer-jwt")
+@Tag(name = "Carrier - Driver Performance")
 public class DriverPerformanceResource {
 
     private final DriverPerformanceService driverPerformanceService;

@@ -127,7 +127,7 @@ export const setupErrorInterceptor = () => {
           }
           
           // Call refresh endpoint
-          const response = await axiosInstance.post('/auth/refresh', { refreshToken }, { skipAuth: true });
+          const response = await axiosInstance.post('/auth/refresh', { refreshToken }, { headers: { skipAuth: true as any } });
           const { accessToken } = response.data;
           
           // Store new token in the same storage location as the original token

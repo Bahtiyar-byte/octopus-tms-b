@@ -1,6 +1,7 @@
 package tms.octopus.octopus_tms.carrier.carrier_dashboard.rest;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,9 +18,10 @@ import tms.octopus.octopus_tms.carrier.carrier_dashboard.model.CarrierDashboardD
 import java.util.UUID;
 
 @RestController
-@RequestMapping(value = "/dashboard", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api/dashboard", produces = MediaType.APPLICATION_JSON_VALUE)
 @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.SUPERVISOR + "', '" + UserRole.Fields.SALES + "', '" + UserRole.Fields.DISPATCHER + "')")
 @SecurityRequirement(name = "bearer-jwt")
+@Tag(name = "Carrier - Dashboard")
 public class CarrierDashboardController {
 
     private final UserService userService;

@@ -3,6 +3,7 @@ package tms.octopus.octopus_tms.carrier.driver.rest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -36,6 +37,7 @@ import tms.octopus.octopus_tms.carrier.driver.service.DriverService;
 @RequestMapping(value = "/api/drivers", produces = MediaType.APPLICATION_JSON_VALUE)
 @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SUPERVISOR + "', '" + UserRole.Fields.DISPATCHER + "')")
 @SecurityRequirement(name = "bearer-jwt")
+@Tag(name = "Carrier - Drivers")
 public class DriverResource {
 
     private final DriverService driverService;

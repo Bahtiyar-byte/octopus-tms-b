@@ -1,6 +1,7 @@
 package tms.octopus.octopus_tms.carrier.driver_report.rest;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,9 +15,10 @@ import tms.octopus.octopus_tms.carrier.driver_report.model.DriverStatusDTO;
 
 
 @RestController
-@RequestMapping(value = "/reports", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api/reports", produces = MediaType.APPLICATION_JSON_VALUE)
 @PreAuthorize("hasAuthority('" + UserRole.Fields.SUPERVISOR + "')")
 @SecurityRequirement(name = "bearer-jwt")
+@Tag(name = "Carrier - Reports")
 public class DeriverReportController {
 
     @GetMapping("/performance/{driverId}")
