@@ -10,4 +10,7 @@ public class CarrierDashboardDTO {
 
     @NotNull
     private Long unassignedShipments;
+
+    @NotNull
+    private Long enRouteShipments;
 }

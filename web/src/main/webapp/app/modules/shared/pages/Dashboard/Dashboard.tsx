@@ -14,16 +14,23 @@ const Dashboard: React.FC = () => {
 
     // Carrier dashboard metrics
     const [unassignedShipments, setUnassignedShipments] = useState<number | null>(null);
+    const [enRouteShipments, setEnRouteShipments] = useState<number | null>(null);
 
     useEffect(() => {
         let isMounted = true;
         if (companyType === 'CARRIER') {
-            ApiClient.get<{ unassignedShipments: number }>("/dashboard/carrier")
+            ApiClient.get<{ unassignedShipments: number; enRouteShipments: number }>("/dashboard/carrier")
                 .then((data) => {
-                    if (isMounted) setUnassignedShipments(typeof data?.unassignedShipments === 'number' ? data.unassignedShipments : 0);
+                    if (isMounted) {
+                        setUnassignedShipments(typeof data?.unassignedShipments === 'number' ? data.unassignedShipments : 0);
+                        setEnRouteShipments(typeof data?.enRouteShipments === 'number' ? data.enRouteShipments : 0);
+                    }
                 })
                 .catch(() => {
-                    if (isMounted) setUnassignedShipments(0);
+                    if (isMounted) {
+                        setUnassignedShipments(0);
+                        setEnRouteShipments(0);
+                    }
                 });
         }
         return () => { isMounted = false; };
@@ -115,7 +122,7 @@ const Dashboard: React.FC = () => {
                             </div>
                         </div>
                         <h3 className="text-white/80 text-sm font-medium mb-1">En Route Shipments</h3>
-                        <p className="text-3xl font-bold mb-2">45</p>
+                        <p className="text-3xl font-bold mb-2">{companyType === 'CARRIER' ? (enRouteShipments ?? '—') : 45}</p>
                         <p className="text-xs text-white/70">12 preferred partners</p>
                         <div className="mt-4 bg-white/20 rounded-full h-2">
                             <div className="bg-white h-2 rounded-full w-11/12"></div>

@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import tms.octopus.octopus_tms.load.load.domain.Load;
+import tms.octopus.octopus_tms.base.load.model.LoadStatus;
 
 
 public interface LoadRepository extends JpaRepository<Load, UUID> {
@@ -25,6 +26,16 @@ public interface LoadRepository extends JpaRepository<Load, UUID> {
      * Count loads for a carrier that have not yet been assigned to a driver, filtered by assigned dispatcher
      */
     long countByCarrierIdAndAssignedDriverIdIsNullAndAssignedDispatcher(UUID carrierId, UUID assignedDispatcher);
+
+    /**
+     * Count loads for a carrier by status
+     */
+    long countByCarrierIdAndStatus(UUID carrierId, LoadStatus status);
+
+    /**
+     * Count loads for a carrier by status filtered by assigned dispatcher
+     */
+    long countByCarrierIdAndStatusAndAssignedDispatcher(UUID carrierId, LoadStatus status, UUID assignedDispatcher);
     
     /**
      * Find the load with the highest load number

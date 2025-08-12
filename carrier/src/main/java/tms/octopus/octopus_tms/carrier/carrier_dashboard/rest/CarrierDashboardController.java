@@ -14,6 +14,7 @@ import tms.octopus.octopus_tms.core.user.model.UserDTO;
 import tms.octopus.octopus_tms.core.user.service.UserService;
 import tms.octopus.octopus_tms.load.load.repos.LoadRepository;
 import tms.octopus.octopus_tms.carrier.carrier_dashboard.model.CarrierDashboardDTO;
+import tms.octopus.octopus_tms.base.load.model.LoadStatus;
 
 import java.util.UUID;
 
@@ -39,17 +40,21 @@ public class CarrierDashboardController {
         UUID companyId = user.getCompany();
 
         long unassigned = 0L;
+        long enRoute = 0L;
         if (companyId != null) {
             if (user.getRole() == UserRole.DISPATCHER) {
                 UUID dispatcherId = user.getId();
                 unassigned = loadRepository.countByCarrierIdAndAssignedDriverIdIsNullAndAssignedDispatcher(companyId, dispatcherId);
+                enRoute = loadRepository.countByCarrierIdAndStatusAndAssignedDispatcher(companyId, LoadStatus.IN_TRANSIT, dispatcherId);
             } else {
                 unassigned = loadRepository.countByCarrierIdAndAssignedDriverIdIsNull(companyId);
+                enRoute = loadRepository.countByCarrierIdAndStatus(companyId, LoadStatus.IN_TRANSIT);
             }
         }
 
         CarrierDashboardDTO dto = new CarrierDashboardDTO();
         dto.setUnassignedShipments(unassigned);
+        dto.setEnRouteShipments(enRoute);
         return ResponseEntity.ok(dto);
     }
 
