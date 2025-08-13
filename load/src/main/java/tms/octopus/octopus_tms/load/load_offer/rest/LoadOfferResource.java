@@ -60,20 +60,20 @@ public class LoadOfferResource {
             }
     )
     @GetMapping
-    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.DISPATCHER + "')")
+    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SALES_REP + "')")
     public ResponseEntity<Page<LoadOfferDTO>> getAllLoadOffers(
             @Parameter(hidden = true) @SortDefault(sort = "id") @PageableDefault(size = 20) final Pageable pageable) {
         return ResponseEntity.ok(loadOfferService.findAll(pageable));
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.DISPATCHER + "', '" + UserRole.Fields.SALES + "')")
+    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "',  '" + UserRole.Fields.SALES_REP + "')")
     public ResponseEntity<LoadOfferDTO> getLoadOffer(@PathVariable(name = "id") final UUID id) {
         return ResponseEntity.ok(loadOfferService.get(id));
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.DISPATCHER + "', '" + UserRole.Fields.SALES + "')")
+    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "',  '" + UserRole.Fields.SALES_REP + "')")
     @ApiResponse(responseCode = "201")
     public ResponseEntity<UUID> createLoadOffer(
             @RequestBody @Valid final LoadOfferDTO loadOfferDTO) {
@@ -82,7 +82,7 @@ public class LoadOfferResource {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.DISPATCHER + "')")
+    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SALES_REP + "')")
     public ResponseEntity<UUID> updateLoadOffer(@PathVariable(name = "id") final UUID id,
             @RequestBody @Valid final LoadOfferDTO loadOfferDTO) {
         loadOfferService.update(id, loadOfferDTO);
@@ -90,7 +90,7 @@ public class LoadOfferResource {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.DISPATCHER + "')")
+    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SALES_REP + "')")
     @ApiResponse(responseCode = "204")
     public ResponseEntity<Void> deleteLoadOffer(@PathVariable(name = "id") final UUID id) {
         loadOfferService.delete(id);

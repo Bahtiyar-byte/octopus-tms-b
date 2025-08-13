@@ -1,5 +1,33 @@
 {
   "mcpServers": {
+    "eslint": {
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-eslint"],
+      "env": {
+        "ESLINT_CONFIG_PATH": "./.eslintrc.js"
+      }
+    },
+    "react-mcp": {
+      "command": "npx",
+      "args": ["@copilotkit/react-mcp"],
+      "env": {
+        "PROJECT_ROOT": "."
+      }
+    },
+    "github": {
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "your_github_token"
+      }
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-filesystem"],
+      "env": {
+        "ALLOWED_DIRECTORIES": "./src,./public"
+      }
+    },
     "postgresql": {
       "command": "npx",
       "args": [
@@ -34,6 +62,25 @@
         "PLAYWRIGHT_HEADLESS": "false",
         "PLAYWRIGHT_TIMEOUT": "30000"
       }
+    },
+    "octopus-db": {
+      "command": "node",
+      "args": ["./mcp-servers/database-mcp/server.js"],
+      "env": {
+        "DB_HOST": "localhost",
+        "DB_PORT": "5432",
+        "DB_NAME": "octopus-tms-b",
+        "DB_USER": "haydarovbahtiyar",
+        "DB_PASSWORD": "password"
+      }
+    },
+    "octopus-testing": {
+      "command": "node",
+      "args": ["./mcp-servers/testing-mcp/server.js"]
+    },
+    "octopus-codegen": {
+      "command": "node",
+      "args": ["./mcp-servers/codegen-mcp/server.js"]
     }
   },
   "securityRules": {

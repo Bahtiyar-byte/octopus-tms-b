@@ -2,7 +2,7 @@ import React from 'react';
 import { Card } from '../../../../components';
 import { ReportTemplate } from '../../pages/Reports/Reports';
 import { AreaChart, Area, BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { formatCurrency } from '../../utils/formatters';
+import { formatCurrency } from '../../../../utils/format';
 
 interface ReportsDashboardProps {
   templates: ReportTemplate[];
@@ -112,8 +112,8 @@ export const ReportsDashboard: React.FC<ReportsDashboardProps> = ({
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="month" />
             <YAxis />
-            <Tooltip formatter={(value: any) => 
-              role === 'BROKER' ? formatCurrency(value) : `${value}%`
+            <Tooltip formatter={(value: number | string) => 
+              role === 'BROKER' ? formatCurrency(Number(value)) : `${value}%`
             } />
             <Area 
               type="monotone" 

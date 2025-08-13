@@ -136,29 +136,29 @@ const Tracking: React.FC = () => {
   };
   
   const handleRefresh = () => {
-    console.log('Refreshing tracking data...');
+    // Refreshing tracking data...
     loadMockData();
   };
   
-  const handleAction = (action: string, data?: any) => {
+  const handleAction = (action: string, data?: unknown) => {
     switch (action) {
       case 'refresh':
         handleRefresh();
         break;
       case 'contact':
-        console.log('Contacting driver/carrier...', data);
+        // Contacting driver/carrier...
         break;
       case 'update':
-        console.log('Updating status/location...', data);
+        // Updating status/location...
         break;
       case 'notify':
-        console.log('Notifying warehouse...', data);
+        // Notifying warehouse...
         break;
       case 'complete':
-        console.log('Marking as delivered...', data);
+        // Marking as delivered...
         break;
       default:
-        console.log(`Unknown action: ${action}`, data);
+        // Unknown action
     }
   };
   

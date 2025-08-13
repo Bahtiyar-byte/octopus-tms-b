@@ -73,7 +73,6 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ lat: initialLat, lon: ini
         }
       } catch (err) {
         setError('Error fetching weather data');
-        console.error(err);
       } finally {
         setLoading(false);
       }
@@ -103,7 +102,6 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ lat: initialLat, lon: ini
       }
     } catch (err) {
       setError('Error searching for city');
-      console.error(err);
     } finally {
       setIsSearching(false);
     }

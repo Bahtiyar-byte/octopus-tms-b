@@ -175,7 +175,6 @@ const AllLoads: React.FC = () => {
         // @ts-ignore
         setFilteredLoads(allLoads);
       } catch (error) {
-        console.error('Error fetching loads:', error);
         notify('Error fetching loads. Please try again.', 'error');
       } finally {
         setLoading(false);
@@ -270,7 +269,6 @@ const AllLoads: React.FC = () => {
 
       notify('Loads exported to CSV successfully');
     } catch (error) {
-      console.error('Error exporting to CSV:', error);
       notify('Error exporting to CSV. Please try again.', 'error');
     } finally {
       setExportLoading(false);
@@ -286,7 +284,6 @@ const AllLoads: React.FC = () => {
       await new Promise(resolve => setTimeout(resolve, 800));
       notify('Loads exported to Excel successfully');
     } catch (error) {
-      console.error('Error exporting to Excel:', error);
       notify('Error exporting to Excel. Please try again.', 'error');
     } finally {
       setExportLoading(false);

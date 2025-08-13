@@ -7,7 +7,7 @@ const API_KEY = 'b4b18010157af6350c104c59523e8307';
 
 // Validate API key
 if (!API_KEY && import.meta.env.PROD) {
-  console.warn('Weather API key not configured. Weather features will be disabled.');
+  // Weather API key not configured. Weather features will be disabled.
 }
 
 // Cities with their coordinates for weather data
@@ -154,9 +154,7 @@ export const fetchWeatherAlerts = async (): Promise<WeatherAlert[]> => {
 
     return alerts;
   } catch (error) {
-    if (import.meta.env.DEV) {
-      console.error('Error fetching weather data:', error);
-    }
+    // Error fetching weather data
     return getFallbackWeatherAlerts();
   }
 };
@@ -205,9 +203,7 @@ export const getCurrentWeather = async (lat: number, lon: number, units: 'imperi
     );
     return response.data;
   } catch (error) {
-    if (import.meta.env.DEV) {
-      console.error('Error fetching current weather:', error);
-    }
+    // Error fetching current weather
     return null;
   }
 };
@@ -225,9 +221,7 @@ export const searchCity = async (cityName: string) => {
       data: response.data
     };
   } catch (error) {
-    if (import.meta.env.DEV) {
-      console.error('Error searching for city:', error);
-    }
+    // Error searching for city
     return null;
   }
 };

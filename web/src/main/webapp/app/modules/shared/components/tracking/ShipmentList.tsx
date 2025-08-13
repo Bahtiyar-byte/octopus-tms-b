@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { Shipment } from '../../pages/Tracking/Tracking';
-import { getLoadStatusColor, formatLoadStatus } from '../../utils/loadUtils';
+import { getLoadStatusColor, formatLoadStatus } from '../../../../utils/load/loadUtils';
 
 interface ShipmentListProps {
   shipments: Shipment[];

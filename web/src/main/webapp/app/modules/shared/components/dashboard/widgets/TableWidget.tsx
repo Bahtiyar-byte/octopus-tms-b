@@ -1,13 +1,13 @@
 import React from 'react';
-import { formatCurrency, formatDate } from '../../../utils/formatters';
-import { getLoadStatusColor, formatLoadStatus } from '../../../utils/loadUtils';
+import { formatCurrency, formatDate } from '../../../../../utils/format';
+import { getLoadStatusColor, formatLoadStatus } from '../../../../../utils/load/loadUtils';
 
 interface TableWidgetProps {
   id: string;
   title: string;
   type: string;
   size?: string;
-  props?: Record<string, any>;
+  props?: Record<string, string | number | boolean>;
 }
 
 export const TableWidget: React.FC<TableWidgetProps> = ({ title, type }) => {
@@ -78,12 +78,12 @@ function getTableData(type: string) {
   }
 }
 
-function renderCell(cell: any, header: string): React.ReactNode {
+function renderCell(cell: string | number, header: string): React.ReactNode {
   if (header.toLowerCase() === 'status') {
-    const colorClass = getLoadStatusColor(cell);
+    const colorClass = getLoadStatusColor(String(cell));
     return (
       <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${colorClass}`}>
-        {formatLoadStatus(cell)}
+        {formatLoadStatus(String(cell))}
       </span>
     );
   }

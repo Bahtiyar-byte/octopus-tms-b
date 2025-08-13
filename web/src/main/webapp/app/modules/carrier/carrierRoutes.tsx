@@ -1,10 +1,10 @@
 import { Navigate, RouteObject } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { UserRole } from '../../types/user';
+import { UserRole, CompanyType } from '../../types/core/user.types';
 
 // Import Shared pages
 import Dashboard from '../shared/pages/Dashboard/Dashboard';
-import Documents from '../shared/pages/Documents/Documents';
+import Documents from '../../features/documents/pages/Documents';
 import Tracking from '../shared/pages/Tracking/Tracking';
 import Invoices from '../shared/pages/Invoices/Invoices';
 import Reports from '../shared/pages/Reports/Reports';
@@ -14,8 +14,8 @@ import SmartLoadSearch from './pages/SmartLoadSearch';
 import DispatchBoard from './pages/DispatchBoard';
 import AllLoads from './pages/AllLoads';
 import Drivers from './pages/Drivers';
-import Workflows from './pages/Workflows';
-import WorkflowBuilder from './pages/WorkflowBuilder';
+import Workflows from '../../pages/Workflows';
+import WorkflowBuilder from '../../pages/WorkflowBuilder';
 
 // Role-based access control component
 const CarrierRoute = ({ children }: { children: React.ReactNode }) => {
@@ -25,16 +25,18 @@ const CarrierRoute = ({ children }: { children: React.ReactNode }) => {
     return <Navigate to="/login" replace />;
   }
   
-  // Allow access to users with carrier-related roles or admin role
+  // Allow access to users from carrier companies or admins
   const allowedRoles = [
-    UserRole.CARRIER,
     UserRole.DISPATCHER,
     UserRole.DRIVER,
     UserRole.SUPERVISOR,
     UserRole.ADMIN
   ];
   
-  if (!user?.role || !allowedRoles.includes(user.role)) {
+  // Check if user has an allowed role OR is from a carrier company
+  const hasAccess = (user?.role && allowedRoles.includes(user.role)) || user?.companyType === CompanyType.CARRIER;
+  
+  if (!hasAccess) {
     return <Navigate to="/login" replace />;
   }
   

@@ -5,9 +5,50 @@ interface AIAgentProps {
   className?: string;
 }
 
+interface RevenueData {
+  revenue?: {
+    total: number;
+    count: number;
+  };
+  pending_payments?: {
+    total: number;
+    count: number;
+  };
+}
+
+interface Load {
+  id?: string | number;
+  load_number?: string;
+  status?: string;
+  origin_city?: string;
+  origin_state?: string;
+  destination_city?: string;
+  destination_state?: string;
+  equipment_type?: string;
+  pickup_date?: string;
+  rate?: number | string;
+  distance?: number;
+}
+
+interface Carrier {
+  name: string;
+  mc_number: string;
+  total_loads?: number;
+  rating?: number;
+  on_time_percentage?: number;
+  equipment_types?: string;
+  phone?: string;
+}
+
+interface AIResponseData extends RevenueData {
+  loads?: Load[];
+  carrier_ratings?: Carrier[];
+  carriers?: Carrier[];
+}
+
 interface AIResponse {
   text: string;
-  data?: any;
+  data?: AIResponseData;
   suggestions?: string[];
 }
 
@@ -20,7 +61,7 @@ export const AIAgent: React.FC<AIAgentProps> = ({ className = '' }) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   // Format data for display
-  const formatDataDisplay = (data: any): React.ReactNode => {
+  const formatDataDisplay = (data: AIResponseData): React.ReactNode => {
     // Handle revenue data
     if (data.revenue || data.pending_payments) {
       return (
@@ -68,7 +109,7 @@ export const AIAgent: React.FC<AIAgentProps> = ({ className = '' }) => {
           ) : (
             <>
               <div className="grid gap-2">
-                {data.loads.slice(0, maxLoadsToShow).map((load: any, index: number) => (
+                {data.loads.slice(0, maxLoadsToShow).map((load: Load, index: number) => (
                   <div key={load.id || index} className="bg-white p-3 rounded-lg border border-gray-200 hover:border-blue-300 hover:shadow-sm transition-all cursor-pointer">
                     <div className="flex justify-between items-start">
                       <div className="flex-1">
@@ -137,7 +178,7 @@ export const AIAgent: React.FC<AIAgentProps> = ({ className = '' }) => {
       return (
         <div className="space-y-2">
           <h4 className="text-sm font-medium text-gray-700 mb-2">Carrier Ratings</h4>
-          {data.carrier_ratings.slice(0, 5).map((carrier: any, index: number) => (
+          {data.carrier_ratings.slice(0, 5).map((carrier: Carrier, index: number) => (
             <div key={index} className="bg-white p-3 rounded-lg border border-gray-200 hover:border-blue-300 transition-colors">
               <div className="flex justify-between items-start">
                 <div className="flex-1">
@@ -170,7 +211,7 @@ export const AIAgent: React.FC<AIAgentProps> = ({ className = '' }) => {
           {data.carriers.length === 0 ? (
             <p className="text-sm text-gray-500 italic">No carriers found</p>
           ) : (
-            data.carriers.slice(0, 3).map((carrier: any, index: number) => (
+            data.carriers.slice(0, 3).map((carrier: Carrier, index: number) => (
               <div key={index} className="bg-white p-3 rounded-lg border border-gray-200 hover:border-blue-300 transition-colors cursor-pointer">
                 <p className="font-medium text-sm text-gray-900">{carrier.name}</p>
                 <p className="text-xs text-gray-600 mt-1">
@@ -235,7 +276,6 @@ export const AIAgent: React.FC<AIAgentProps> = ({ className = '' }) => {
       setResponse(data);
       setShowResponse(true);
     } catch (error) {
-      console.error('AI Agent error:', error);
       setResponse({
         text: 'I apologize, but I encountered an error processing your request. Please try again.',
         suggestions: ['Check system status', 'View recent loads', 'Search carriers']
@@ -252,8 +292,12 @@ export const AIAgent: React.FC<AIAgentProps> = ({ className = '' }) => {
       return;
     }
 
-    const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
-    const recognition = new SpeechRecognition();
+    const SpeechRecognitionAPI = window.webkitSpeechRecognition || window.SpeechRecognition;
+    if (!SpeechRecognitionAPI) {
+      alert('Speech recognition is not supported in your browser.');
+      return;
+    }
+    const recognition = new SpeechRecognitionAPI();
 
     recognition.continuous = false;
     recognition.interimResults = false;
@@ -263,7 +307,7 @@ export const AIAgent: React.FC<AIAgentProps> = ({ className = '' }) => {
       setIsListening(true);
     };
 
-    recognition.onresult = (event: any) => {
+    recognition.onresult = (event: SpeechRecognitionEvent) => {
       const transcript = event.results[0][0].transcript;
       setInput(transcript);
       setIsListening(false);

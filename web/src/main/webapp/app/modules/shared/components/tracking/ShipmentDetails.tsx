@@ -2,13 +2,13 @@ import React from 'react';
 import { Card } from '../../../../components';
 import { Shipment, TimelineEvent } from '../../pages/Tracking/Tracking';
 import { PageConfig } from '../../config/roleConfig';
-import { getLoadStatusColor, formatLoadStatus } from '../../utils/loadUtils';
+import { getLoadStatusColor, formatLoadStatus } from '../../../../utils/load/loadUtils';
 
 interface ShipmentDetailsProps {
   shipment: Shipment | undefined;
   timeline: TimelineEvent[];
   config: PageConfig;
-  onAction: (action: string, data?: any) => void;
+  onAction: (action: string, data?: Shipment) => void;
 }
 
 export const ShipmentDetails: React.FC<ShipmentDetailsProps> = ({

@@ -35,21 +35,21 @@ public class LoadDocumentResource {
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SUPERVISOR + "', '" + UserRole.Fields.DISPATCHER + "', '" + UserRole.Fields.SALES + "')")
+    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SALES_REP + "')")
     public ResponseEntity<List<LoadDocumentDTO>> getAllLoadDocuments(
             @RequestParam(name = "filter", required = false) final String filter) {
         return ResponseEntity.ok(loadDocumentService.findAll(filter));
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SUPERVISOR + "', '" + UserRole.Fields.DISPATCHER + "')")
+    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SALES_REP + "')")
     public ResponseEntity<LoadDocumentDTO> getLoadDocument(
             @PathVariable(name = "id") final UUID id) {
         return ResponseEntity.ok(loadDocumentService.get(id));
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SUPERVISOR + "', '" + UserRole.Fields.DISPATCHER + "', '" + UserRole.Fields.DRIVER + "', '" + UserRole.Fields.SALES + "')")
+    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SALES_REP + "')")
     @ApiResponse(responseCode = "201")
     public ResponseEntity<UUID> createLoadDocument(
             @RequestBody @Valid final LoadDocumentDTO loadDocumentDTO) {
@@ -58,7 +58,7 @@ public class LoadDocumentResource {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SUPERVISOR + "', '" + UserRole.Fields.DISPATCHER + "')")
+    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SALES_REP + "')")
     public ResponseEntity<UUID> updateLoadDocument(@PathVariable(name = "id") final UUID id,
             @RequestBody @Valid final LoadDocumentDTO loadDocumentDTO) {
         loadDocumentService.update(id, loadDocumentDTO);
@@ -66,7 +66,7 @@ public class LoadDocumentResource {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SUPERVISOR + "', '" + UserRole.Fields.DISPATCHER + "')")
+    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SALES_REP + "')")
     @ApiResponse(responseCode = "204")
     public ResponseEntity<Void> deleteLoadDocument(@PathVariable(name = "id") final UUID id) {
         loadDocumentService.delete(id);

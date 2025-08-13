@@ -6,7 +6,7 @@ import axios from 'axios';
 
 
 export const ADMIN = 'ADMIN';
-export const SUPERVISOR = 'SUPERVISOR';
+export const SALES_REP = 'SUPERVISOR';
 export const DISPATCHER = 'DISPATCHER';
 export const DRIVER = 'DRIVER';
 export const ACCOUNTING = 'ACCOUNTING';

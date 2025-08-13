@@ -32,7 +32,7 @@ import tms.octopus.octopus_tms.core.audit_log.service.AuditLogService;
 
 @RestController
 @RequestMapping(value = "/api/auditLogs", produces = MediaType.APPLICATION_JSON_VALUE)
-@PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SUPPORT + "')")
+@PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "')")
 @SecurityRequirement(name = "bearer-jwt")
 public class AuditLogResource {
 

@@ -31,7 +31,7 @@ export const triggerTypeSchema = z.enum([
   'dock_appointment_scheduled'
 ] as const);
 
-export const triggerConfigSchema = z.record(z.any()).optional();
+export const triggerConfigSchema = z.record(z.union([z.string(), z.number(), z.boolean()])).optional();
 
 export const triggerNodeSchema = z.object({
   label: z.string().min(1, 'Label is required'),
@@ -59,7 +59,7 @@ export const comparisonOperatorSchema = z.enum([
 export const conditionSchema = z.object({
   field: z.string().min(1, 'Field is required'),
   operator: comparisonOperatorSchema,
-  value: z.any()
+  value: z.union([z.string(), z.number(), z.boolean(), z.null()])
 });
 
 export const conditionNodeSchema = z.object({
@@ -88,7 +88,7 @@ export const actionTypeSchema = z.enum([
   'export_data'
 ] as const);
 
-export const actionConfigSchema = z.record(z.any()).optional();
+export const actionConfigSchema = z.record(z.union([z.string(), z.number(), z.boolean()])).optional();
 
 export const actionNodeSchema = z.object({
   label: z.string().min(1, 'Label is required'),
@@ -140,7 +140,7 @@ export const smsActionConfigSchema = z.object({
 export const updateFieldActionConfigSchema = z.object({
   entity: z.string().min(1, 'Entity is required'),
   field: z.string().min(1, 'Field is required'),
-  value: z.any()
+  value: z.union([z.string(), z.number(), z.boolean(), z.null()])
 });
 
 // Webhook action config schema
@@ -148,11 +148,11 @@ export const webhookActionConfigSchema = z.object({
   url: z.string().url('Invalid URL'),
   method: z.enum(['GET', 'POST', 'PUT', 'PATCH', 'DELETE']),
   headers: z.record(z.string()).optional(),
-  body: z.any().optional()
+  body: z.union([z.string(), z.record(z.unknown())]).optional()
 });
 
 // Helper function to validate node data based on type
-export function validateNodeData(nodeType: NodeType, data: any) {
+export function validateNodeData(nodeType: NodeType, data: unknown) {
   switch (nodeType) {
     case 'trigger':
       return triggerNodeSchema.parse(data);
@@ -168,7 +168,7 @@ export function validateNodeData(nodeType: NodeType, data: any) {
 }
 
 // Helper function to validate action config based on action type
-export function validateActionConfig(actionType: ActionType, config: any) {
+export function validateActionConfig(actionType: ActionType, config: unknown) {
   switch (actionType) {
     case 'send_email':
       return emailActionConfigSchema.parse(config);

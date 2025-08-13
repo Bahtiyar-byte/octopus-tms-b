@@ -8,22 +8,7 @@ public enum UserRole {
 
     @FieldNameConstants.Include
     ADMIN,
+
     @FieldNameConstants.Include
-    SUPERVISOR,
-    @FieldNameConstants.Include
-    DISPATCHER,
-    @FieldNameConstants.Include
-    DRIVER,
-    @FieldNameConstants.Include
-    ACCOUNTING,
-    @FieldNameConstants.Include
-    SALES,
-    @FieldNameConstants.Include
-    SUPPORT,
-    @FieldNameConstants.Include
-    BROKER,
-    @FieldNameConstants.Include
-    SHIPPER,
-    @FieldNameConstants.Include
-    CARRIER
+    SALES_REP,
 }

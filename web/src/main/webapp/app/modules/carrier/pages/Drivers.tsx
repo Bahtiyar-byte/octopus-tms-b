@@ -107,10 +107,13 @@ const Drivers: React.FC = () => {
     setLoading(true);
     try {
       // This would call the API in a real app
-      await mockActions.saveSettings({ action: 'add_driver' });
+      await mockActions.addDriver({ 
+        name: 'New Driver', 
+        license: 'CDL-' + Math.random().toString(36).substr(2, 9), 
+        phone: '555-' + Math.floor(1000 + Math.random() * 9000) 
+      });
       setShowDriverModal(false);
     } catch (error) {
-      console.error('Error adding driver:', error);
     } finally {
       setLoading(false);
     }
@@ -132,7 +135,6 @@ const Drivers: React.FC = () => {
         setShowMessageModal(false);
       }
     } catch (error) {
-      console.error('Error sending message:', error);
     } finally {
       setLoading(false);
     }
@@ -152,7 +154,6 @@ const Drivers: React.FC = () => {
     try {
       await notify(`Driver status updated to ${newStatus}`);
     } catch (error) {
-      console.error('Error changing status:', error);
     } finally {
       setLoading(false);
     }
@@ -164,7 +165,6 @@ const Drivers: React.FC = () => {
     try {
       await notify('Message sent to all drivers');
     } catch (error) {
-      console.error('Error messaging all drivers:', error);
     } finally {
       setLoading(false);
     }
@@ -175,7 +175,6 @@ const Drivers: React.FC = () => {
     try {
       await notify('Driver list download started');
     } catch (error) {
-      console.error('Error downloading driver list:', error);
     } finally {
       setLoading(false);
     }
@@ -186,7 +185,6 @@ const Drivers: React.FC = () => {
     try {
       await notify('Hours updated successfully for all drivers');
     } catch (error) {
-      console.error('Error updating hours:', error);
     } finally {
       setLoading(false);
     }
@@ -197,7 +195,6 @@ const Drivers: React.FC = () => {
     try {
       await notify('Opening driver tag management');
     } catch (error) {
-      console.error('Error managing tags:', error);
     } finally {
       setLoading(false);
     }

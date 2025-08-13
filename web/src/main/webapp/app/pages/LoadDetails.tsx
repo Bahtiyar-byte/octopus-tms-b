@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { Card } from '../components';
-import { mockActions, notify } from '../services';
+import { mockActions, notify } from '@/services';
 
 // Define load data types
 interface Load {
@@ -145,7 +145,6 @@ const LoadDetails: React.FC = () => {
           setLoad(mockLoad);
         }
       } catch (error) {
-        console.error('Error fetching load details:', error);
         notify('Error fetching load details. Please try again.', 'error');
       } finally {
         setLoading(false);
@@ -327,7 +326,6 @@ const LoadDetails: React.FC = () => {
       await new Promise(resolve => setTimeout(resolve, 800));
       notify('Load details exported to PDF successfully');
     } catch (error) {
-      console.error('Error exporting to PDF:', error);
       notify('Error exporting to PDF. Please try again.', 'error');
     } finally {
       setExportingPdf(false);
@@ -366,7 +364,6 @@ const LoadDetails: React.FC = () => {
 
       notify(`${doc.name} downloaded successfully`);
     } catch (error) {
-      console.error(`Error downloading ${doc.name}:`, error);
       notify(`Error downloading ${doc.name}. Please try again.`, 'error');
     } finally {
       setDownloadingDoc(null);
@@ -515,7 +512,6 @@ const LoadDetails: React.FC = () => {
       await new Promise(resolve => setTimeout(resolve, 800));
       notify('Proof of Delivery generated successfully');
     } catch (error) {
-      console.error('Error generating POD:', error);
       notify('Error generating Proof of Delivery. Please try again.', 'error');
     } finally {
       setDownloadingDoc(null);

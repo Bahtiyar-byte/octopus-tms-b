@@ -50,7 +50,6 @@ export const ReadinessNotificationModal: React.FC<ReadinessNotificationModalProp
       );
       onClose();
     } catch (error) {
-      console.error('Error sending notification:', error);
       toast.error('Failed to send notification');
     } finally {
       setSending(false);

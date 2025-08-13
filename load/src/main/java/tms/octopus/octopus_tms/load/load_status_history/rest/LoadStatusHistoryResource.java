@@ -40,7 +40,7 @@ public class LoadStatusHistoryResource {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.DISPATCHER + "')")
+    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SALES_REP + "')")
     public ResponseEntity<LoadStatusHistoryDTO> getLoadStatusHistory(
             @PathVariable(name = "id") final UUID id) {
         return ResponseEntity.ok(loadStatusHistoryService.get(id));

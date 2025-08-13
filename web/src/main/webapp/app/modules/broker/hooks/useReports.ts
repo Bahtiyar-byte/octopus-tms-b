@@ -50,7 +50,6 @@ export const useBrokerReports = () => {
       await new Promise(resolve => setTimeout(resolve, 1000));
       setMetrics(mockMetrics);
     } catch (error) {
-      console.error('Failed to fetch report data:', error);
       toast.error('Failed to load report data');
     } finally {
       setLoading(false);

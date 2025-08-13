@@ -2,8 +2,7 @@ import React, { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, Modal } from '../../../components';
 import { mockActions, Driver } from '../../../services/mockActions';
-
-// Define load data types
+// Define load data types for dispatch board
 interface Load {
   id: string;
   origin: string;
@@ -203,7 +202,6 @@ const DispatchBoard: React.FC = () => {
       const drivers = await mockActions.getAvailableDrivers();
       setAvailableDrivers(drivers);
     } catch (error) {
-      console.error('Error fetching drivers:', error);
     }
   };
 
@@ -241,7 +239,6 @@ const DispatchBoard: React.FC = () => {
       setSelectedLoad(newAssignedLoad);
       setShowDriverModal(false);
     } catch (error) {
-      console.error('Error assigning driver:', error);
     } finally {
       setDriverAssignLoading(false);
     }
@@ -267,7 +264,6 @@ const DispatchBoard: React.FC = () => {
       setPickedUpLoads([...pickedUpLoads, newPickedUpLoad]);
       setSelectedLoad(newPickedUpLoad);
     } catch (error) {
-      console.error('Error marking as picked up:', error);
     } finally {
       setLoading(false);
     }
@@ -292,7 +288,6 @@ const DispatchBoard: React.FC = () => {
       setDeliveredLoads([...deliveredLoads, newDeliveredLoad]);
       setSelectedLoad(newDeliveredLoad);
     } catch (error) {
-      console.error('Error marking as delivered:', error);
     } finally {
       setLoading(false);
     }
@@ -305,7 +300,6 @@ const DispatchBoard: React.FC = () => {
       await mockActions.createInvoice(load.id);
       // No state update needed for this action
     } catch (error) {
-      console.error('Error creating invoice:', error);
     } finally {
       setLoading(false);
     }
@@ -317,26 +311,34 @@ const DispatchBoard: React.FC = () => {
     setLoading(true);
     try {
       const newLoadData = {
-        origin: 'New Origin, NY',
-        destination: 'New Destination, CA',
-        customer: 'New Customer',
-        equipment: 'Dry Van',
-        date: new Date().toLocaleDateString(),
-        price: 1500
+        pickupLocation: 'New Origin, NY',
+        deliveryLocation: 'New Destination, CA',
+        customerId: 'New Customer',
+        equipmentType: 'Dry Van',
+        pickupDate: new Date().toISOString().split('T')[0],
+        deliveryDate: new Date().toISOString().split('T')[0],
+        rate: 1500
       };
 
       const result = await mockActions.createLoad(newLoadData);
 
       const newLoad: Load = {
         id: result.id,
-        ...newLoadData,
-        status: 'Booked'
+        origin: newLoadData.pickupLocation,
+        destination: newLoadData.deliveryLocation,
+        customer: newLoadData.customerId || 'New Customer',
+        equipment: newLoadData.equipmentType,
+        date: newLoadData.pickupDate,
+        price: newLoadData.rate,
+        status: 'Booked',
+        pickupDate: newLoadData.pickupDate,
+        deliveryDate: newLoadData.deliveryDate,
+        driver: 'Unassigned'
       };
 
       setBookedLoads([...bookedLoads, newLoad]);
       setShowNewLoadModal(false);
     } catch (error) {
-      console.error('Error creating new load:', error);
     } finally {
       setLoading(false);
     }
@@ -360,7 +362,6 @@ const DispatchBoard: React.FC = () => {
 
       setBookedLoads([...bookedLoads, newLoad]);
     } catch (error) {
-      console.error('Error duplicating load:', error);
     } finally {
       setLoading(false);
     }

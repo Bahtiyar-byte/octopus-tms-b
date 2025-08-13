@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Card } from '../components';
+import { formatCurrency } from '../utils';
 
 interface SavedReport {
   id: string;
@@ -36,12 +37,6 @@ const Reports: React.FC = () => {
     { customer: 'Reliable Transport', loads: 10, revenue: 15200, avgRate: 1520, percentOfTotal: 12.1, yoyChange: 5.4 }
   ];
 
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD'
-    }).format(amount);
-  };
 
   return (
     <div className="fade-in">

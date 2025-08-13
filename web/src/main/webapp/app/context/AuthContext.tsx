@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { User, LoginCredentials, AuthResponse } from '../types/user';
+import { User, LoginCredentials, AuthResponse } from '../types/core/user.types';
 import { authService } from '../services';
 
 interface AuthContextType {
@@ -26,7 +26,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         const currentUser = authService.getCurrentUser();
         setUser(currentUser);
       } catch (error) {
-        console.error('Error checking authentication:', error);
       } finally {
         setIsLoading(false);
       }

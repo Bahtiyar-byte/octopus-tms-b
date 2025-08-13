@@ -13,7 +13,7 @@ import tms.octopus.octopus_tms.broker.broker_dashboard.model.BrokerDashboardDTO;
 
 @RestController
 @RequestMapping(value = "/dashboard", produces = MediaType.APPLICATION_JSON_VALUE)
-@PreAuthorize("hasAnyAuthority('" + UserRole.Fields.SUPERVISOR + "', '" + UserRole.Fields.SALES + "')")
+@PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SALES_REP + "')")
 @SecurityRequirement(name = "bearer-jwt")
 public class BrokerDashboardController {
 

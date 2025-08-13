@@ -24,7 +24,7 @@ import tms.octopus.octopus_tms.core.workflow.service.WorkflowService;
 
 @RestController
 @RequestMapping(value = "/api/workflows", produces = MediaType.APPLICATION_JSON_VALUE)
-@PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SUPERVISOR + "')")
+@PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "')")
 @SecurityRequirement(name = "bearer-jwt")
 public class WorkflowResource {
 

@@ -5,7 +5,6 @@ public enum CompanyType {
 
     BROKER,
     CARRIER,
-    SHIPPER,
-    MULTI
+    SHIPPER
 
 }

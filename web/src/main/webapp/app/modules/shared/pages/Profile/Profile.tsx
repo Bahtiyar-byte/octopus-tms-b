@@ -3,14 +3,25 @@ import { useAuth } from '../../../../context/AuthContext';
 import { authService } from '../../../../services';
 import { User as UserIcon, Edit2, Key, Activity, Truck, CheckSquare, Star, Bell, Globe, Layout, Upload, Camera } from 'lucide-react';
 import { toast } from 'react-hot-toast';
-import { User } from '../../../../types/user';
+import { User } from '../../../../types/core/user.types';
 import { useRoleConfig } from '../../hooks/useRoleConfig';
 
 const Profile: React.FC = () => {
   const { user, updateUser } = useAuth();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
-  const [userStats, setUserStats] = useState<any>(null);
+  interface UserStats {
+    actionsToday: number;
+    loadsDispatched: number;
+    tasksCompleted: number;
+    performanceScore: number;
+    activeDriversToday: number;
+    totalDriversManaged: number;
+    totalCustomersServed: number;
+    avgResponseTime: string;
+  }
+
+  const [userStats, setUserStats] = useState<UserStats | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const fileInputRef = useRef<HTMLInputElement>(null);
   
@@ -21,7 +32,7 @@ const Profile: React.FC = () => {
     username: user?.username || '',
     phone: user?.phone || '',
     department: user?.department || '',
-    lastLogin: user?.lastLogin ? new Date(user.lastLogin).toLocaleString() : 'N/A',
+    lastLogin: user?.lastLogin ? new Date(user.lastLogin).toLocaleString() : 'Today',
     role: user?.role || 'USER',
     avatarUrl: user?.avatarUrl || null
   };
@@ -35,9 +46,8 @@ const Profile: React.FC = () => {
         // Try to load stats, but don't fail if it errors
         try {
           const stats = await authService.getUserStats();
-          setUserStats(stats);
+          setUserStats(stats as unknown as UserStats);
         } catch (statsError) {
-          console.warn('Failed to load user stats:', statsError);
           // Set default stats if API fails
           setUserStats({
             actionsToday: 0,
@@ -56,10 +66,8 @@ const Profile: React.FC = () => {
           const profile = await authService.getProfile();
           await updateUser(profile);
         } catch (profileError) {
-          console.warn('Failed to load fresh profile, using cached data:', profileError);
         }
       } catch (error) {
-        console.error('Failed to load profile data:', error);
       } finally {
         setIsLoading(false);
       }
@@ -96,7 +104,7 @@ const Profile: React.FC = () => {
     inAppNotifications: true
   });
 
-  const handlePreferenceChange = (key: string, value: any) => {
+  const handlePreferenceChange = (key: keyof typeof preferences, value: string | boolean) => {
     setPreferences(prev => ({
       ...prev,
       [key]: value
@@ -106,7 +114,6 @@ const Profile: React.FC = () => {
   const handleSavePreferences = async () => {
     try {
       // Here you would save preferences to backend
-      console.log('Saving preferences:', preferences);
       toast.success('Preferences saved successfully!');
     } catch (error) {
       toast.error('Failed to save preferences');

@@ -2,8 +2,8 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card } from '../../../../components';
 import { Load } from '../../pages/Loads/Loads';
-import { formatLoadId, getLoadStatusColor, formatLoadStatus } from '../../utils/loadUtils';
-import { formatCurrency, formatDate, formatWeight } from '../../utils/formatters';
+import { formatLoadId, getLoadStatusColor, formatLoadStatus } from '../../../../utils/load/loadUtils';
+import { formatCurrency, formatDate, formatWeight } from '../../../../utils/format';
 
 interface LoadCardProps {
   load: Load;

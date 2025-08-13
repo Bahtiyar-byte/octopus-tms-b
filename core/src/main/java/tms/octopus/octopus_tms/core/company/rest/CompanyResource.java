@@ -63,7 +63,7 @@ public class CompanyResource {
             }
     )
     @GetMapping
-    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SUPERVISOR + "', '" + UserRole.Fields.DISPATCHER + "', '" + UserRole.Fields.ACCOUNTING + "', '" + UserRole.Fields.SALES + "', '" + UserRole.Fields.SUPPORT + "')")
+    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SALES_REP + "')")
     public ResponseEntity<Page<CompanyDTO>> getAllCompanies(
             @RequestParam(name = "filter", required = false) final String filter,
             @Parameter(hidden = true) @SortDefault(sort = "id") @PageableDefault(size = 20) final Pageable pageable) {
@@ -71,13 +71,13 @@ public class CompanyResource {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SUPERVISOR + "', '" + UserRole.Fields.DISPATCHER + "', '" + UserRole.Fields.SALES + "')")
+    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SALES_REP + "')")
     public ResponseEntity<CompanyDTO> getCompany(@PathVariable(name = "id") final UUID id) {
         return ResponseEntity.ok(companyService.get(id));
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SALES + "')")
+    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SALES_REP + "')")
     @ApiResponse(responseCode = "201")
     public ResponseEntity<UUID> createCompany(@RequestBody @Valid final CompanyDTO companyDTO) {
         final UUID createdId = companyService.create(companyDTO);
@@ -85,7 +85,7 @@ public class CompanyResource {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SALES + "')")
+    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SALES_REP + "')")
     public ResponseEntity<UUID> updateCompany(@PathVariable(name = "id") final UUID id,
             @RequestBody @Valid final CompanyDTO companyDTO) {
         companyService.update(id, companyDTO);
@@ -93,7 +93,7 @@ public class CompanyResource {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SALES + "')")
+    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SALES_REP + "')")
     @ApiResponse(responseCode = "204")
     public ResponseEntity<Void> deleteCompany(@PathVariable(name = "id") final UUID id) {
         final ReferencedWarning referencedWarning = companyService.getReferencedWarning(id);

@@ -63,7 +63,7 @@ public class LoadResource {
             }
     )
     @GetMapping
-    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SUPERVISOR + "', '" + UserRole.Fields.DISPATCHER + "', '" + UserRole.Fields.SALES + "', '" + UserRole.Fields.SUPPORT + "')")
+    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SALES_REP + "')")  
     public ResponseEntity<Page<LoadDTO>> getAllLoads(
             @RequestParam(name = "filter", required = false) final String filter,
             @Parameter(hidden = true) @SortDefault(sort = "id") @PageableDefault(size = 20) final Pageable pageable) {
@@ -90,7 +90,7 @@ public class LoadResource {
             }
     )
     @GetMapping("/broker/{brokerId}")
-    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SUPERVISOR + "', '" + UserRole.Fields.DISPATCHER + "', '" + UserRole.Fields.SALES + "')")
+    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SALES_REP + "')")
     public ResponseEntity<Page<LoadDTO>> getLoadsByBrokerId(
             @PathVariable(name = "brokerId") final UUID brokerId,
             @Parameter(hidden = true) @SortDefault(sort = "id") @PageableDefault(size = 20) final Pageable pageable) {
@@ -98,13 +98,13 @@ public class LoadResource {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SUPERVISOR + "', '" + UserRole.Fields.DISPATCHER + "', '" + UserRole.Fields.DRIVER + "', '" + UserRole.Fields.SALES + "')")
+    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SALES_REP + "')")
     public ResponseEntity<LoadDTO> getLoad(@PathVariable(name = "id") final UUID id) {
         return ResponseEntity.ok(loadService.get(id));
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SUPERVISOR + "', '" + UserRole.Fields.DISPATCHER + "', '" + UserRole.Fields.SALES + "')")
+    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SALES_REP + "')")
     @ApiResponse(responseCode = "201")
     public ResponseEntity<UUID> createLoad(@RequestBody @Valid final LoadDTO loadDTO) {
         final UUID createdId = loadService.create(loadDTO);
@@ -112,7 +112,7 @@ public class LoadResource {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SUPERVISOR + "', '" + UserRole.Fields.DISPATCHER + "', '" + UserRole.Fields.SALES + "')")
+    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SALES_REP + "')")
     public ResponseEntity<UUID> updateLoad(@PathVariable(name = "id") final UUID id,
             @RequestBody @Valid final LoadDTO loadDTO) {
         loadService.update(id, loadDTO);
@@ -120,7 +120,7 @@ public class LoadResource {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SUPERVISOR + "', '" + UserRole.Fields.DISPATCHER + "', '" + UserRole.Fields.SALES + "')")
+    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SALES_REP + "')")
     @ApiResponse(responseCode = "204")
     public ResponseEntity<Void> deleteLoad(@PathVariable(name = "id") final UUID id) {
         final ReferencedWarning referencedWarning = loadService.getReferencedWarning(id);

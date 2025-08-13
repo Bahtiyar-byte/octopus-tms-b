@@ -1,6 +1,7 @@
 import React from 'react';
 import Card  from '../ui/Card';
 import { SupervisorKPI } from '../../data/kpis';
+import { formatChange } from '../../utils';
 
 interface KPICardsProps {
   kpis: SupervisorKPI[];
@@ -8,12 +9,9 @@ interface KPICardsProps {
 }
 
 export const KPICards: React.FC<KPICardsProps> = ({ kpis, viewType }) => {
-  const formatChange = (change: number) => {
-    return change > 0 
-      ? <span className="text-green-600">+{change}%</span>
-      : change < 0 
-        ? <span className="text-red-600">{change}%</span>
-        : <span className="text-gray-600">0%</span>;
+  const renderChange = (change: number) => {
+    const { text, color } = formatChange(change);
+    return <span className={color}>{text}</span>;
   };
 
   if (viewType === 'grid') {
@@ -27,7 +25,7 @@ export const KPICards: React.FC<KPICardsProps> = ({ kpis, viewType }) => {
                   <p className="text-sm text-gray-500">{kpi.title}</p>
                   <h3 className="text-2xl font-bold mt-1">{kpi.value}</h3>
                   <p className="text-sm mt-1">
-                    vs last period: {formatChange(kpi.change)}
+                    vs last period: {renderChange(kpi.change)}
                   </p>
                 </div>
                 <div className={`bg-${kpi.color}-100 p-3 rounded-full`}>
@@ -85,7 +83,7 @@ export const KPICards: React.FC<KPICardsProps> = ({ kpis, viewType }) => {
                     <div className="text-sm font-bold">{kpi.value}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm">{formatChange(kpi.change)}</div>
+                    <div className="text-sm">{renderChange(kpi.change)}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="w-24 h-2 bg-gray-200 rounded-full overflow-hidden">

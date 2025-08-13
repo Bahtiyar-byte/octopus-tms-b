@@ -60,21 +60,21 @@ public class LoadTrackingResource {
             }
     )
     @GetMapping
-    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SUPERVISOR + "', '" + UserRole.Fields.DISPATCHER + "', '" + UserRole.Fields.SALES + "')")
+    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "',  '" + UserRole.Fields.SALES_REP + "')")
     public ResponseEntity<Page<LoadTrackingDTO>> getAllLoadTrackings(
             @Parameter(hidden = true) @SortDefault(sort = "id") @PageableDefault(size = 20) final Pageable pageable) {
         return ResponseEntity.ok(loadTrackingService.findAll(pageable));
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SUPERVISOR + "', '" + UserRole.Fields.DISPATCHER + "', '" + UserRole.Fields.SALES + "')")
+    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "',  '" + UserRole.Fields.SALES_REP + "')")
     public ResponseEntity<LoadTrackingDTO> getLoadTracking(
             @PathVariable(name = "id") final UUID id) {
         return ResponseEntity.ok(loadTrackingService.get(id));
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SUPERVISOR + "', '" + UserRole.Fields.DISPATCHER + "')")
+    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "',  '" + UserRole.Fields.SALES_REP + "')")
     @ApiResponse(responseCode = "201")
     public ResponseEntity<UUID> createLoadTracking(
             @RequestBody @Valid final LoadTrackingDTO loadTrackingDTO) {
@@ -83,7 +83,7 @@ public class LoadTrackingResource {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SUPERVISOR + "', '" + UserRole.Fields.DISPATCHER + "')")
+    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "',  '" + UserRole.Fields.SALES_REP + "')")
     public ResponseEntity<UUID> updateLoadTracking(@PathVariable(name = "id") final UUID id,
             @RequestBody @Valid final LoadTrackingDTO loadTrackingDTO) {
         loadTrackingService.update(id, loadTrackingDTO);
@@ -91,7 +91,7 @@ public class LoadTrackingResource {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SUPERVISOR + "', '" + UserRole.Fields.DISPATCHER + "')")
+    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "',  '" + UserRole.Fields.SALES_REP + "')")
     @ApiResponse(responseCode = "204")
     public ResponseEntity<Void> deleteLoadTracking(@PathVariable(name = "id") final UUID id) {
         loadTrackingService.delete(id);

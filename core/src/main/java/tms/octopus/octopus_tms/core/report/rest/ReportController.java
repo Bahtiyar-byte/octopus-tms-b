@@ -18,7 +18,7 @@ import tms.octopus.octopus_tms.base.user.model.UserRole;
 public class ReportController {
 
     @GetMapping("/revenue")
-    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.SUPERVISOR + "', '" + UserRole.Fields.ACCOUNTING + "')")
+    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "')")
     public ResponseEntity<Map<String, String>> getRevenueReport(
             @RequestParam(name = "startDate", required = false) final String startDate,
             @RequestParam(name = "endDate", required = false) final String endDate,
@@ -27,7 +27,7 @@ public class ReportController {
     }
 
     @GetMapping("/loads/summary")
-    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.SUPERVISOR + "', '" + UserRole.Fields.DISPATCHER + "')")
+    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SALES_REP + "')")
     public ResponseEntity<Map<String, String>> getLoadsSummary(
             @RequestParam(name = "period", required = false) final String period) {
         return ResponseEntity.ok(null);

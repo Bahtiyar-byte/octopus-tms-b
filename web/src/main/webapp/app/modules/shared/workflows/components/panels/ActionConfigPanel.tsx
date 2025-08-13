@@ -33,6 +33,12 @@ const formSchema = actionNodeSchema.extend({
 
 type FormData = z.infer<typeof formSchema>;
 
+type ActionConfig = 
+  | { to: string | undefined; subject: string | undefined; body: string | undefined }
+  | { to: string | undefined; message: string | undefined }
+  | { title: string | undefined; message: string | undefined; type: 'info' | 'success' | 'warning' | 'error' }
+  | { entity: string | undefined; field: string | undefined; value: string | undefined };
+
 const actionTypes: ActionType[] = [
   'send_email',
   'send_sms',
@@ -75,7 +81,7 @@ export const ActionConfigPanel: React.FC<ActionConfigPanelProps> = ({ node }) =>
       ...nodeData 
     } = data;
     
-    let actionConfig: any = {};
+    let actionConfig: ActionConfig | {} = {};
     
     // Build config based on action type
     switch (selectedActionType) {

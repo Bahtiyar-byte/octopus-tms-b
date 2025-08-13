@@ -19,7 +19,7 @@ import tms.octopus.octopus_tms.shipper.warehouse_operations.model.WarehouseInven
 
 @RestController
 @RequestMapping(value = "/warehouse-operations", produces = MediaType.APPLICATION_JSON_VALUE)
-@PreAuthorize("hasAuthority('" + UserRole.Fields.SUPERVISOR + "')")
+@PreAuthorize("hasAuthority('" + UserRole.Fields.ADMIN + "')")
 @SecurityRequirement(name = "bearer-jwt")
 public class WarehouseOperationsController {
 

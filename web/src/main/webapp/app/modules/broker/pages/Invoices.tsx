@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Card, Modal } from '../../../components';
 import { mockActions } from '../../../services';
+import { formatCurrency } from '../../../utils';
 
 interface Invoice {
   id: string;
@@ -93,12 +94,6 @@ const Invoices: React.FC = () => {
 
   const [invoicesState, setInvoicesState] = useState<Invoice[]>(invoices);
 
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD'
-    }).format(amount);
-  };
 
   const filteredInvoices = invoicesState.filter(invoice => {
     const matchesQuery = searchQuery === '' ||
@@ -161,7 +156,6 @@ const Invoices: React.FC = () => {
     try {
       await mockActions.downloadInvoice(invoice.id);
     } catch (error) {
-      console.error('Error downloading invoice:', error);
     } finally {
       setLoading(false);
     }
@@ -180,7 +174,6 @@ const Invoices: React.FC = () => {
 
       setInvoicesState(updatedInvoices);
     } catch (error) {
-      console.error('Error marking invoice as paid:', error);
     } finally {
       setLoading(false);
     }
@@ -206,7 +199,6 @@ const Invoices: React.FC = () => {
       setReminderEmail('');
       setReminderMessage('');
     } catch (error) {
-      console.error('Error sending reminder:', error);
     } finally {
       setLoading(false);
     }
@@ -229,7 +221,6 @@ const Invoices: React.FC = () => {
     try {
       await mockActions.syncWithQuickBooks();
     } catch (error) {
-      console.error('Error syncing with QuickBooks:', error);
     } finally {
       setLoading(false);
     }
@@ -240,7 +231,6 @@ const Invoices: React.FC = () => {
     try {
       await mockActions.sendOverdueReminders();
     } catch (error) {
-      console.error('Error processing batch invoices:', error);
     } finally {
       setLoading(false);
     }
@@ -251,7 +241,6 @@ const Invoices: React.FC = () => {
     try {
       await mockActions.downloadInvoiceReport();
     } catch (error) {
-      console.error('Error downloading invoice report:', error);
     } finally {
       setLoading(false);
     }
@@ -262,7 +251,6 @@ const Invoices: React.FC = () => {
     try {
       await mockActions.bulkUpdateInvoiceStatus('paid');
     } catch (error) {
-      console.error('Error integrating with Triumph Pay:', error);
     } finally {
       setLoading(false);
     }
