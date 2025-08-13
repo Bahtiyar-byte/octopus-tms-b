@@ -1,10 +1,10 @@
 import { Navigate, RouteObject } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { UserRole } from '../../types/user';
+import { UserRole, CompanyType } from '../../types/core/user.types';
 
 // Import Shared pages
 import Dashboard from '../shared/pages/Dashboard/Dashboard';
-import Documents from '../shared/pages/Documents/Documents';
+import Documents from '../../features/documents/pages/Documents';
 import Reports from '../shared/pages/Reports/Reports';
 import Tracking from '../shared/pages/Tracking/Tracking';
 import Invoices from '../shared/pages/Invoices/Invoices';
@@ -14,8 +14,8 @@ import Loads from '../shared/pages/Loads/Loads';
 import CreateLoad from './pages/CreateLoad';
 import Settings from './pages/Settings';
 import { WarehouseDashboard } from './pages/WarehouseDashboard';
-import Workflows from './pages/Workflows';
-import WorkflowBuilder from './pages/WorkflowBuilder';
+import Workflows from '../../pages/Workflows';
+import WorkflowBuilder from '../../pages/WorkflowBuilder';
 import Payments from './pages/Payments';
 
 // Role-based access control component
@@ -26,8 +26,8 @@ const ShipperRoute = ({ children }: { children: React.ReactNode }) => {
     return <Navigate to="/login" replace />;
   }
   
-  // Allow access to users with shipper role or admin role
-  if (user?.role !== UserRole.SHIPPER && user?.role !== UserRole.ADMIN && user?.role !== UserRole.SUPERVISOR) {
+  // Allow access to users from shipper companies or admins
+  if (user?.role !== UserRole.ADMIN && user?.role !== UserRole.SUPERVISOR && user?.companyType !== CompanyType.SHIPPER) {
     return <Navigate to="/dashboard" replace />;
   }
   

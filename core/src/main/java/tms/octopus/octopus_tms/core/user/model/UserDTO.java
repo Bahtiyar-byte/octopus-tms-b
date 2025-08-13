@@ -8,6 +8,7 @@ import java.util.UUID;
 import lombok.Getter;
 import lombok.Setter;
 import tms.octopus.octopus_tms.base.user.model.UserRole;
+import tms.octopus.octopus_tms.base.company.model.CompanyType;
 import tms.octopus.octopus_tms.base.util.WebUtils;
 
 
@@ -69,5 +70,9 @@ public class UserDTO {
     private OffsetDateTime updatedAt;
 
     private UUID company;
+    
+    private String companyName;
+    
+    private CompanyType companyType;
 
 }

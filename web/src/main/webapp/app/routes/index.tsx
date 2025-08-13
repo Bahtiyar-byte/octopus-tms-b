@@ -14,6 +14,8 @@ import ForgotPassword from '../pages/ForgotPassword';
 import LoadDetails from '../pages/LoadDetails';
 import TestBackend from '../pages/TestBackend';
 import DashboardRedirect from '../components/DashboardRedirect';
+import Workflows from '../pages/Workflows';
+import WorkflowBuilder from '../pages/WorkflowBuilder';
 
 // Auth guard component to protect routes
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -88,6 +90,15 @@ const router = createBrowserRouter([
       {
         path: '/load-details/:id',
         element: <LoadDetails />,
+      },
+      // Unified workflow routes
+      {
+        path: '/workflows',
+        element: <Workflows />,
+      },
+      {
+        path: '/workflows/builder',
+        element: <WorkflowBuilder />,
       },
       // Carrier module routes
       {

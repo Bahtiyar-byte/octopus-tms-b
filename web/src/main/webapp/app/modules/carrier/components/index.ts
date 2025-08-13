@@ -1,5 +1,5 @@
 // Export all carrier-specific components
-export { LoadCard } from './LoadCard';
+// LoadCard moved to shared components
 export { StatusBadge } from './StatusBadge';
 export { DriverCard } from './DriverCard';
 export { RouteDisplay } from './RouteDisplay';

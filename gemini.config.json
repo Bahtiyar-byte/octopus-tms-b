@@ -1,0 +1,15 @@
+{
+    "project_name": "octopus-tms-b",
+    "backend": {
+        "path": "",
+        "build_command": "./gradlew build",
+        "test_command": "./gradlew test",
+        "run_command": "./gradlew bootRun"
+    },
+    "frontend": {
+        "path": "web/src/main/webapp",
+        "build_command": "npm run build",
+        "test_command": "npm test",
+        "run_command": "npm run dev"
+    }
+}

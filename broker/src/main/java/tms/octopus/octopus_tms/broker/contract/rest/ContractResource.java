@@ -8,7 +8,6 @@ import java.util.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,14 +17,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import tms.octopus.octopus_tms.base.user.model.UserRole;
 import tms.octopus.octopus_tms.broker.contract.model.ContractDTO;
 import tms.octopus.octopus_tms.broker.contract.service.ContractService;
+import tms.octopus.octopus_tms.core.security.annotations.RequireBrokerAccess;
+import tms.octopus.octopus_tms.core.security.annotations.RequireAdminOrSalesRep;
 
 
 @RestController
 @RequestMapping(value = "/api/contracts", produces = MediaType.APPLICATION_JSON_VALUE)
-@PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SALES + "')")
+@RequireBrokerAccess
+@RequireAdminOrSalesRep
 @SecurityRequirement(name = "bearer-jwt")
 public class ContractResource {
 

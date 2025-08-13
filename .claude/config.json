@@ -1,32 +1,328 @@
 {
-  "project_name": "Octopus TMS",
-  "default_system_prompt": "Octopus TMS: Java 21, Spring Boot 3.5.1, React 19.1, Multi-module architecture. NO Docker, local PostgreSQL. Check CLAUDE.md for conventions.",
-  "prefer_edit_over_write": true,
-  "auto_run_tests": true,
-  "test_commands": {
-    "backend": "./gradlew test",
-    "frontend": "npm run test",
-    "integration": "./gradlew test -Dspring.profiles.active=test",
-    "e2e": "npm run test:e2e",
-    "screenshots": "npm run screenshots"
+  "project": {
+    "name": "Octopus TMS",
+    "description": "Transportation Management System - Modular monolith with Spring Boot backend and React frontend",
+    "type": "full-stack",
+    "default_system_prompt": "Octopus TMS: Java 21, Spring Boot 3.5.1, React 18.2, Vite, Tailwind CSS. Multi-module Gradle architecture. NO Docker, local PostgreSQL 14. Check CLAUDE.md for all conventions.",
+    "technologies": {
+      "backend": ["Spring Boot 3.5.1", "Java 21", "PostgreSQL 14", "JWT", "MapStruct", "Lombok", "Flyway (disabled)"],
+      "frontend": ["React 18.2", "TypeScript", "Vite", "Tailwind CSS", "React Router v6"],
+      "testing": ["JUnit", "Testcontainers", "RestAssured", "Jest", "Playwright", "Puppeteer"],
+      "build": ["Gradle 8.5", "Node.js 22", "npm"]
+    }
   },
-  "quick_commands": {
-    "run_backend": "./gradlew bootRun -Dspring.profiles.active=local",
-    "run_frontend": "npm run devserver",
+  
+  "modules": {
+    "base": {
+      "path": "base/",
+      "description": "Core infrastructure, configuration, shared utilities, mail service",
+      "key_packages": ["config", "mail", "model", "util"],
+      "important_files": [
+        "src/main/java/tms/octopus/octopus_tms/base/OctopusTmsApplication.java",
+        "src/main/resources/application.properties"
+      ],
+      "shared_enums": ["UserRole", "LoadStatus", "InvoiceStatus", "PaymentStatus"]
+    },
+    "core": {
+      "path": "core/",
+      "description": "User management, authentication, companies, workflows, audit logging",
+      "key_packages": ["auth", "user", "company", "workflow", "audit", "ai"],
+      "key_services": ["AuthService", "UserService", "CompanyService", "WorkflowService"],
+      "depends_on": ["base"],
+      "api_prefix": "/api/users, /api/companies, /authenticate"
+    },
+    "load": {
+      "path": "load/",
+      "description": "Load/shipment management core functionality",
+      "key_packages": ["load", "assignment", "cargo", "document", "tracking", "offer"],
+      "key_entities": ["Load", "Stop", "Cargo", "LoadAssignment", "LoadDocument"],
+      "depends_on": ["base", "core"],
+      "api_prefix": "/api/loads, /load-operations"
+    },
+    "broker": {
+      "path": "broker/",
+      "description": "Broker dashboards, contract management, load posting",
+      "key_packages": ["dashboard", "contract", "rest", "service"],
+      "depends_on": ["base", "core", "load"],
+      "api_prefix": "/api/broker, /dashboard/broker"
+    },
+    "shipper": {
+      "path": "shipper/",
+      "description": "Warehouse and inventory management, shipment readiness",
+      "key_packages": ["warehouse", "inventory", "shipment", "rest", "service"],
+      "key_entities": ["Warehouse", "InventoryItem", "InventoryLevel", "ShipmentReadiness"],
+      "depends_on": ["base", "core", "load"],
+      "api_prefix": "/api/shipper, /dashboard/shipper"
+    },
+    "carrier": {
+      "path": "carrier/",
+      "description": "Carrier management, driver and equipment tracking",
+      "key_packages": ["dashboard", "driver", "equipment", "performance", "rest", "service"],
+      "key_entities": ["Driver", "Equipment", "DriverPerformance", "DriverReport"],
+      "depends_on": ["base", "core", "load"],
+      "api_prefix": "/api/carrier, /dashboard/carrier"
+    },
+    "financial": {
+      "path": "financial/",
+      "description": "Invoicing, payment processing, rate agreements",
+      "key_packages": ["invoice", "payment", "rate", "accessorial", "rest", "service"],
+      "key_entities": ["Invoice", "Payment", "RateAgreement", "AccessorialCharge"],
+      "depends_on": ["base", "core", "load"],
+      "api_prefix": "/api/financial, /financial-operations"
+    },
+    "web": {
+      "path": "web/",
+      "description": "Spring Boot application entry point and React frontend",
+      "frontend_root": "src/main/webapp/app",
+      "depends_on": ["all_modules"],
+      "build_output": "build/libs/web-0.0.1-SNAPSHOT.jar"
+    }
+  },
+  
+  "api": {
+    "base_path": "/api",
+    "auth_endpoints": {
+      "/authenticate": "POST - Login with email/password",
+      "/auth/logout": "POST - Logout current user",
+      "/auth/register": "POST - Register new user",
+      "/auth/reset-password": "POST - Reset password",
+      "/auth/refresh": "POST - Refresh JWT token"
+    },
+    "patterns": {
+      "crud": "/api/{entity} - GET (list), POST (create), GET/{id}, PUT/{id}, DELETE/{id}",
+      "operations": "/{module}-operations/{operation} - Module-specific operations",
+      "dashboard": "/dashboard/{module} - Module dashboard data"
+    },
+    "security": {
+      "type": "JWT Bearer Token",
+      "header": "Authorization: Bearer {token}",
+      "token_expiry": "24 hours",
+      "roles": ["ADMIN", "SUPERVISOR", "DISPATCHER", "DRIVER", "BROKER", "SHIPPER", "CARRIER"],
+      "role_hierarchy": "ADMIN > SUPERVISOR > DISPATCHER > DRIVER"
+    }
+  },
+  
+  "database": {
+    "type": "PostgreSQL 14",
+    "local_connection": {
+      "url": "jdbc:postgresql://localhost:5432/octopus-tms-b",
+      "username": "haydarovbahtiyar",
+      "password": "password",
+      "note": "NO DOCKER - Local PostgreSQL only"
+    },
+    "migration": {
+      "tool": "Flyway (currently disabled)",
+      "location": "{module}/src/main/resources/db/migration/",
+      "pattern": "V{version}__{description}.sql",
+      "order": "V001_base → V002_core → V003_load → V004_broker → V005_shipper → V006_carrier → V007_financial → V008_test_data"
+    },
+    "patterns": {
+      "primary_keys": "UUID DEFAULT gen_random_uuid()",
+      "timestamps": "created_at TIMESTAMP, updated_at TIMESTAMP",
+      "enums": "Stored as VARCHAR",
+      "foreign_keys": "ON DELETE CASCADE/SET NULL as appropriate"
+    }
+  },
+  
+  "frontend": {
+    "structure": {
+      "app/": "Root frontend directory",
+      "components/": "Reusable UI components (buttons, forms, modals)",
+      "modules/": {
+        "broker/": "Broker-specific pages and components",
+        "carrier/": "Carrier-specific pages and components",
+        "shipper/": "Shipper-specific pages and components",
+        "shared/": "Shared components across modules (navigation, tables)"
+      },
+      "pages/": "Top-level page components (Login, Dashboard)",
+      "services/": "API client services (authService, userService, etc.)",
+      "types/": "TypeScript type definitions matching backend DTOs",
+      "utils/": "Helper functions (date formatting, validation)",
+      "context/": "React contexts (AuthContext for authentication)",
+      "hooks/": "Custom React hooks (useAuth, useApi)",
+      "layouts/": "Page layouts (MainLayout with sidebar/topbar)"
+    },
+    "routing": {
+      "protected": "RequireAuth wrapper for authenticated routes",
+      "module_routes": {
+        "/broker/*": "brokerRoutes.tsx",
+        "/carrier/*": "carrierRoutes.tsx", 
+        "/shipper/*": "shipperRoutes.tsx"
+      },
+      "shared_routes": ["/settings", "/reports", "/profile", "/customers", "/documents"]
+    },
+    "state_management": "React Context API + local component state",
+    "styling": "Tailwind CSS with custom component classes",
+    "api_client": "Axios with interceptors for auth token"
+  },
+  
+  "development": {
+    "ports": {
+      "backend": 8080,
+      "frontend": 3000,
+      "database": 5432
+    },
+    "profiles": {
+      "local": "Local development with debug logging",
+      "production": "Production with optimized settings",
+      "it": "Integration testing profile",
+      "local-test": "Local testing without containers"
+    },
+    "environment": {
+      "backend": "application-{profile}.properties",
+      "frontend": ".env files for API URLs"
+    },
+    "hot_reload": {
+      "backend": "Spring DevTools",
+      "frontend": "Vite HMR"
+    }
+  },
+  
+  "testing": {
+    "backend": {
+      "base_class": "BaseIT - provides auth tokens and test containers",
+      "structure": "{module}/src/test/java/.../",
+      "test_data": "{module}/src/test/resources/data/",
+      "request_examples": "{module}/src/test/resources/requests/",
+      "patterns": {
+        "integration": "*IT.java - Integration tests with full Spring context",
+        "unit": "*Test.java - Unit tests with mocks"
+      }
+    },
+    "frontend": {
+      "unit": {
+        "tool": "Jest + React Testing Library",
+        "config": "jest.config.js",
+        "pattern": "*.test.tsx"
+      },
+      "e2e": {
+        "tool": "Playwright",
+        "config": "playwright.config.ts",
+        "pattern": "*.spec.ts"
+      },
+      "screenshots": {
+        "tool": "Puppeteer",
+        "command": "npm run screenshots"
+      }
+    }
+  },
+  
+  "commands": {
+    "install": "npm install",
+    "backend": "./gradlew bootRun -Dspring.profiles.active=local",
+    "frontend": "npm run devserver",
     "build": "./gradlew clean build",
-    "lint": "npm run lint"
+    "test": {
+      "all": "./gradlew test && npm run test",
+      "backend": "./gradlew test",
+      "backend_specific": "./gradlew :module-name:test --tests 'ClassName.methodName'",
+      "frontend": "npm run test",
+      "e2e": "npm run test:e2e",
+      "screenshots": "npm run screenshots"
+    },
+    "production": "java -Dspring.profiles.active=production -jar ./web/build/libs/web-0.0.1-SNAPSHOT.jar",
+    "database": {
+      "reset": "DROP DATABASE 'octopus-tms-b'; CREATE DATABASE 'octopus-tms-b';",
+      "migrate": "./gradlew flywayMigrate (when enabled)"
+    }
   },
-  "module_contexts": {
-    "broker": "Focus on load management, carrier matching, and rate negotiation",
-    "shipper": "Focus on shipment requests and warehouse integration",
-    "carrier": "Focus on fleet management and load execution",
-    "financial": "Focus on invoicing and payment processing"
+  
+  "code_patterns": {
+    "backend": {
+      "controller": "@RestController with @RequestMapping, Resource suffix for CRUD",
+      "service": "Interface + ServiceImpl pattern, @Service annotation",
+      "repository": "Extends JpaRepository<Entity, UUID>, custom queries with @Query",
+      "dto": "Request/Response DTOs, MapStruct for mapping",
+      "entity": "@Entity with @Table, UUID primary keys, audit fields",
+      "validation": "Jakarta validation annotations (@NotNull, @Valid)",
+      "error_handling": "GlobalExceptionHandler, custom exception classes"
+    },
+    "frontend": {
+      "components": "Functional components with TypeScript",
+      "api_calls": "Service layer with async/await",
+      "state": "useState, useContext for global state",
+      "routing": "React Router v6 with route objects",
+      "forms": "Controlled components with validation",
+      "tables": "Reusable table components with sorting/filtering"
+    }
   },
-  "reminders": [
-    "Complete Broker module before moving to others",
-    "Fix role confusion with multi-tenant architecture",
-    "Re-enable Flyway when ready",
-    "Test all changes before marking complete",
-    "No Docker - use local PostgreSQL"
+  
+  "current_focus": {
+    "priority": "Complete Broker module implementation",
+    "known_issues": [
+      "Role confusion - employees at same company type share roles",
+      "Security endpoints all permitAll() - needs proper authorization",
+      "Flyway temporarily disabled - needs re-enabling",
+      "Multi-tenancy not implemented - needed for proper separation"
+    ],
+    "next_steps": [
+      "Implement proper role-based authorization",
+      "Complete Broker dashboard and operations",
+      "Add comprehensive test coverage",
+      "Enable Flyway migrations"
+    ]
+  },
+  
+  "test_users": [
+    {
+      "email": "emily.anderson@octopus-tms.com",
+      "password": "password",
+      "role": "BROKER",
+      "description": "Broker company employee"
+    },
+    {
+      "email": "shipper1@octopustms.com",
+      "password": "password",
+      "role": "SHIPPER",
+      "description": "Shipper company employee"
+    },
+    {
+      "email": "carrier1@octopustms.com",
+      "password": "password",
+      "role": "CARRIER",
+      "description": "Carrier company employee"
+    }
+  ],
+  
+  "navigation_helpers": {
+    "find_endpoints": "Search for @RestController and @RequestMapping in {module}/rest/",
+    "find_services": "Look in {module}/service/ for business logic",
+    "find_entities": "Check {module}/model/ or {module}/domain/",
+    "find_frontend_component": "Search in web/src/main/webapp/app/modules/{module}/",
+    "find_api_calls": "Check web/src/main/webapp/app/services/",
+    "find_routes": "Look in web/src/main/webapp/app/routes/ or modules/{module}/",
+    "find_types": "Check web/src/main/webapp/app/types/",
+    "find_tests": "Backend: {module}/src/test/, Frontend: alongside components as .test.tsx"
+  },
+  
+  "conventions": {
+    "naming": {
+      "entities": "Singular nouns (Load, Driver, Invoice)",
+      "dtos": "EntityDTO, CreateEntityRequest, EntityResponse",
+      "services": "EntityService interface, EntityServiceImpl",
+      "controllers": "EntityResource (CRUD), EntityController (operations)",
+      "frontend_services": "camelCase (authService, loadService)"
+    },
+    "file_organization": {
+      "one_class_per_file": true,
+      "test_alongside_code": false,
+      "migrations_sequential": true
+    },
+    "code_style": {
+      "backend": "Google Java Style Guide",
+      "frontend": "ESLint + Prettier configuration",
+      "imports": "Organized by package hierarchy"
+    }
+  },
+  
+  "helpful_reminders": [
+    "NO DOCKER - Always use local PostgreSQL",
+    "Complete modules one at a time (Broker first)",
+    "Run tests before marking tasks complete",
+    "Check CLAUDE.md for detailed instructions",
+    "Use TodoWrite tool for complex tasks",
+    "Frontend dev server proxies to backend automatically",
+    "MapStruct generates mappers at compile time",
+    "Lombok requires IDE annotation processing"
   ]
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
-import { handleServerError, setYupDefaults } from '../utils/common';
+import { handleServerError, setYupDefaults } from '../utils';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { AuthenticationRequest } from './authentication-model';
@@ -36,8 +36,8 @@ export default function Authentication() {
     try {
       const response = await axios.post('/auth/login', data);
       navigate(authenticationContext.login(response.data));
-    } catch (error: any) {
-      if (error.status === 401) {
+    } catch (error: unknown) {
+      if (error instanceof Error && 'status' in error && error.status === 401) {
         useFormResult.reset();
         navigate('/login', {
               state: {

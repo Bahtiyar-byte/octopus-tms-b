@@ -3,7 +3,7 @@ import { MapContainer, TileLayer, Marker, Popup, Polyline, useMap } from 'react-
 import L from 'leaflet';
 import { Card } from '../../../../components';
 import { Shipment, LatLng } from '../../pages/Tracking/Tracking';
-import { formatLoadStatus } from '../../utils/loadUtils';
+import { formatLoadStatus } from '../../../../utils/load/loadUtils';
 
 interface TrackingMapProps {
   shipments: Shipment[];

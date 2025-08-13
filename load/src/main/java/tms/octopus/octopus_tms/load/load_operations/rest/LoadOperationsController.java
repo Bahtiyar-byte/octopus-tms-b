@@ -38,28 +38,28 @@ import tms.octopus.octopus_tms.load.load_tracking.model.LoadTrackingDTO;
 public class LoadOperationsController {
 
     @GetMapping("/{loadId}/details")
-    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.SUPERVISOR + "', '" + UserRole.Fields.DISPATCHER + "', '" + UserRole.Fields.DRIVER + "', '" + UserRole.Fields.SALES + "')")
+    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SALES_REP + "')")
     public ResponseEntity<LoadDetailDTO> getLoadDetails(
             @PathVariable(name = "loadId") final String loadId) {
         return ResponseEntity.ok(null);
     }
 
     @PostMapping("/{loadId}/accept-offer/{offerId}")
-    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.SUPERVISOR + "', '" + UserRole.Fields.DISPATCHER + "', '" + UserRole.Fields.SALES + "')")
+    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "',  '" + UserRole.Fields.SALES_REP + "')")
     public ResponseEntity<LoadDTO> acceptOffer(@PathVariable(name = "loadId") final String loadId,
             @PathVariable(name = "offerId") final String offerId) {
         return ResponseEntity.ok(null);
     }
 
     @PostMapping("/{loadId}/assign-driver")
-    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.SUPERVISOR + "', '" + UserRole.Fields.DISPATCHER + "', '" + UserRole.Fields.SALES + "')")
+    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "',  '" + UserRole.Fields.SALES_REP + "')")
     public ResponseEntity<LoadDTO> assignDriver(@PathVariable(name = "loadId") final String loadId,
             @RequestBody @Valid final DriverAssignmentDTO driverAssignmentDTO) {
         return ResponseEntity.ok(null);
     }
 
     @PostMapping("/{loadId}/update-status")
-    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.SUPERVISOR + "', '" + UserRole.Fields.DISPATCHER + "', '" + UserRole.Fields.SALES + "')")
+    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "',  '" + UserRole.Fields.SALES_REP + "')")
     public ResponseEntity<LoadDTO> updateLoadStatus(
             @PathVariable(name = "loadId") final String loadId,
             @RequestBody @Valid final LoadStatusUpdateDTO loadStatusUpdateDTO) {
@@ -67,7 +67,7 @@ public class LoadOperationsController {
     }
 
     @PostMapping("/tracking/update")
-    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.SUPERVISOR + "', '" + UserRole.Fields.DISPATCHER + "', '" + UserRole.Fields.DRIVER + "', '" + UserRole.Fields.SALES + "')")
+    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SALES_REP + "')")
     public ResponseEntity<LoadTrackingDTO> updateTracking(
             @RequestBody @Valid final LoadTrackingUpdateDTO loadTrackingUpdateDTO) {
         return ResponseEntity.ok(null);
@@ -93,7 +93,7 @@ public class LoadOperationsController {
             }
     )
     @PostMapping("/search")
-    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.SUPERVISOR + "', '" + UserRole.Fields.DISPATCHER + "', '" + UserRole.Fields.SALES + "')")
+    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "',  '" + UserRole.Fields.SALES_REP + "')")
     public ResponseEntity<Page<LoadSearchDTO>> searchLoads(
             @RequestBody @Valid final LoadSearchCriteriaDTO loadSearchCriteriaDTO,
             @Parameter(hidden = true) @PageableDefault(size = 20) final Pageable pageable) {
@@ -101,7 +101,7 @@ public class LoadOperationsController {
     }
 
     @PostMapping("/quote-request")
-    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.SUPERVISOR + "', '" + UserRole.Fields.DISPATCHER + "', '" + UserRole.Fields.SALES + "')")
+    @PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SALES_REP + "', '" + UserRole.Fields.SALES_REP + "')")
     @ApiResponse(responseCode = "201")
     public ResponseEntity<LoadQuoteRequestDTO> requestQuote(
             @RequestBody @Valid final LoadQuoteRequestDTO loadQuoteRequestDTO) {

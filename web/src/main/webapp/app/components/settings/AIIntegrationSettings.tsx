@@ -75,7 +75,7 @@ export const AIIntegrationSettings: React.FC = () => {
         setConfigurations(data);
       }
     } catch (error) {
-      console.error('Failed to fetch configurations:', error);
+      // Failed to fetch configurations
     }
   };
 
@@ -108,7 +108,6 @@ export const AIIntegrationSettings: React.FC = () => {
         alert('Failed to save configuration');
       }
     } catch (error) {
-      console.error('Failed to save configuration:', error);
       alert('Failed to save configuration');
     } finally {
       setLoading(false);
@@ -139,7 +138,6 @@ export const AIIntegrationSettings: React.FC = () => {
         await fetchConfigurations();
       }
     } catch (error) {
-      console.error('Failed to test connection:', error);
       alert('Failed to test connection');
     } finally {
       setTestingConnection(null);
@@ -160,7 +158,7 @@ export const AIIntegrationSettings: React.FC = () => {
         await fetchConfigurations();
       }
     } catch (error) {
-      console.error('Failed to toggle configuration:', error);
+      // Failed to toggle configuration
     }
   };
 
@@ -181,7 +179,7 @@ export const AIIntegrationSettings: React.FC = () => {
         await fetchConfigurations();
       }
     } catch (error) {
-      console.error('Failed to delete configuration:', error);
+      // Failed to delete configuration
     }
   };
 

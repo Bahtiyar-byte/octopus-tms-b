@@ -113,14 +113,23 @@ export const useCustomers = () => {
       await new Promise(resolve => setTimeout(resolve, 1000));
       setCustomers(mockCustomers);
     } catch (error) {
-      console.error('Failed to fetch customers:', error);
       toast.error('Failed to load customers');
     } finally {
       setLoading(false);
     }
   };
 
-  const addCustomer = async (customerData: any) => {
+  interface CustomerFormData {
+    name: string;
+    contact: string;
+    email: string;
+    phone: string;
+    address: string;
+    creditLimit?: string;
+    paymentTerms: string;
+  }
+
+  const addCustomer = async (customerData: CustomerFormData) => {
     try {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 500));
@@ -135,7 +144,7 @@ export const useCustomers = () => {
         status: 'Pending',
         totalLoads: 0,
         totalRevenue: 0,
-        creditLimit: parseInt(customerData.creditLimit) || 50000,
+        creditLimit: parseInt(customerData.creditLimit || '50000') || 50000,
         creditUsed: 0,
         paymentTerms: customerData.paymentTerms,
         lastLoadDate: '',
@@ -145,7 +154,6 @@ export const useCustomers = () => {
       setCustomers([...customers, newCustomer]);
       return newCustomer;
     } catch (error) {
-      console.error('Failed to add customer:', error);
       throw error;
     }
   };
@@ -159,7 +167,6 @@ export const useCustomers = () => {
         customer.id === id ? { ...customer, ...updates } : customer
       ));
     } catch (error) {
-      console.error('Failed to update customer:', error);
       throw error;
     }
   };
@@ -171,7 +178,6 @@ export const useCustomers = () => {
       
       setCustomers(customers.filter(customer => customer.id !== id));
     } catch (error) {
-      console.error('Failed to delete customer:', error);
       throw error;
     }
   };

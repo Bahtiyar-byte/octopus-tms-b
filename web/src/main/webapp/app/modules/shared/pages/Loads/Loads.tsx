@@ -6,7 +6,7 @@ import { useAuth } from '../../../../context/AuthContext';
 import { LoadCard } from '../../components/cards/LoadCard';
 import { LoadsTable } from '../../components/tables/LoadsTable';
 import { LoadsFilters } from '../../components/filters/LoadsFilters';
-import { formatLoadId, getLoadStatusColor } from '../../utils/loadUtils';
+import { formatLoadId, getLoadStatusColor } from '../../../../utils/load/loadUtils';
 
 export interface Load {
   id: string;
@@ -105,7 +105,6 @@ const Loads: React.FC = () => {
       setLoads(mockLoads);
       setError(null);
     } catch (err) {
-      console.error('Failed to fetch loads:', err);
       setError('Failed to load data. Please try again later.');
     } finally {
       setLoading(false);
@@ -122,17 +121,17 @@ const Loads: React.FC = () => {
         navigate(`/${role}/carrier-match`, { state: { load } });
         break;
       case 'exportLoads':
-        console.log('Exporting loads...');
+        // Exporting loads...
         break;
       case 'schedulePickup':
-        console.log('Scheduling pickup for load:', load);
+        // Scheduling pickup for load
         break;
       case 'searchLoads':
       case 'filterLoads':
         // These are handled by the filter component
         break;
       default:
-        console.log(`Unknown action: ${action}`, load);
+        // Unknown action
     }
   };
 

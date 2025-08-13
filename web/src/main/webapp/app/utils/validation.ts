@@ -100,13 +100,13 @@ export interface ValidationResult {
 /**
  * Validate form data
  */
-export const validateForm = <T extends Record<string, any>>(
+export const validateForm = <T extends Record<string, unknown>>(
   data: T,
-  rules: Record<keyof T, (value: any) => string | null>
+  rules: Record<keyof T, (value: unknown) => string | null>
 ): ValidationResult => {
   const errors: Record<string, string> = {};
   
-  for (const [field, validator] of Object.entries(rules) as [keyof T, (value: any) => string | null][]) {
+  for (const [field, validator] of Object.entries(rules) as [keyof T, (value: unknown) => string | null][]) {
     const error = validator(data[field]);
     if (error) {
       errors[field as string] = error;

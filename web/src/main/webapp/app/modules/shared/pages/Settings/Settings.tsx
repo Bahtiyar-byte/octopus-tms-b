@@ -12,7 +12,7 @@ import BackupSettings from '../../../../components/settings/BackupSettings';
 import LogSettings from '../../../../components/settings/LogSettings';
 import ToggleSwitch from '../../../../components/ToggleSwitch';
 import { useAuth } from '../../../../context/AuthContext';
-import { UserRole } from '../../../../types/user';
+import { UserRole, CompanyType } from '../../../../types/core/user.types';
 import { toast } from 'react-hot-toast';
 import { useRoleConfig } from '../../hooks/useRoleConfig';
 
@@ -38,13 +38,13 @@ interface BrokerIntegration {
 const Settings: React.FC = () => {
   const { user } = useAuth();
   const location = useLocation();
-  const isBroker = user?.role === UserRole.BROKER || user?.role === UserRole.ADMIN || user?.role === UserRole.SUPERVISOR;
+  const isBroker = user?.companyType === CompanyType.BROKER || user?.role === UserRole.ADMIN || user?.role === UserRole.SUPERVISOR;
   const [activeTab, setActiveTab] = useState<ExtendedTabType>('company');
 
   // Check if we're navigating from the notification settings link
   useEffect(() => {
-    if (location.state && (location.state as any).activeTab) {
-      setActiveTab((location.state as any).activeTab);
+    if (location.state && (location.state as { activeTab?: ExtendedTabType }).activeTab) {
+      setActiveTab((location.state as { activeTab: ExtendedTabType }).activeTab);
     }
   }, [location.state]);
 

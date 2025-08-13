@@ -23,7 +23,7 @@ import tms.octopus.octopus_tms.financial.payment.model.PaymentDTO;
 
 @RestController
 @RequestMapping(value = "/invoice-operations", produces = MediaType.APPLICATION_JSON_VALUE)
-@PreAuthorize("hasAuthority('" + UserRole.Fields.ACCOUNTING + "')")
+@PreAuthorize("hasAuthority('" + UserRole.Fields.ADMIN + "')")
 @SecurityRequirement(name = "bearer-jwt")
 public class InvoiceOperationsController {
 

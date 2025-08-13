@@ -15,7 +15,6 @@ export const QuickActions: React.FC<QuickActionsProps> = ({ actions }) => {
   const handleAction = (action: Action) => {
     if (action.handler) {
       // Handle custom action handlers
-      console.log(`Handling action: ${action.handler}`);
     } else {
       // Default navigation based on action name
       const routeMap: Record<string, string> = {

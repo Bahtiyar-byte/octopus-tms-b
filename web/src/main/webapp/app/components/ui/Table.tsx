@@ -1,18 +1,18 @@
 import React, { type ReactNode } from 'react';
 
-interface TableColumn {
+interface TableColumn<T = Record<string, unknown>> {
   header: string;
-  accessor: string;
-  cell?: (value: any, row: any) => ReactNode;
+  accessor: keyof T & string;
+  cell?: (value: T[keyof T], row: T) => ReactNode;
 }
 
-interface TableProps {
-  columns: TableColumn[];
-  data: any[];
+interface TableProps<T = Record<string, unknown>> {
+  columns: TableColumn<T>[];
+  data: T[];
   className?: string;
 }
 
-const Table: React.FC<TableProps> = ({ columns, data, className = '' }) => {
+const Table = <T extends Record<string, unknown> = Record<string, unknown>>({ columns, data, className = '' }: TableProps<T>) => {
   return (
     <div className="overflow-x-auto">
       <table className={`min-w-full divide-y divide-gray-200 ${className}`}>
@@ -35,7 +35,7 @@ const Table: React.FC<TableProps> = ({ columns, data, className = '' }) => {
                 <td key={colIndex} className="px-6 py-4 whitespace-nowrap">
                   {column.cell
                     ? column.cell(row[column.accessor], row)
-                    : row[column.accessor]}
+                    : String(row[column.accessor])}
                 </td>
               ))}
             </tr>

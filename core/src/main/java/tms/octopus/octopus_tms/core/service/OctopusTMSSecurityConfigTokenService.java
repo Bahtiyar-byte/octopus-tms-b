@@ -27,7 +27,7 @@ public class OctopusTMSSecurityConfigTokenService {
     private final UserRepository userRepository;
 
     public OctopusTMSSecurityConfigTokenService(
-            @Value("${octopusTMSSecurityConfig.secret}") final String secret,
+            @Value("${jwt.secret:octopus-tms-secret-key-2025}") final String secret,
             final UserRepository userRepository) {
         this.hmac512 = Algorithm.HMAC512(secret);
         this.verifier = JWT.require(this.hmac512).build();
@@ -56,7 +56,10 @@ public class OctopusTMSSecurityConfigTokenService {
                     .withClaim("email", user.getEmail())
                     .withClaim("firstName", user.getFirstName())
                     .withClaim("lastName", user.getLastName())
-                    .withClaim("role", user.getRole() != null ? user.getRole().name() : null);
+                    .withClaim("role", user.getRole() != null ? user.getRole().name() : null)
+                    .withClaim("companyId", user.getCompany() != null ? user.getCompany().getId().toString() : null)
+                    .withClaim("companyName", user.getCompany() != null ? user.getCompany().getName() : null)
+                    .withClaim("companyType", user.getCompany() != null ? user.getCompany().getType().name() : null);
         }
         
         return jwtBuilder.sign(this.hmac512);

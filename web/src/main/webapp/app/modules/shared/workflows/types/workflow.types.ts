@@ -42,7 +42,7 @@ export type TriggerType =
   | 'dock_appointment_scheduled';
 
 export interface TriggerConfig {
-  [key: string]: any;
+  [key: string]: string | number | boolean | string[] | Record<string, unknown>;
 }
 
 // Condition node specific data
@@ -54,7 +54,7 @@ export interface ConditionNodeData extends BaseNodeData {
 export interface Condition {
   field: string;
   operator: ComparisonOperator;
-  value: any;
+  value: string | number | boolean | null;
 }
 
 export type ComparisonOperator = 
@@ -95,7 +95,7 @@ export type ActionType =
   | 'export_data';
 
 export interface ActionConfig {
-  [key: string]: any;
+  [key: string]: string | number | boolean | string[] | Record<string, unknown>;
 }
 
 // Delay node specific data
@@ -166,7 +166,7 @@ export interface WorkflowExecution {
   completedAt?: string;
   currentNodeId?: string;
   executionPath: string[];
-  context: Record<string, any>;
+  context: Record<string, string | number | boolean | null>;
   logs: ExecutionLog[];
 }
 
@@ -175,5 +175,5 @@ export interface ExecutionLog {
   timestamp: string;
   status: 'started' | 'completed' | 'failed' | 'skipped';
   message?: string;
-  data?: any;
+  data?: Record<string, unknown>;
 }

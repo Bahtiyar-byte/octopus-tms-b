@@ -24,7 +24,7 @@ import tms.octopus.octopus_tms.financial.invoice_line_item.service.InvoiceLineIt
 
 @RestController
 @RequestMapping(value = "/api/invoiceLineItems", produces = MediaType.APPLICATION_JSON_VALUE)
-@PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.ACCOUNTING + "')")
+@PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SALES_REP + "')")
 @SecurityRequirement(name = "bearer-jwt")
 public class InvoiceLineItemResource {
 

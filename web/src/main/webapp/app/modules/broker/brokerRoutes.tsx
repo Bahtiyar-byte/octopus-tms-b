@@ -1,13 +1,13 @@
 import { Navigate, RouteObject } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { UserRole } from '../../types/user';
+import {CompanyType, UserRole} from '../../types/core/user.types';
 
 // Import Shared pages
 import Dashboard from '../shared/pages/Dashboard/Dashboard';
 import Loads from '../shared/pages/Loads/Loads';
 import Tracking from '../shared/pages/Tracking/Tracking';
 import Reports from '../shared/pages/Reports/Reports';
-import Documents from '../shared/pages/Documents/Documents';
+import Documents from '../../features/documents/pages/Documents';
 import Invoices from '../shared/pages/Invoices/Invoices';
 
 // Import Shared pages
@@ -20,22 +20,23 @@ import Contracts from './pages/Contracts';
 import Carriers from './pages/Carriers';
 import Commissions from './pages/Commissions';
 import { SmartLoadMatch } from './pages/SmartLoadMatch';
-import WorkflowBuilder from './pages/WorkflowBuilder';
-import Workflows from './pages/Workflows';
+import WorkflowBuilder from '../../pages/WorkflowBuilder';
+import Workflows from '../../pages/Workflows';
+import MonetizationShowcase from '../../monetization/pages/MonetizationShowcase';
 
 // Role-based access control component
 const BrokerRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, isAuthenticated } = useAuth();
-  
+
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
-  
-  // Allow access to users with broker role or admin role
-  if (user?.role !== UserRole.BROKER && user?.role !== UserRole.ADMIN && user?.role !== UserRole.SUPERVISOR) {
+
+  // Allow access to users from broker companies or admins
+  if (user?.role !== UserRole.ADMIN && user?.role !== UserRole.SUPERVISOR && user?.companyType !== CompanyType.BROKER) {
     return <Navigate to="/dashboard" replace />;
   }
-  
+
   return <>{children}</>;
 };
 
@@ -109,6 +110,10 @@ const brokerRoutes: RouteObject[] = [
   {
     path: 'broker/workflows/builder',
     element: <BrokerRoute><WorkflowBuilder /></BrokerRoute>,
+  },
+  {
+    path: 'broker/monetization/showcase',
+    element: <BrokerRoute><MonetizationShowcase /></BrokerRoute>,
   },
 ];
 

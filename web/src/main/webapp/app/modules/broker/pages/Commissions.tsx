@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Card, Modal } from '../../../components';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import { formatCurrency } from '../../../utils';
 
 interface SalesRep {
   id: string;
@@ -125,7 +126,6 @@ const Commissions: React.FC = () => {
       toast.success(`Commission rate updated to ${newRate}% for ${rep.name}`);
       setShowEditModal(false);
     } catch (error) {
-      console.error('Error updating commission rate:', error);
       toast.error('Failed to update commission rate');
     } finally {
       setLoading(false);
@@ -133,14 +133,20 @@ const Commissions: React.FC = () => {
   };
 
   // Add function to handle add new sales rep
-  const handleAddSalesRep = async (repData: any) => {
+  interface AddSalesRepData {
+    name: FormDataEntryValue | null;
+    email: FormDataEntryValue | null;
+    phone: FormDataEntryValue | null;
+    commissionRate: FormDataEntryValue | null;
+  }
+
+  const handleAddSalesRep = async (repData: AddSalesRepData) => {
     setLoading(true);
     try {
       await new Promise(resolve => setTimeout(resolve, 1000));
       toast.success('New sales rep added successfully');
       setShowAddRepModal(false);
     } catch (error) {
-      console.error('Error adding sales rep:', error);
       toast.error('Failed to add sales rep');
     } finally {
       setLoading(false);
@@ -239,12 +245,6 @@ const Commissions: React.FC = () => {
     }
   ];
 
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD'
-    }).format(amount);
-  };
 
   const getStatusBadgeClass = (status: string) => {
     switch(status) {
@@ -283,7 +283,6 @@ const Commissions: React.FC = () => {
       toast.success(`Payment of ${formatCurrency(6280)} processed for ${rep.name}`);
       setShowPaymentModal(false);
     } catch (error) {
-      console.error('Error processing payment:', error);
       toast.error('Failed to process payment');
     } finally {
       setLoading(false);
@@ -305,7 +304,6 @@ const Commissions: React.FC = () => {
       toast.success('Commission report generated successfully');
       setShowExportModal(true);
     } catch (error) {
-      console.error('Error generating report:', error);
       toast.error('Failed to generate report');
     } finally {
       setLoading(false);
@@ -326,7 +324,6 @@ const Commissions: React.FC = () => {
       toast.success(`Bulk payment processed for ${selectedReps.length} sales reps`);
       setSelectedReps([]);
     } catch (error) {
-      console.error('Error processing bulk payment:', error);
       toast.error('Failed to process bulk payments');
     } finally {
       setLoading(false);
@@ -1008,7 +1005,7 @@ const Commissions: React.FC = () => {
         <form onSubmit={(e) => {
           e.preventDefault();
           const formData = new FormData(e.target as HTMLFormElement);
-          const repData = {
+          const repData: AddSalesRepData = {
             name: formData.get('name'),
             email: formData.get('email'),
             phone: formData.get('phone'),

@@ -14,7 +14,6 @@ const WeatherAlerts: React.FC = () => {
         const alerts = await fetchWeatherAlerts();
         setWeatherAlerts(alerts);
       } catch (error) {
-        console.error('Error fetching weather alerts:', error);
       } finally {
         setWeatherLoading(false);
       }

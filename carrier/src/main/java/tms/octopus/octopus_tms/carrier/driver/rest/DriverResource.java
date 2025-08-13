@@ -34,7 +34,7 @@ import tms.octopus.octopus_tms.carrier.driver.service.DriverService;
 
 @RestController
 @RequestMapping(value = "/api/drivers", produces = MediaType.APPLICATION_JSON_VALUE)
-@PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "', '" + UserRole.Fields.SUPERVISOR + "', '" + UserRole.Fields.DISPATCHER + "')")
+@PreAuthorize("hasAnyAuthority('" + UserRole.Fields.ADMIN + "',  '" + UserRole.Fields.SALES_REP + "')")
 @SecurityRequirement(name = "bearer-jwt")
 public class DriverResource {
 

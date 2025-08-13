@@ -15,7 +15,7 @@ public class InvoiceOperationsControllerTest extends BaseIT {
     void getInvoiceDetails_success() {
         RestAssured
                 .given()
-                    .header(HttpHeaders.AUTHORIZATION, accountingOctopusTMSSecurityConfigToken())
+                    .header(HttpHeaders.AUTHORIZATION, adminOctopusTMSSecurityConfigToken())
                     .accept(ContentType.JSON)
                 .when()
                     .get("/invoice-operations/test-invoiceId/details")
@@ -27,7 +27,7 @@ public class InvoiceOperationsControllerTest extends BaseIT {
     void sendInvoice_success() {
         RestAssured
                 .given()
-                    .header(HttpHeaders.AUTHORIZATION, accountingOctopusTMSSecurityConfigToken())
+                    .header(HttpHeaders.AUTHORIZATION, adminOctopusTMSSecurityConfigToken())
                     .accept(ContentType.JSON)
                     .contentType(ContentType.JSON)
                     .body(readResource("/requests/invoiceSendRequestDTORequest.json"))
@@ -41,7 +41,7 @@ public class InvoiceOperationsControllerTest extends BaseIT {
     void sendInvoice_missingField() {
         RestAssured
                 .given()
-                    .header(HttpHeaders.AUTHORIZATION, accountingOctopusTMSSecurityConfigToken())
+                    .header(HttpHeaders.AUTHORIZATION, adminOctopusTMSSecurityConfigToken())
                     .accept(ContentType.JSON)
                     .contentType(ContentType.JSON)
                     .body(readResource("/requests/invoiceSendRequestDTORequest_missingField.json"))
@@ -58,7 +58,7 @@ public class InvoiceOperationsControllerTest extends BaseIT {
     void recordPayment_success() {
         RestAssured
                 .given()
-                    .header(HttpHeaders.AUTHORIZATION, accountingOctopusTMSSecurityConfigToken())
+                    .header(HttpHeaders.AUTHORIZATION, adminOctopusTMSSecurityConfigToken())
                     .accept(ContentType.JSON)
                     .contentType(ContentType.JSON)
                     .body(readResource("/requests/paymentRecordDTORequest.json"))

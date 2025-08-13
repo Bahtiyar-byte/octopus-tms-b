@@ -18,7 +18,7 @@ import tms.octopus.octopus_tms.financial.invoice.domain.Invoice;
 
 
 @Entity
-@Table(name = "InvoiceLineItems")
+@Table(name = "invoice_line_items")
 @Getter
 @Setter
 public class InvoiceLineItem {

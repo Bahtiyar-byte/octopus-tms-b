@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { Card, Modal } from '../../../../components';
 import { useRoleConfig } from '../../hooks/useRoleConfig';
 import { useAuth } from '../../../../context/AuthContext';
-import { UserRole } from '../../../../types/user';
+import { UserRole, CompanyType } from '../../../../types/core/user.types';
 import toast from 'react-hot-toast';
-import * as formatters from '../../utils/formatters';
+import * as formatters from '../../../../utils/format';
 
 interface Customer {
   id: string;
@@ -74,17 +74,17 @@ const Customers: React.FC = () => {
     ];
 
     // Add role-specific fields
-    if (user?.role === UserRole.BROKER) {
+    if (user?.companyType === CompanyType.BROKER) {
       return baseCustomers.map(c => ({
         ...c,
         contractedCarriers: Math.floor(Math.random() * 20) + 5,
       }));
-    } else if (user?.role === UserRole.SHIPPER) {
+    } else if (user?.companyType === CompanyType.SHIPPER) {
       return baseCustomers.map(c => ({
         ...c,
         preferredLanes: ['Chicago-Dallas', 'Dallas-Phoenix', 'Phoenix-LA'],
       }));
-    } else if (user?.role === UserRole.CARRIER) {
+    } else if (user?.companyType === CompanyType.CARRIER) {
       return baseCustomers.map(c => ({
         ...c,
         equipmentTypes: ['Dry Van', 'Reefer', 'Flatbed'],
@@ -147,19 +147,19 @@ const Customers: React.FC = () => {
   };
 
   const renderRoleSpecificInfo = (customer: Customer) => {
-    if (user?.role === UserRole.BROKER) {
+    if (user?.companyType === CompanyType.BROKER) {
       return (
         <div className="text-sm text-gray-600">
           <p>Contracted Carriers: {customer.contractedCarriers}</p>
         </div>
       );
-    } else if (user?.role === UserRole.SHIPPER) {
+    } else if (user?.companyType === CompanyType.SHIPPER) {
       return (
         <div className="text-sm text-gray-600">
           <p>Preferred Lanes: {customer.preferredLanes?.join(', ')}</p>
         </div>
       );
-    } else if (user?.role === UserRole.CARRIER) {
+    } else if (user?.companyType === CompanyType.CARRIER) {
       return (
         <div className="text-sm text-gray-600">
           <p>Equipment: {customer.equipmentTypes?.join(', ')}</p>

@@ -1,12 +1,12 @@
 import React from 'react';
-import { formatCurrency, formatNumber } from '../../../utils/formatters';
+import { formatCurrency, formatNumber } from '../../../../../utils/format';
 import { useAuth } from '../../../../../context/AuthContext';
 
 interface MetricWidgetProps {
   id: string;
   type: string;
   title: string;
-  props?: Record<string, any>;
+  props?: Record<string, string | number | undefined>;
 }
 
 export const MetricWidget: React.FC<MetricWidgetProps> = ({ id, type, title, props = {} }) => {
@@ -40,9 +40,17 @@ export const MetricWidget: React.FC<MetricWidgetProps> = ({ id, type, title, pro
   );
 };
 
-function getMetricData(type: string, role?: string): any {
+interface MetricData {
+  value: number;
+  subtitle?: string;
+  progress?: number;
+  gradient: string;
+  icon?: string;
+}
+
+function getMetricData(type: string, role?: string): MetricData {
   // Mock data - in real app, this would fetch from API
-  const metricsMap: Record<string, any> = {
+  const metricsMap: Record<string, MetricData> = {
     revenue: {
       value: 45890,
       subtitle: '+12% from last month',
@@ -100,9 +108,11 @@ function getMetricData(type: string, role?: string): any {
   };
 }
 
-function formatValue(value: any, type: string): string {
+function formatValue(value: string | number | undefined, type: string): string {
+  if (value === undefined) return '0';
+  
   if (type === 'revenue' || type.includes('cost') || type.includes('payment')) {
-    return formatCurrency(value);
+    return formatCurrency(Number(value));
   }
   if (typeof value === 'number') {
     return formatNumber(value);

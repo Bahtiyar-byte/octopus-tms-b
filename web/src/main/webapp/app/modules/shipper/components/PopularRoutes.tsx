@@ -1,5 +1,6 @@
 import React from 'react';
 import { TrendingUp, Package, DollarSign, Users } from 'lucide-react';
+import { formatCurrency } from '../../../utils';
 
 interface RouteData {
   id: string;
@@ -62,13 +63,6 @@ const PopularRoutes: React.FC = () => {
     }
   ];
 
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0
-    }).format(amount);
-  };
 
   return (
     <div className="bg-white rounded-lg shadow p-6">

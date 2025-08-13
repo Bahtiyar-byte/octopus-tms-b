@@ -247,7 +247,6 @@ const SmartLoadSearch: React.FC = () => {
       setSearchName('');
       notify(`Search "${searchName}" saved successfully`);
     } catch (error) {
-      console.error('Error saving search:', error);
       notify('Error saving search. Please try again.', 'error');
     } finally {
       setLoading(false);
@@ -269,7 +268,6 @@ const SmartLoadSearch: React.FC = () => {
       setShowSetAlertModal(false);
       notify('Alert set successfully. You will be notified when new loads match your criteria.');
     } catch (error) {
-      console.error('Error setting alert:', error);
       notify('Error setting alert. Please try again.', 'error');
     } finally {
       setLoading(false);
@@ -291,7 +289,6 @@ const SmartLoadSearch: React.FC = () => {
         notify(`Load ${load.id} saved successfully`);
       }
     } catch (error) {
-      console.error('Error saving load:', error);
       notify('Error saving load. Please try again.', 'error');
     } finally {
       setLoading(false);
@@ -319,7 +316,6 @@ const SmartLoadSearch: React.FC = () => {
       // Remove the booked load from the list
       setFilteredLoads(prev => prev.filter(load => load.id !== selectedLoad.id));
     } catch (error) {
-      console.error('Error booking load:', error);
       notify('Error booking load. Please try again.', 'error');
     } finally {
       setLoading(false);
@@ -343,7 +339,6 @@ const SmartLoadSearch: React.FC = () => {
       setFilteredLoads(prev => [...prev, ...moreLoads]);
       notify(`Loaded ${moreLoads.length} more results`);
     } catch (error) {
-      console.error('Error loading more results:', error);
       notify('Error loading more results. Please try again.', 'error');
     } finally {
       setLoadingMore(false);
@@ -388,7 +383,6 @@ const SmartLoadSearch: React.FC = () => {
       setShowAddLaneModal(false);
       notify(`Lane ${newSavedLane.origin} → ${newSavedLane.destination} added successfully`);
     } catch (error) {
-      console.error('Error adding lane:', error);
       notify('Error adding lane. Please try again.', 'error');
     } finally {
       setLoading(false);
@@ -430,7 +424,6 @@ const SmartLoadSearch: React.FC = () => {
       setShowEditLaneModal(false);
       notify(`Lane updated successfully`);
     } catch (error) {
-      console.error('Error updating lane:', error);
       notify('Error updating lane. Please try again.', 'error');
     } finally {
       setLoading(false);
@@ -452,7 +445,6 @@ const SmartLoadSearch: React.FC = () => {
       setSavedLanes(prev => prev.filter(l => l.id !== lane.id));
       notify(`Lane deleted successfully`);
     } catch (error) {
-      console.error('Error deleting lane:', error);
       notify('Error deleting lane. Please try again.', 'error');
     } finally {
       setLoading(false);
@@ -491,7 +483,6 @@ const SmartLoadSearch: React.FC = () => {
       // Scroll to the top of the page
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (error) {
-      console.error('Error viewing matches:', error);
       notify('Error viewing matches. Please try again.', 'error');
     } finally {
       setLoading(false);
@@ -511,7 +502,6 @@ const SmartLoadSearch: React.FC = () => {
 
       notify(`Email alerts ${lane.emailAlerts ? 'disabled' : 'enabled'} for lane ${lane.origin} → ${lane.destination}`);
     } catch (error) {
-      console.error('Error toggling email alerts:', error);
       notify('Error toggling email alerts. Please try again.', 'error');
     } finally {
       setLoading(false);

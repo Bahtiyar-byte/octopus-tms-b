@@ -166,14 +166,24 @@ export const useCarriers = () => {
       await new Promise(resolve => setTimeout(resolve, 1000));
       setCarriers(mockCarriers);
     } catch (error) {
-      console.error('Failed to fetch carriers:', error);
       toast.error('Failed to load carriers');
     } finally {
       setLoading(false);
     }
   };
 
-  const addCarrier = async (carrierData: any) => {
+  interface CarrierFormData {
+    name: string;
+    mc: string;
+    dot: string;
+    contact: string;
+    email: string;
+    phone: string;
+    address?: string;
+    equipment: string[];
+  }
+
+  const addCarrier = async (carrierData: CarrierFormData) => {
     try {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 500));
@@ -204,7 +214,6 @@ export const useCarriers = () => {
       setCarriers([...carriers, newCarrier]);
       return newCarrier;
     } catch (error) {
-      console.error('Failed to add carrier:', error);
       throw error;
     }
   };
@@ -218,7 +227,6 @@ export const useCarriers = () => {
         carrier.id === id ? { ...carrier, ...updates } : carrier
       ));
     } catch (error) {
-      console.error('Failed to update carrier:', error);
       throw error;
     }
   };
@@ -230,7 +238,6 @@ export const useCarriers = () => {
       
       setCarriers(carriers.filter(carrier => carrier.id !== id));
     } catch (error) {
-      console.error('Failed to delete carrier:', error);
       throw error;
     }
   };
@@ -247,7 +254,6 @@ export const useCarriers = () => {
       
       toast.success('Carrier verified successfully!');
     } catch (error) {
-      console.error('Failed to verify carrier:', error);
       throw error;
     }
   };

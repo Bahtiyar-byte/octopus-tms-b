@@ -1,16 +1,22 @@
 import React from 'react';
-import { UseFormReturn } from 'react-hook-form';
+import { UseFormReturn, FieldValues, Path } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-interface InputRowProps {
-  useFormResult: UseFormReturn<any>;
+interface InputRowProps<TFieldValues extends FieldValues = FieldValues> {
+  useFormResult: UseFormReturn<TFieldValues>;
   object: string;
-  field: string;
+  field: Path<TFieldValues>;
   required?: boolean;
   type?: string;
 }
 
-export default function InputRow({ useFormResult, object, field, required = false, type = 'text' }: InputRowProps) {
+export default function InputRow<TFieldValues extends FieldValues = FieldValues>({ 
+  useFormResult, 
+  object, 
+  field, 
+  required = false, 
+  type = 'text' 
+}: InputRowProps<TFieldValues>) {
   const { t } = useTranslation();
   const { register, formState: { errors } } = useFormResult;
   const error = errors[field];
