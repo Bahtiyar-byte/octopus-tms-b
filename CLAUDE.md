@@ -5,25 +5,26 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Project Overview
 
 Octopus TMS is a Transportation Management System built as a modular monolith with:
-- **Backend**: Spring Boot 3.5.1 with Java 21, PostgreSQL, JWT authentication
-- **Frontend**: React 19.1 with TypeScript, Webpack 5, Tailwind CSS
+- **Backend**: Spring Boot 3.5.1 with Java 21, PostgreSQL, JWT authentication (using com.auth0:java-jwt library)
+- **Frontend**: React 18.2 with TypeScript, Vite 6.3.5, Tailwind CSS (with custom Poppins font)
 - **Architecture**: Domain-driven design with clear module boundaries
 
 ## Essential Commands
 
 ### Development Setup
 ```bash
-# Install frontend dependencies
-npm install
+# Install frontend dependencies (in web/src/main/webapp)
+cd web/src/main/webapp && npm install
 
-# NO DOCKER - Local PostgreSQL 14 running
+# Database Configuration (NO DOCKER - user preference)
+# Local PostgreSQL 14 running on port 5432
 # Database: octopus-tms-b
 # Username: haydarovbahtiyar
 # Password: password
 # URL: jdbc:postgresql://localhost:5432/octopus-tms-b
 
 # Run frontend dev server (port 3000)
-npm run devserver
+cd web/src/main/webapp && npm run dev
 
 # Run Spring Boot backend
 ./gradlew bootRun -Dspring.profiles.active=local
@@ -35,8 +36,11 @@ npm run devserver
 # Build entire application (frontend + backend)
 ./gradlew clean build
 
-# Run frontend tests
-npm run test
+# Run frontend tests (in web/src/main/webapp)
+npm run test:puppeteer  # Puppeteer tests
+npm run test:playwright # Playwright E2E tests
+npm run test:playwright:ui # Playwright with UI
+npm run test:playwright:report # Show test report
 
 # Run backend tests
 ./gradlew test
@@ -88,23 +92,25 @@ module/
 ### Frontend Structure
 React code lives in `web/src/main/webapp/app/`:
 - **components/**: Reusable UI components
-- **pages/**: Page components for each route
-- **security/**: Authentication provider and guards
+- **pages/**: Page components for each route  
+- **modules/**: Feature-specific modules
+- **context/**: React Context providers for global state
+- **hooks/**: Custom React hooks
+- **services/**: API and business logic
 - **types/**: TypeScript type definitions
 - **utils/**: Utility functions and API client
 
 ### Key Architectural Patterns
 
-1. **Authentication**: JWT-based with role hierarchy (ADMIN > SUPERVISOR > DISPATCHER > DRIVER)
-2. **API Design**: RESTful endpoints under `/api/`, OpenAPI documented
-3. **Database**: UUID primary keys, Flyway migrations (must be idempotent)
+1. **Authentication**: JWT-based using com.auth0:java-jwt library, currently with ADMIN and SALES_REP roles
+2. **API Design**: RESTful endpoints under `/api/`, OpenAPI documented  
+3. **Database**: UUID primary keys, Flyway temporarily disabled (commented out in build.gradle)
 4. **Testing**: 
    - Backend: Integration tests extend `BaseIT` with Testcontainers
-   - Frontend: Jest with React Testing Library for unit tests
-   - E2E: Playwright for end-to-end testing
-   - Screenshots: Puppeteer for screenshot generation
+   - Frontend: Playwright for E2E testing, Puppeteer for screenshots
 5. **DTO Pattern**: Separate DTOs for requests/responses, MapStruct for mapping
-6. **Security**: Role-based access control, JWT filter chain
+6. **Security**: Role-based access control, JWT filter chain with 60-minute token validity
+7. **Environment Variables**: `.env` files for configuration (database, API keys, etc.)
 
 ### Development Environment
 
@@ -142,30 +148,32 @@ npm run screenshots
 
 ### Important Notes
 
-1. **NO DOCKER**: Local PostgreSQL 14 running. Never suggest Docker.
-2. **NO FLYWAY**: Temporarily removed for simplification
+1. **NO DOCKER FOR LOCAL DEV**: User prefers local PostgreSQL 14. Docker only for Testcontainers in tests.
+2. **FLYWAY DISABLED**: Temporarily commented out in build.gradle (lines 198-199)
 3. **Lombok**: Requires IDE plugin with annotation processing enabled
-4. **MapStruct**: Generates mapper implementations at compile time
-5. **Frontend Build**: Integrated into Gradle build, outputs to Spring Boot static resources
-6. **Environment Config**: Use Spring profiles (local, production) and .env files
+4. **MapStruct**: Generates mapper implementations at compile time (version 1.6.3)
+5. **Frontend Build**: Vite build integrated into Gradle, outputs to `web/build/resources/main/static`
+6. **Environment Config**: 
+   - Spring profiles (local, production)
+   - `.env` files for API keys and database config
+   - Frontend uses Vite env vars (VITE_ prefix)
 7. **Module Dependencies**: Core modules should not depend on domain-specific modules
-8. **Focus**: Complete modules one at a time, starting with Broker module
+8. **Tailwind CSS**: Configured with custom Poppins font and primary color palette
 
-### Test Users (Simplified)
+### Test Users
 
-Only 3 test users during development:
-- **BROKER**: emily.anderson@octopus-tms.com (password: password)
-- **SHIPPER**: shipper1@octopustms.com (password: password)  
-- **CARRIER**: carrier1@octopustms.com (password: password)
+Only 3 test users during development (all with ADMIN role):
+- **emily.anderson@octopus-tms.com** (password: password) - BROKER company type
+- **shipper1@octopustms.com** (password: password) - SHIPPER company type
+- **carrier1@octopustms.com** (password: password) - CARRIER company type
 
 ### Authentication & Authorization
 
-**Current Issue**: Role confusion - multiple employees at same company type (e.g., broker company) all have same role ("BROKER").
-
-**Proposed Solution**: Multi-tenant architecture with Companies and User Profiles
-- Companies have types: BROKER_COMPANY, SHIPPER_COMPANY, CARRIER_COMPANY
-- Users belong to companies and have profiles/positions within company
-- Permissions based on company type + user profile combination
+**Architecture**: Multi-tenant system where:
+- Users have roles: `ADMIN` or `SALES_REP` (defined in UserRole enum)
+- Companies have types: `BROKER`, `SHIPPER`, `CARRIER` (defined in CompanyType enum)
+- Access control is based on both user role AND company type combination
+- Each user belongs to exactly one company
 
 **Focus**: Simplify authentication and complete one module at a time, starting with Broker module.
 

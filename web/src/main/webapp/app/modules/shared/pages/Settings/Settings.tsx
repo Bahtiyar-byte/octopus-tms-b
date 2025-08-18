@@ -126,6 +126,116 @@ const Settings: React.FC = () => {
       apiKey: '',
       icon: 'fa-search',
       iconBg: 'bg-gray-100 text-gray-600'
+    },
+    {
+      id: '1',
+      name: 'DAT Load Board',
+      description: 'Real-time load posting and searching on DAT network',
+      isConnected: true,
+      apiKey: 'DAT-API-KEY-12345-ABCDE',
+      icon: 'fa-truck-loading',
+      iconBg: 'bg-blue-100 text-blue-600',
+      category: 'loadboard'
+    },
+    {
+      id: '2',
+      name: 'Truck Stop Load Board',
+      description: 'Access to Truckstop.com load network and carrier verification',
+      isConnected: true,
+      apiKey: 'TRUCKSTOP-API-67890-FGHIJ',
+      icon: 'fa-truck',
+      iconBg: 'bg-green-100 text-green-600',
+      category: 'loadboard'
+    },
+    {
+      id: '3',
+      name: '123LoadBoard',
+      description: 'Connect to 123LoadBoard for additional load opportunities',
+      isConnected: false,
+      apiKey: '',
+      icon: 'fa-search',
+      iconBg: 'bg-gray-100 text-gray-600',
+      category: 'loadboard'
+    },
+    {
+      id: '4',
+      name: 'Samsara ELD Integration',
+      description: 'Connect to Samsara for real-time ELD and GPS data',
+      isConnected: true,
+      apiKey: 'SAMSARA-API-67890-FGHIJ',
+      icon: 'fa-truck',
+      iconBg: 'bg-green-100 text-green-600',
+      category: 'tracking'
+    },
+    {
+      id: '5',
+      name: 'Project44 Visibility',
+      description: 'Real-time shipment tracking and visibility platform',
+      isConnected: true,
+      apiKey: 'P44-API-KEY-98765-LMNOP',
+      icon: 'fa-map-marked-alt',
+      iconBg: 'bg-purple-100 text-purple-600',
+      category: 'tracking'
+    },
+    {
+      id: '6',
+      name: 'FourKites Tracking',
+      description: 'Supply chain visibility and predictive analytics',
+      isConnected: false,
+      apiKey: '',
+      icon: 'fa-satellite',
+      iconBg: 'bg-gray-100 text-gray-600',
+      category: 'tracking'
+    },
+    {
+      id: '7',
+      name: 'QuickBooks Integration',
+      description: 'Sync invoices, payments, and financial data',
+      isConnected: true,
+      apiKey: 'QB-API-KEY-45678-QRSTU',
+      icon: 'fa-calculator',
+      iconBg: 'bg-yellow-100 text-yellow-600',
+      category: 'accounting'
+    },
+    {
+      id: '8',
+      name: 'Triumph Factoring',
+      description: 'Automated factoring and quick pay services',
+      isConnected: false,
+      apiKey: '',
+      icon: 'fa-money-check-alt',
+      iconBg: 'bg-gray-100 text-gray-600',
+      category: 'accounting'
+    },
+    {
+      id: '9',
+      name: 'RMIS Insurance',
+      description: 'Carrier insurance verification and monitoring',
+      isConnected: true,
+      apiKey: 'RMIS-API-KEY-87654-VWXYZ',
+      icon: 'fa-shield-alt',
+      iconBg: 'bg-red-100 text-red-600',
+      category: 'compliance'
+    },
+    {
+      id: '10',
+      name: 'CarrierWatch',
+      description: 'Carrier vetting and compliance monitoring',
+      isConnected: false,
+      apiKey: '',
+      icon: 'fa-user-check',
+      iconBg: 'bg-gray-100 text-gray-600',
+      category: 'compliance'
+    },
+    {
+      id: '11',
+      name: 'Twilio SMS',
+      description: 'Automated SMS notifications for carriers and customers',
+      isConnected: true,
+      apiKey: 'TWILIO-API-KEY-34567-ABCDE',
+      icon: 'fa-sms',
+      iconBg: 'bg-indigo-100 text-indigo-600',
+      category: 'communication'
     }
   ];
 

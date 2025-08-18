@@ -193,8 +193,7 @@ const Topbar: React.FC = () => {
     try {
       await logout();
       navigate('/login');
-    } catch (error) {
-    }
+    } catch (error) { /* empty */ }
   };
 
   // Get the correct dashboard path based on user role
